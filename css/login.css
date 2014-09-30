@@ -1,0 +1,198 @@
+body {
+height:100%;
+background: #97c3e5; /* Old browsers */
+background: -moz-radial-gradient(center, ellipse cover,  #97c3e5 0%, #62a2d6 44%, #2989d8 61%, #006ec9 100%); /* FF3.6+ */
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#97c3e5), color-stop(44%,#62a2d6), color-stop(61%,#2989d8), color-stop(100%,#006ec9)); /* Chrome,Safari4+ */
+background: -webkit-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* Chrome10+,Safari5.1+ */
+background: -o-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* Opera 12+ */
+background: -ms-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* IE10+ */
+background: radial-gradient(ellipse at center,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* W3C */
+}
+
+.container {
+    width: 420px;
+    margin: 64px auto;
+}
+
+#signup {
+    padding: 0px 25px 25px;
+    background: #fff;
+    box-shadow: 
+        0px 0px 0px 5px rgba( 255,255,255,0.4 ), 
+        0px 4px 20px rgba( 0,0,0,0.33 );
+    border-radius: 5px;
+    display: table;
+    position: static;
+}
+
+#signup header {
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+}
+
+#signup header img {
+	margin :0;
+	float:left;
+}
+
+#signup header h3 {
+	text-align:right;
+	border-bottom: 2px solid #c95265;
+	font-family: Arial,Helvetica,sans-serif;
+	color: #126fb4;
+	font-style: italic;
+	line-height: 0em;
+	font-weight: bold;
+	background-color: #fefefe;
+}
+
+#signup header h3 p {
+font-weight: normal;
+font-size: 0.7em;
+}
+#signup hr {
+	border: 1px solid #e8e8e8;
+    margin: 0px -25px;
+}
+
+#signup .inputs {
+    margin-top: 25px;
+	text-align: center;
+}
+
+input::-webkit-input-placeholder {
+    color:    #b5b5b5;
+}
+
+input:-moz-placeholder {
+    color:    #b5b5b5;
+}
+
+#signup .inputs input[type=text], input[type=password] {
+    background: #f5f5f5;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    border: none;
+    padding: 8px 4px;
+    width: 260px;
+    margin-bottom: 20px;
+    box-shadow: inset 0px 2px 3px rgba( 0,0,0,0.1 );
+    clear: both;
+}
+
+#signup .inputs input[type=text]:focus, input[type=password]:focus {
+    background: #fff;
+    box-shadow: 0px 0px 0px 3px #fff38e, inset 0px 2px 3px rgba( 0,0,0,0.2 ), 0px 5px 5px rgba( 0,0,0,0.15 );
+    outline: none;   
+}
+
+#signup .inputs .checkboxy {
+/*    display: block; */
+    display: none;
+    position: static;
+    height: 25px;
+    margin-top: 10px;
+    clear: both;
+}
+
+#signup .inputs input[type=checkbox] {
+    float: left;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+#signup .inputs label.terms {
+    float: left;
+    font-size: 14px;
+    font-style: italic;
+}
+/*
+#signup .inputs input[type=submit] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+    background: -moz-linear-gradient(
+        top,
+        #b9c5dd 0%,
+        #a4b0cb);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#b9c5dd),
+        to(#a4b0cb));
+    border-radius: 5px;
+    border: 1px solid #737b8d;
+    -moz-box-shadow:
+        0px 5px 5px rgba(000,000,000,0.1),
+        inset 0px 1px 0px rgba(255,255,255,0.5);
+    -webkit-box-shadow:
+        0px 5px 5px rgba(000,000,000,0.1),
+        inset 0px 1px 0px rgba(255,255,255,0.5);
+    box-shadow:
+        0px 5px 5px rgba(000,000,000,0.1),
+        inset 0px 1px 0px rgba(255,255,255,0.5);
+    text-shadow:
+        0px 1px 3px rgba(000,000,000,0.3),
+        0px 0px 0px rgba(255,255,255,0);
+    display: table;
+    position: static;
+    clear: both;
+	cursor:pointer;
+}
+
+#signup .inputs input[type=submit]:hover {
+    background: -moz-linear-gradient(
+        top,
+        #a4b0cb 0%,
+        #b9c5dd);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#a4b0cb),
+        to(#b9c5dd));
+}
+*/
+ul {
+    list-style-type: none;
+	padding:0;
+}
+.inputs>ul>li {
+    display:inline-block;
+	width:120px;
+	text-align: center;
+}
+input[type="radio"] {
+    height: 1px;
+    opacity: 0;
+    padding: 12px 48px;
+    position: absolute;
+    width: 1px;
+}
+input[type="radio"] + label img {
+    border: medium none;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin: 2px;
+    padding: 24px;
+}
+input[type="radio"]:checked + label img {
+    background: url("../img/aroundBlue2.png") no-repeat scroll 0 center transparent;
+	transform: scale(1.2, 1.2);
+    font-weight: bold;
+}
+#signup .inputs li label {
+    display: inline;
+}
+
+
+#signup input[type="radio"]~.month-picker {
+	display: none;
+}
+
+#signup input[type="radio"]:checked ~.month-picker,
+#signup .inputs input[type="radio"]:checked ~.mtz-monthpicker-widgetcontainer {
+	display:inline;
+}
