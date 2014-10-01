@@ -1,11 +1,6 @@
 body {
 height:100%;
 background: #97c3e5; /* Old browsers */
-background: -moz-radial-gradient(center, ellipse cover,  #97c3e5 0%, #62a2d6 44%, #2989d8 61%, #006ec9 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#97c3e5), color-stop(44%,#62a2d6), color-stop(61%,#2989d8), color-stop(100%,#006ec9)); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* IE10+ */
 background: radial-gradient(ellipse at center,  #97c3e5 0%,#62a2d6 44%,#2989d8 61%,#006ec9 100%); /* W3C */
 }
 
@@ -155,9 +150,8 @@ input:-moz-placeholder {
         to(#b9c5dd));
 }
 */
-ul {
-    list-style-type: none;
-	padding:0;
+.inputs>ul {
+	padding: 0 0 16px;
 }
 .inputs>ul>li {
     display:inline-block;
@@ -179,7 +173,7 @@ input[type="radio"] + label img {
     padding: 24px;
 }
 input[type="radio"]:checked + label img {
-    background: url("../img/aroundBlue2.png") no-repeat scroll 0 center transparent;
+    background: url("../img/aroundBlue-rond.png") no-repeat scroll 0 center transparent;
 	transform: scale(1.2, 1.2);
     font-weight: bold;
 }

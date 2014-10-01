@@ -1,0 +1,206 @@
+/**
+ * header.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2014
+ * @date       25/05/2014
+ * @version    0.1
+ * @revision   $3$
+ *
+ *
+ * style des entêtes
+ *
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
+header {
+	position: fixed;
+	top:0;
+	right:0;
+	left:0;
+	padding: 0 12px;
+	color:#000;
+    background: none repeat scroll 0 0 #20AAE5;
+	background: -moz-linear-gradient(top, #fefefe 28%, #c1dcf3 66%, #1e5799 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(28%,#fefefe), color-stop(66%,#c1dcf3), color-stop(100%,#1e5799)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* W3C */   border-bottom: 0.25em solid #1894CA;
+    box-shadow: 0 -1px rgba(255, 255, 255, 0.05) inset, 0 1px rgba(0, 0, 0, 0.05);
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+header img {
+	margin :0;
+	float:left;
+}
+
+header h3 {
+	text-align:right;
+	border-bottom: 2px solid #c95265;
+	font-family: Arial,Helvetica,sans-serif;
+	color: #126fb4;
+	font-style: italic;
+	line-height: 0em;
+	font-weight: bold;
+	background-color: #fefefe;
+	padding:0 16px 0 32px;
+	float:right;
+	margin: 16px 4px 0 4px;
+}
+
+header h3 p {
+	font-weight: normal;
+	font-size: 0.7em;
+	padding: 0;
+}
+
+header nav {
+	margin-left:120px;
+}
+header nav div{
+	padding:8px;
+	float:right;
+}
+header div a{
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: linear-gradient(to bottom, #4CB1FE, #229AFC 40%, #138DF6) repeat scroll 0 0 #1993FB;
+    border-color: #1486F9 #0F7DE9 #0D6ACF;
+    border-image: none;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: white;
+    font-weight: bold;
+	height: 26px;
+    line-height: 24px;
+    padding: 0 8px;
+    text-align: center;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.2);
+	display:inline-block;
+    -moz-box-sizing: border-box;
+    font-family: inherit;
+    font-size: 100%;
+    margin: 0;
+}
+header div a:active {
+    background-image: linear-gradient(to bottom, #1281DC, #1593FC);
+    border-color: #075BBA #0C69D2 #0F7DE9;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) inset, 0 1px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+header form{
+	display: inline;
+}
+
+header>ul {
+	margin: 4px;
+	padding-left: 56px;
+}
+header ul ul {
+	padding-left: 24px;
+}
+
+
+header li {
+	display: inline;
+	margin-right: 12px;
+	float:left;
+	text-align:center;
+    font-size: .85em;
+}
+
+header li input{
+	width: 64px;
+	text-align:center;
+    font-size: 1.2em;
+}
+
+header li div {
+	width:12px;
+	height:12px;
+	color:#343434;
+	-moz-box-shadow: 0px 0px 10px #343434;
+	-webkit-box-shadow: 0px 0px 10px #343434;
+	-o-box-shadow: 0px 0px 10px #343434;
+	box-shadow: 0px 0px 10px #343434;
+	border-radius: 2px;
+	border: 1px solid #656565;
+	margin:auto;
+	line-height:11px;
+}
+
+header li fieldset {
+	border-radius: 4px;
+	margin-left: 36px;
+	padding: 2px 12px;
+}
+
+header li fieldset div {
+	margin-left: 12px;
+	display: inline-block;
+}
+
+/*.fileUpload label,*/
+header li button {
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background: linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	background-color:#ededed;
+	background-position:  center center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	border-radius:6px;
+	text-indent:0;
+	border:1px solid #dcdcdc;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	font-style:normal;
+	height:32px;
+	line-height:32px;
+	width:32px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #ffffff;
+}
+header li button:hover {
+	background:linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+}
+header li button:active {
+	position:relative;
+	top:1px;
+}
+
+header+div {
+	margin-top:64px;
+}
+
+
+button.imprimer {
+	background-image: url(../img/PDF.png);
+}
+button.editer {
+	background-image: url(../img/b_edit.png);
+}
+button.supprimer {
+	background-image: url(../img/b_drop.png);
+}
+button.undelete {
+	background-image: url(../img/b_undelete.png);
+}
+button.inserer {
+	background-image: url(../img/b_insrow.png);
+	background-position: left center;
+	background-repeat: no-repeat;
+	height: 24px;
+	padding-left:24px;
+}

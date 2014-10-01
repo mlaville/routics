@@ -8,10 +8,13 @@
  * @revision   $0$
  *
  * Gére la saisie du login utilisateur
+ *
+ * Appel  ajax:
+ * - ./php/login.php
  * 
  * A Faire
- * - Se passer de JQuery
- *
+ * - Se passer de Zepto
+*
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
@@ -39,27 +42,9 @@ window.addEventListener('load', function() {
 
 	monthPickerFactory.createMonthPicker( document.getElementById('input-mois-planning') );
 	monthPickerFactory.createMonthPicker( document.getElementById('input-mois-recap') );
-/*
 
-	$('#input-mois-planning').monthpicker({
-		pattern: 'mm-yyyy', // Default is 'mm/yyyy' and separator char is not mandatory
-		selectedYear: 2014,
-		startYear: 2013,
-		finalYear: 2020,
-		monthNames: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc']
-	});
-
-	$('#input-mois-recap').monthpicker({
-		pattern: 'mm-yyyy', // Default is 'mm/yyyy' and separator char is not mandatory
-		selectedYear: 2014,
-		startYear: 2013,
-		finalYear: 2020,
-		monthNames: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc']
-	});
-*/
 	document.forms["signup"].addEventListener('submit', function(event) {
-		var	f = event.target,
-			param = { login: f['login'].value, pwd: f['pwd'].value };
+		var	f = event.target;
 			
 		event.stopPropagation();
 		event.preventDefault();

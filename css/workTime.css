@@ -1,0 +1,318 @@
+/**
+ * workTime.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2014
+ * @date       24/10/2014
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Affichage des relevés d'activité
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Palette 
+ #7F3B3B
+#B9B9B9
+#182253
+#8DB9E7
+#000000
+ */
+.datagrid {
+	position:absolute;
+	top:68px;
+	bottom:0;
+	font: normal 12px/150% Arial, Helvetica, sans-serif;
+	background: #fff;
+	margin-top:32px;
+	overflow-y:scroll;
+	overflow-x: hidden;
+/*	border: 1px solid #006699;*/
+}
+.datagrid form {
+	padding: 0;
+	margin: 0;
+}
+.datagrid table { 
+	border-collapse: collapse;
+	text-align: center;
+	margin-top: 12px;
+    width: 1067px;
+}
+.datagrid table#table-hd {
+    width: 1200px;
+}
+ 
+.datagrid table thead {
+	position:fixed;
+	top: 128px;
+	margin:0;
+}
+.datagrid #table-hd thead {
+	top: 116px;
+	width: 1200px;
+}
+.datagrid table td, .datagrid table th {
+	padding: 2px 8px;
+}
+.datagrid table#table-hd td {
+    padding: 2px 4px;
+}
+.datagrid table#table-recap thead th {
+	background: linear-gradient(to bottom, #1e5799 0%,#2989d8 83%,#7db9e8 100%); /* W3C */
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	border-left: 1px solid #0070A8;
+}
+
+.datagrid thead {
+	background: linear-gradient(to bottom, #1e5799 0%,#2989d8 83%,#7db9e8 100%); /* W3C */
+}
+
+.datagrid table#table-hd thead th {
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: normal;
+	border-left: 1px solid #0070A8;
+} 
+
+.datagrid table thead th, 
+.datagrid table td { 
+	width: 80px;
+}
+.datagrid table#table-hd thead th,
+.datagrid table#table-hd td {
+	width: 64px;
+} 
+.datagrid table#table-hd thead th.little,
+ .datagrid table#table-hd td.little {
+    width: 54px;
+	text-align:center;
+}
+
+.datagrid table#table-hd th {
+	background-color: #1e5799;
+}
+
+.datagrid table thead th:first-child { 
+	border: none;
+	width: 240px;
+    text-transform: capitalize;
+}
+
+.datagrid table td:first-child { 
+	border: none;
+	width: 240px;
+}
+
+.datagrid table#table-hd td:first-child { 
+    width: 160px;
+}
+.datagrid table#table-hd td:last-child { 
+    width: 24px;
+}
+
+.datagrid table thead th:first-child label {
+	font-size: .6em;
+	float: right;
+}
+
+.datagrid table thead th input[type="checkbox"]{
+	display:none;
+}
+.datagrid table thead th:first-child span:last-child input[type="checkbox"]+label {
+	background-color: #8DB9E7;
+	background-image: url("../img/b_edit.png");
+	background-position: right center;
+	background-repeat: no-repeat;
+	border: 2px outset #7F3B3B;
+	border-radius: 4px;
+	box-shadow: 1px 1px 2px #C0C0C0 inset;
+	padding: 6px 16px 6px 2px;
+}
+.datagrid table thead th:first-child span:last-child input[type="checkbox"]:checked+label {
+	border-style: inset;
+}
+
+.datagrid table thead th:last-child, 
+.datagrid table td:last-child { 
+	width: 18px;
+}
+.datagrid tr:nth-child(odd){ background-color:#aad4ff; }
+.datagrid tr:nth-child(even)    { background-color:#ffffff; }
+
+
+.datagrid table tbody td { 
+	color: #00557F;
+	border-left: 1px solid #E1EEF4;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+
+.datagrid table tbody td input:disabled {
+	background-color:transparent;
+	font-size: .7em;
+	border: none;
+}
+
+input:checked ~.datagrid table tbody td:first-child input,
+.datagrid table tbody td input { 
+	width: 48px;
+	padding: 2px;
+	border:1px solid #267BC7;
+	border-radius:4px;
+	box-shadow:1px 1px 2px #C0C0C0 inset;
+	font-size: .9em;
+	text-align: right;
+ }
+
+.datagrid table tbody#tbody_hrDues td.little output, 
+.datagrid table tbody td.little input { 
+	width: 18px;
+	margin:auto;
+ }
+ 
+table tbody#tbody_hrDues td output.coef {
+	width: 36px;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.datagrid td output {
+	text-align: right;
+	display: block;
+	font-family: "Courier New",Courier,monospace;
+	font-weight: bold;
+	background-color: #ddd;
+	border-radius:2px;
+	padding: 0 2px;
+	margin: 1px 0;
+	float: right;
+}
+
+.datagrid tbody#tbody_hrDues td output {
+	width: 48px;
+ }
+ 
+.datagrid table tbody td span+input {
+	float:right;
+}
+
+.datagrid table tbody .alt td { 
+	background: #E1EEf4;
+	color: #00557F;
+}
+
+.datagrid table tbody td:first-child { 
+	border-left: none;
+	text-align: left;
+    text-transform: capitalize;
+	font-weight: bold;
+}
+
+.datagrid table tbody tr:last-child td { 
+	border-bottom: none;
+}
+
+.datagrid table tfoot td { 
+	padding: 0;
+	font-size: 12px
+ } 
+
+.idTransics {
+	margin: 0 8px;
+    float: right;
+    font-size: 0.6em;
+}
+.btn-ttTransics {
+	display:inline;
+	border-style: none;
+	width: 16px;
+	height: 18px;
+	border-radius:2px;
+	margin:2px;
+	background-image: url("../img/transics-icon.png");
+	background-position:  center center;
+	background-repeat: no-repeat;
+	background-color: transparent;
+}
+
+.datagrid table tbody td:first-child span:nth-of-type(2){ 
+	display: none;
+}
+
+.datagrid table#table-hd tbody td:first-child span:first-child {
+text-transform:uppercase;
+}
+
+input[type="radio"]+label:hover {
+    background: #fff;
+}
+input[type="radio"]+label {
+    font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
+    padding: 5px 20px;
+    position: relative;
+    z-index: 20;
+    display: block;
+    height: 30px;
+    cursor: pointer;
+    color: #777;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
+    line-height: 33px;
+    font-size: 19px;
+    background: linear-gradient(top, #ffffff 1%,#eaeaea 100%);
+    box-shadow: 
+        0px 0px 0px 1px rgba(155,155,155,0.3), 
+        1px 0px 0px 0px rgba(255,255,255,0.9) inset, 
+        0px 2px 2px rgba(0,0,0,0.1);
+}
+
+input:checked + label,
+input:checked + label:hover {
+    background: #c6e1ec;
+    color: #3d7489;
+    text-shadow: 0px 1px 1px rgba(255,255,255, 0.6);
+    box-shadow: 
+        0px 0px 0px 1px rgba(155,155,155,0.3), 
+        0px 2px 2px rgba(0,0,0,0.1);
+}
+
+input ~ div {
+	overflow:hidden
+    background: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    height: 0px;
+    position: relative;
+    z-index: 10;
+    transition: 
+        height 0.3s ease-in-out, 
+        box-shadow 0.6s linear;
+    background: #fff;
+    box-shadow: 
+        0px 0px 0px 5px rgba( 255,255,255,0.4 ), 
+        0px 4px 20px rgba( 0,0,0,0.33 );
+    border-radius: 5px;
+}
+input:checked ~ div {
+	padding: 8px;
+    margin: 4px;
+    height: 260px;
+}
+input[type="radio"] {
+    display: none;
+}
+
+.display-none {
+	display: none;
+}
+.color-red {
+	color: red;
+	font-weight: bold;
+}
+.color-gris {
+	color: #999;
+	font-weight: normal;
+}
