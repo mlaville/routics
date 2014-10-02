@@ -2,15 +2,15 @@
 /* Settings */
 $wsdl = "http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL";
 
-// Définit le fuseau horaire par défaut à utiliser. Disponible depuis PHP 5.1
-date_default_timezone_set('Europe/Berlin');
+// DÃ©finit le fuseau horaire par dÃ©faut Ã  utiliser. Disponible depuis PHP 5.1
+date_default_timezone_set('Europe/Paris');
 
 /* Create login object */
 $login = new stdClass();
 
 $login->DateTime = date(DateTime::W3C);
 $login->Dispatcher = 'POLINUX';
-$login->Password = 'POLINUX_1333';
+$login->Password = '*****';
 $login->SystemNr = 2858;
 $login->Integrator = '2858_POLINUX_01';
 $login->Language = 'fr';
