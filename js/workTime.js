@@ -788,9 +788,6 @@ var mvcConducteur = (function ( document ) {
 		saveHrDues: function(event) { 
 			return enregistreHeureDues( event, document.getElementById('tbody_hrDues') ); 
 		},
-		editStat: function(e) { 
-//			return visuPdf( './php/pdfRecapService.php?mois=' + dateReleve.getFullYear() + '-' + ( '0' + (dateReleve.getMonth() + 1) ).slice(-2) );
-		},
 		dateTitre: function() { return Date.monthNames()[dateReleve.getMonth()] + ' ' + dateReleve.getFullYear(); }
 	};
 })(window.document);
@@ -822,7 +819,6 @@ window.addEventListener('load', function() {
 	document.forms['frm_hd'].addEventListener('input', function(e){ return mvcConducteur.calLigneHrDues(e.target.parentNode.parentNode) });
 	document.getElementById('bt_enregHrDues').addEventListener('click', mvcConducteur.saveHrDues);
 	
-//	document.getElementById('bt_imprimer').addEventListener('click', mvcConducteur.editStat);
 	document.getElementById('btn_impRecap').addEventListener('click', function() {
 		var objPdf = document.createElement('object');
 	
@@ -836,7 +832,7 @@ window.addEventListener('load', function() {
 		);
 	});
 	document.getElementById('btn_impHeuresDues').addEventListener('click', function() {
-		var objPdf = document.createElement('object');
+/*		var objPdf = document.createElement('object');
 	
 		objPdf.setAttribute('type', 'application/pdf');
 		objPdf.setAttribute('width', '100%');
@@ -846,6 +842,9 @@ window.addEventListener('load', function() {
 		document.body.appendChild(
 			winManager.domFenetre( 'Tableau des Heures Dûes', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
 		);
+	*/	
+		return document.body.appendChild( domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ) ), 'Tableau des Heures Dûes' );
+		
 	});
 	document.getElementById('cb-codeOptiGest').addEventListener('change', mvcConducteur.switchEditCodeOptigest);
 	

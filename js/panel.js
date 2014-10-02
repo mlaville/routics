@@ -89,3 +89,15 @@ function domMenu(unTitre) {
 
 	return menu;
 }
+
+function domFenetrePdf(chainePDF, unTitre) {
+	var pos = { x:'5%', y:'120px', width:'880px', height: '420px' },
+		objPdf = document.createElement('object');
+
+	objPdf.setAttribute('type', 'application/pdf');
+	objPdf.setAttribute('width', '100%');
+	objPdf.setAttribute('height', '100%');
+	objPdf.setAttribute('data', chainePDF);
+	
+	return winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, pos, true );
+}
