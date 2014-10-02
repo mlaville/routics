@@ -163,6 +163,7 @@ var mvcConducteur = (function ( document ) {
 						document.getElementById('ajax-loader').style.display='none';
 						return;
 					} else {
+						alert('Erreur', '');  
 					}
 				}, "json"
 			);
