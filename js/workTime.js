@@ -154,7 +154,8 @@ var mvcConducteur = (function ( document ) {
 			}
 			$.post("./php/validRecap.php", { // construction du parametre
 					cmd: 'validRecap',
-					mois: dateReleve.getFullYear() + '-' + ( '0' + (dateReleve.getMonth() + 1) ).slice(-2),
+//					mois: dateReleve.getFullYear() + '-' + ( '0' + (dateReleve.getMonth() + 1) ).slice(-2),
+					mois: [ dateReleve.getFullYear(), ( '0' + (dateReleve.getMonth() + 1) ).slice(-2) ].join('-'),
 					data: tabValeur
 				}, 
 				function(data){
@@ -820,7 +821,7 @@ window.addEventListener('load', function() {
 	document.getElementById('bt_enregHrDues').addEventListener('click', mvcConducteur.saveHrDues);
 	
 	document.getElementById('btn_impRecap').addEventListener('click', function() {
-		var objPdf = document.createElement('object');
+/*		var objPdf = document.createElement('object');
 	
 		objPdf.setAttribute('type', 'application/pdf');
 		objPdf.setAttribute('width', '100%');
@@ -829,7 +830,8 @@ window.addEventListener('load', function() {
 
 		document.body.appendChild(
 			winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
-		);
+		);*/
+		return document.body.appendChild( domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ) ), 'Récapitulatif Mensuel d\'Activité' );
 	});
 	document.getElementById('btn_impHeuresDues').addEventListener('click', function() {
 /*		var objPdf = document.createElement('object');

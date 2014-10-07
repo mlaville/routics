@@ -7,7 +7,7 @@
  * @version    0.10
  * @revision   $0$
  *
- * Fonction generique de création de fenetre et menu
+ * Fonction generique de crÃ©ation de fenetre et menu
  *
  * A faire : case de miniaturisation, plein ecran
  * 
@@ -99,5 +99,5 @@ function domFenetrePdf(chainePDF, unTitre) {
 	objPdf.setAttribute('height', '100%');
 	objPdf.setAttribute('data', chainePDF);
 	
-	return winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, pos, true );
+	return winManager.domFenetre( 'RÃ©capitulatif Mensuel d\'ActivitÃ©', objPdf, pos, true );
 }
