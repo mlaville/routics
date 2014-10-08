@@ -49,11 +49,11 @@ window.addEventListener('load', function() {
 		event.stopPropagation();
 		event.preventDefault();
 		
-		document.getElementById('ajax-loader').style.display='block';
+		document.getElementById('ajax-loader').style.display = 'block';
 		
 		$.post("./php/login.php", { login: f['login'].value, pwd: f['pwd'].value },
 			function(data){
-				document.getElementById('ajax-loader').style.display='none';
+				document.getElementById('ajax-loader').style.display = 'none';
 				if(data.succes) {
 					if( document.getElementById('rd_tt').checked ) {
 					

@@ -820,33 +820,14 @@ window.addEventListener('load', function() {
 	document.forms['frm_hd'].addEventListener('input', function(e){ return mvcConducteur.calLigneHrDues(e.target.parentNode.parentNode) });
 	document.getElementById('bt_enregHrDues').addEventListener('click', mvcConducteur.saveHrDues);
 	
+	/*
+	 * Gere les éditions
+	 */
 	document.getElementById('btn_impRecap').addEventListener('click', function() {
-/*		var objPdf = document.createElement('object');
-	
-		objPdf.setAttribute('type', 'application/pdf');
-		objPdf.setAttribute('width', '100%');
-		objPdf.setAttribute('height', '100%');
-		objPdf.setAttribute('data', pdfRecapMensuel( document.getElementById('table-recap') ));
-
-		document.body.appendChild(
-			winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
-		);*/
 		return document.body.appendChild( domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ) ), 'Récapitulatif Mensuel d\'Activité' );
 	});
 	document.getElementById('btn_impHeuresDues').addEventListener('click', function() {
-/*		var objPdf = document.createElement('object');
-	
-		objPdf.setAttribute('type', 'application/pdf');
-		objPdf.setAttribute('width', '100%');
-		objPdf.setAttribute('height', '100%');
-		objPdf.setAttribute('data', pdfHeuresDues( document.getElementById('table-hd') ));
-
-		document.body.appendChild(
-			winManager.domFenetre( 'Tableau des Heures Dûes', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
-		);
-	*/	
 		return document.body.appendChild( domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ) ), 'Tableau des Heures Dûes' );
-		
 	});
 	document.getElementById('cb-codeOptiGest').addEventListener('change', mvcConducteur.switchEditCodeOptigest);
 	
@@ -859,6 +840,10 @@ window.addEventListener('load', function() {
 				document.getElementById("heuresDues").classList.remove("display-none");
 			} 
 		});
+		
+	/*
+	 * Gestion du menubar
+	 */
 	document.getElementById("rd_nav_heureDues").addEventListener('change', function( e ) {
 			if( e.target.checked ) {
 				document.getElementById("remonte").classList.add("display-none");

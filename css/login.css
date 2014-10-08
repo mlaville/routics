@@ -74,6 +74,10 @@ input:-moz-placeholder {
     box-shadow: inset 0px 2px 3px rgba( 0,0,0,0.1 );
     clear: both;
 }
+/* Masque les champs date au chargement de la page */
+#signup div.inputs ul li label+input[type=text] {
+	display: none;
+}
 
 #signup .inputs input[type=text]:focus, input[type=password]:focus {
     background: #fff;
