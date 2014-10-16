@@ -1,0 +1,37 @@
+/* 
+ * px-layout.css
+ * Footer * 
+ * @auteur     marc laville
+ * @Copyleft 2014
+ * @date       16/10/2014
+ * @version    1.0
+ * @revision   $0$
+ *
+ * style des boutons
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+body, html {
+	margin: 0;
+}
+img{ border-style: none; }
+a { text-decoration: none; }
+/* 
+ * footer
+* -----------------------------------------------------------------------------
+*/
+footer {
+	background: #ccc none repeat scroll 0pt 50%;
+	height: 15px; 
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+	text-align: center;
+}
+footer a:first-child {
+	float:left;
+	margin-right: 18px;
+	font-size: 12px;
+}
+

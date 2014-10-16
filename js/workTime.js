@@ -25,6 +25,7 @@
  * - ./php/crudDriver.php
  *
  * A Faire : 
+ * Message validation
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -162,6 +163,7 @@ var mvcConducteur = (function ( document ) {
 					if(data.success) {
 						btn.disabled = false;
 						document.getElementById('ajax-loader').style.display='none';
+						alert('Les saisies ont été validées');  
 						return;
 					} else {
 						alert('Erreur', '');  
