@@ -10,7 +10,7 @@ $login = new stdClass();
 
 $login->DateTime = date(DateTime::W3C);
 $login->Dispatcher = 'POLINUX';
-$login->Password = 'polinux_1333';
+$login->Password = '*******';
 $login->SystemNr = 2858;
 $login->Integrator = '2858_POLINUX_01';
 $login->Language = 'fr';
