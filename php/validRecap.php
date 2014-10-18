@@ -17,7 +17,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 include 'ident.inc.php';
-include 'configSoap.inc.php';
+include 'soap/configSoap.inc.php';
 
 include 'connect.inc.php';
 include 'database/crudRecap.php';
@@ -40,7 +40,6 @@ if( $response["success"] ) {
 				break;
 				
 			case "validHrDues":
-//				file_put_contents( '../data/validHrDues-' . date_format( date_create('now'), 'Y-m-d-His' ) . '.json', json_encode($_POST) );
 				$rep = enregistreHeuresDues($dbFlotte, $_POST['mois'], $_POST['data'], $_SESSION['ident']);
 				$response["success"] = $rep[0]["success"];
 

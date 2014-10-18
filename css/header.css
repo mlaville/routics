@@ -28,7 +28,8 @@ header {
 	background: -webkit-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Chrome10+,Safari5.1+ */
 	background: -o-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Opera 11.10+ */
 	background: -ms-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* W3C */   border-bottom: 0.25em solid #1894CA;
+	background: linear-gradient(to bottom, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* W3C */   
+	border-bottom: 0.25em solid #1894CA;
     box-shadow: 0 -1px rgba(255, 255, 255, 0.05) inset, 0 1px rgba(0, 0, 0, 0.05);
     text-shadow: 0 1px rgba(0, 0, 0, 0.1);
     z-index: 1;
@@ -128,9 +129,6 @@ header li div {
 	width:12px;
 	height:12px;
 	color:#343434;
-	-moz-box-shadow: 0px 0px 10px #343434;
-	-webkit-box-shadow: 0px 0px 10px #343434;
-	-o-box-shadow: 0px 0px 10px #343434;
 	box-shadow: 0px 0px 10px #343434;
 	border-radius: 2px;
 	border: 1px solid #656565;

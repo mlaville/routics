@@ -13,13 +13,14 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-include 'configSoap.inc.php';
+//include 'configSoap.inc.php';
 
 // Liste des conducteurs
 function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 	set_time_limit ( 180 );
 	
 	/* Create Soap client */
+//	$clientSoap = null;
 	$context = stream_context_create( array(
          'http' => array(
            'protocol_version'=> '1.0' ,
@@ -32,7 +33,7 @@ function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 		'soap_version'=>SOAP_1_2, 
 		'exceptions'=>true, 
 		'trace'=>1, 
-		'cache_wsdl'=>WSDL_CACHE_NONE 
+		'cache_wsdl'=> WSDL_CACHE_BOTH 
 	); 
 	try {
 		$clientSoap = new SoapClient($unWsdl, $options);
@@ -40,6 +41,9 @@ function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 		echo 'Exception reçue : ',  $e->getMessage(), "\n";
 	}
 	
+	if( !isset($clientSoap) ){
+		echo 'Exception clientSoap\n';
+	}
 	$DriverSelection = new stdClass();
 	$DriverSelection->ExcludeInactiveDrivers = true;
 	
