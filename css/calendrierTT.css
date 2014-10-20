@@ -1,0 +1,236 @@
+/**
+ * calendrierTT.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2014
+ * @date       01-07-2014
+ * @version    0.1
+ * @revision   $0$
+ *
+ * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
+ *
+ * Affichage du planning 
+ * 
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+@import url("header.css");
+
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color:#333
+}
+
+.CSSTableGenerator {
+	margin:0 12px;
+	padding:0;
+	box-shadow: 10px 10px 5px #888888;
+	border:1px solid #000000;
+	width:800px;
+}
+
+#table-calendrier {
+	width:100%;
+	margin:2px;
+	padding:0;
+	border-collapse: collapse;
+}
+
+tr:hover td{
+/*	font-weight:bold; */
+	border-top-color : sienna;
+	border-bottom-color : sienna;
+}
+
+ tr:last-child td:last-child{
+	border-width:0px 0px 0px 0px;
+}
+
+/*
+ *entete du calendrier
+ */
+th {
+    padding: 0 2px;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+th.day div {
+    width: 28px;
+    border: 1px solid rgba(0,0,0,0.25);
+    text-align: center;
+}
+th.day div:first-child {
+    height: 24px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    background: white;
+    box-shadow: 0px 1px 0px 0px #fff, 0px 2px 0px 0px #ccc,0px 3px 0px 0px #fff, 0px 4px 0px 0px #ccc;
+    font-size: 16px;
+    font-weight: bold;
+    color: #444;
+    text-shadow: 1px 1px 0px white;
+    padding-top: 4px;
+}
+th.day div:last-child {
+	height: 16px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: 1px dashed rgba(0,0,0,0.30);
+	box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.4);
+	color: white;
+	font-size: 8px;
+	font-weight:600;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.40);
+	overflow: hidden;
+	padding-top: 2px;
+	background: rgb(79,133,187);
+	background: -moz-linear-gradient(top,  rgba(79,133,187,1) 0%, rgba(36,88,140,1) 99%);
+	background: linear-gradient(top,  rgba(79,133,187,1) 0%,rgba(36,88,140,1) 99%);
+}
+
+th small {
+	display: block;
+	font-weight: normal;
+}
+
+th.day.vacances div:first-child {
+	background-color:#C5D900;
+}
+
+th.ferie {
+	font-size: .8em;
+	color:#333;
+	background-color:#aaa;
+	background:-moz-linear-gradient( center top, #aaa 5%, #888 100% );
+}
+
+.cumul-tachy ul+span,
+input+table td.day span,
+input+table td:first-child span {
+	display: none;
+}
+input:checked+table td span {
+	display: block;
+}
+
+td {
+	font-size:10px;
+	font-family:Arial;
+	font-weight:normal;
+	color:#000;
+	text-align:right;
+	vertical-align:middle;
+	background-color:#aad4ff;
+	border:1px solid #aaa;
+	border-width:1px;
+	padding:1px 2px;
+}
+
+tr {
+  counter-reset: day;
+}
+
+tr td.over-drop:before,
+tr:hover td.day:before {
+	display:block;
+	text-align:left;
+	color: #aaa;
+	margin-top: -6px;
+	margin-left: -1px;
+	left:2px;
+	font-size:6px;
+	content: counter(day); /* Display the counter */
+}
+
+td.day {
+	background-color:#ccc;
+	counter-increment: day;      /* Increment the section counter */
+}
+td.day:empty:not(.dimanche):not(.rouge) {
+	background-color:#eee;
+}
+td.dimanche {
+	background-color:#999;
+}
+td.arret-travail {
+	text-align: center;
+	font-size: 1.1em;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+
+td.cumul-odb button{
+	background: #ffffff url('../img/icone-erreur.gif') no-repeat center center;
+	height: 18px;  
+	width: 18px;
+	cursor: pointer;
+	border-radius:50%;
+	border-style: none;  
+	box-shadow: 2px 2px 4px 2px #3366ff;
+}
+td.cumul-odb button+span{
+	display:none;
+}
+
+td:first-child div {
+   width: 120px;
+   font-size: 1.1em;
+   text-transform : capitalize;
+}
+
+tr:last-child td {
+	border-width:0px 1px 0px 0px;
+}
+tr td:last-child{
+	border-width:0px 0px 1px 0px;
+	font-size:12px;
+	font-weight:bold;
+	text-align:center;
+}
+
+td span {
+	margin: 0 4px;
+}
+
+td ul, td li {
+	margin : 0;
+	padding:0;
+	list-style-type:none;
+}
+th:first-child{
+	border-width:0px 0px 1px 0px;
+}
+th:last-child{
+	border-width:0px 0px 1px 1px;
+}
+
+td input {
+	font-size: .9em;
+	width: 28px;
+	text-align: center;
+}
+
+td ul {
+    display: none;
+}
+input:checked+table td:hover ul {
+	display: block;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
+    border-radius: 5px 5px 5px 5px;
+    color: #FFFFFF;
+    padding: 5px 15px;
+    z-index: 98;
+}
+
+.masque {
+	display:none;
+}
+
+td.rouge {
+    background-color: red;
+}
+
+.vert {
+    background-color: green;
+}

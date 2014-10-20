@@ -1,0 +1,73 @@
+#table-typeAT {
+    border-collapse: collapse;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Sans-Serif;
+    font-size: 12px;
+    text-align: left;
+}
+#table-typeAT th {
+    background: none repeat scroll 0 0 #B9C9FE;
+    color: #003399;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 6px;
+	text-align: center;
+}
+#table-typeAT td {
+    background: none repeat scroll 0 0 #E8EDFF;
+    border-top: 2px solid #FFFFFF;
+    color: #666699;
+    padding: 4px 6px;
+    font-size: 12px;
+}
+
+#table-typeAT thead tr.hidden {
+	display:none;
+}
+
+#table-typeAT fieldset {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #AAAAAA;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 1px 1px 2px #FFFFFF inset;
+    margin-top: 1em;
+    text-shadow: 0 1px 0 #FFFFFF;
+	padding: 4px;
+	opacity: .5;
+}
+
+#table-typeAT fieldset input:nth-child(2) {
+	width:220px;
+}
+
+#table-typeAT fieldset input:nth-child(3),
+#table-typeAT fieldset input:nth-child(4) {
+	width:40px;
+	text-align: center;
+}
+
+#table-typeAT td button {
+	border-style: none;
+	height: 24px;
+	width: 24px;
+	background-position:  center center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+
+.barre {
+text-decoration: line-through;
+}
+
+input[type=text], textarea {
+  transition: all 0.30s ease-in-out;
+  outline: none;
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid #ddd;
+}
+ 
+input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px #FFB700;
+  border: 1px solid #FFB700;
+}

@@ -13,7 +13,7 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-//include 'configSoap.inc.php';
+include 'configSoap.inc.php';
 
 // Liste des conducteurs
 function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
@@ -33,7 +33,7 @@ function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 		'soap_version'=>SOAP_1_2, 
 		'exceptions'=>true, 
 		'trace'=>1, 
-		'cache_wsdl'=> WSDL_CACHE_BOTH 
+		'cache_wsdl'=> WSDL_CACHE_NONE 
 	); 
 	try {
 		$clientSoap = new SoapClient($unWsdl, $options);

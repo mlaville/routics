@@ -29,7 +29,7 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.net/js/jspdf.min.js"></script>
 </head>
 <body>
 	<header>
@@ -226,7 +226,7 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="www.polinux.fr" />
 		</a>
 	</footer><!-- #footer -->
-<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/pdfRecapMensuel.js"></script>
 	<script type="text/javascript" src="./js/pdfHeuresDues.js"></script>
