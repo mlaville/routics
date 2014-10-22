@@ -8,7 +8,7 @@
  * @version    0.1
  * @revision   $0$
  * 
- *  Contrôle et Affecte l'identification au login Soap
+ *  ContrÃ´le et Affecte l'identification au login Soap
  *
  */
 session_name("flotte");
@@ -23,9 +23,11 @@ $retour = array(
 				'result' => null 
 				);
 
+
 if( $retour['succes'] ){
 
 	$resultDispatchers = soapGetDispatchers( $wsdl, $login, $_POST["login"] );
+
 	$erreurs = $resultDispatchers->Get_DispatchersResult->Errors;
 
 	$retour['succes'] = !isset($erreurs->Error);

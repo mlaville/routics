@@ -680,7 +680,7 @@ function chargeTt( uneDate, unTableau ) {
 }
 
 function changeMonth( uneDate ) {
-	/** a retablir
+	/** a retablir */
 	return $.post("./php/joursVacancesMois.php",
 		{ mois: [ uneDate.getFullYear(), ('0' + ( uneDate.getMonth() + 1 )).slice(-2) ].join('') },
 		function( data ) {
@@ -688,7 +688,7 @@ function changeMonth( uneDate ) {
 		},
 		"json"
 	);
-	*/
+	
 	return chargeTt( uneDate, fillRowTHeader( uneDate, document.querySelector('#table-calendrier thead tr'), [] ) );
 }
 
