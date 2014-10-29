@@ -1,0 +1,129 @@
+.CSSTableGenerator {
+	margin:0 12px;
+	padding:0;
+	box-shadow: 10px 10px 5px #888888;
+	border:1px solid #000000;
+	width:800px;
+}
+.CSSTableGenerator table{
+	width:100%;
+	margin:0px;padding:0px;
+border-collapse: collapse;}
+
+.CSSTableGenerator tr:hover td{
+	background-color:#ffffff;
+}
+
+.CSSTableGenerator td{
+	vertical-align:middle;
+	background-color:#aad4ff;
+	border:1px solid #aaa;
+	border-width:0px 1px 1px 0px;
+	padding:2px 8px;
+	font-size:10px;
+	font-family:Arial;
+	font-weight:normal;
+	color:#000000;
+}
+.CSSTableGenerator tr:last-child td{
+	border-width:0px 1px 0px 0px;
+}
+.CSSTableGenerator tr td:last-child{
+	border-width:0px 0px 1px 0px;
+}
+.CSSTableGenerator tr:last-child td:last-child{
+	border-width:0px 0px 0px 0px;
+}
+.CSSTableGenerator th{
+	background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
+	background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
+	padding:4px 8px;
+	background-color:#005fbf;
+	border:0px solid #aaa;
+	text-align:center;
+	border-width:0px 0px 1px 1px;
+	font-size:14px;
+	font-family:Arial;
+	font-weight:bold;
+	color:#ffffff;
+}
+.CSSTableGenerator tr.sousTotal td{
+	background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
+	background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
+
+	background-color:#005fbf;
+	border:0px solid #999;
+	border-width:0px 0px 1px 1px;
+	font-size:12px;
+	font-family:Arial;
+	font-weight:bold;
+	color:#ffffff;
+}
+.CSSTableGenerator tr.sousTotal td a{
+	color:#ffffff;
+}
+.CSSTableGenerator thead:hover th{
+	background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
+	background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
+
+	background-color:#005fbf;
+}
+.CSSTableGenerator td span {
+	margin: 0 8px;
+}
+.nombre {
+	text-align:right;
+}
+.td-km:after {
+	content:'km';
+	font-size:.9em;
+	padding:0 4px;
+}
+.td-euro:after {
+	content:'€';
+	font-size:.9em;
+	padding:0 4px;
+}
+.td-euro:empty:after {
+	display:none;
+}
+
+.td-euro + td + td:after {
+	content:'€/km';
+	font-size:.9em;
+	padding:0 4px;
+}
+.td-euro+td:empty:after {
+	display:none;
+}
+tr.sousTotal td.pourcent {
+	font-family: "Courier New",Courier,monospace;
+	font-weight: bold;
+	font-size:.9em;
+	padding:0 8px;
+	color: #D9EDF8;
+	border-left:none;
+}
+
+.pourcent:after  {
+	content:' %';
+	padding:0 2px;
+}
+.masque {
+	display:none;
+}
+
+td ul, td li {
+	margin : 0;
+	padding:0;
+	list-style-type:none;
+}
+.CSSTableGenerator th:first-child{
+	border-width:0px 0px 1px 0px;
+}
+.CSSTableGenerator th:last-child{
+	border-width:0px 0px 1px 1px;
+}

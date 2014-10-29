@@ -1,0 +1,27 @@
+#divFondPdf {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(32, 32, 32, 0.3);
+	display:none;
+}
+
+#divFondPdf button{
+	background-color: #e00000;
+	color:#fff;
+	font-family: Arial Black;
+	border-radius:50%;
+	margin-top: 4%;
+	margin-left: 94%;
+	font-size: 1.2em;
+	line-height: 1.4em;
+}
+
+#divFondPdf object{
+	height: 80%;
+	width: 90%;
+	margin: 0 5%;
+	background-color: #222;
+}

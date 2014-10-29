@@ -138,7 +138,7 @@ $user = isset($_SESSION['firstname'], $_SESSION['lastname']) ? $_SESSION['firstn
 	</tfoot>
     <tbody></tbody>
 </table>
-	<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/crudAT.js"></script>
 	<script type="text/javascript" src="./js/tt.js"></script>

@@ -14,7 +14,7 @@ function soapGetDispatchers( $unWsdl, $login, $unCode ){
 		'soap_version'=>SOAP_1_2, 
 		'exceptions'=>true, 
 		'trace'=>1, 
-		'cache_wsdl'=>WSDL_CACHE_NONE 
+		'cache_wsdl'=>WSDL_CACHE_BOTH
 	); 
 	set_time_limit ( 200 );
 	try {

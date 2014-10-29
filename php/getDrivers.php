@@ -58,7 +58,7 @@ function tServiceTachyDriver($client, $login, $idDriver, $dateDeb, $dateFin) {
 	$sender = soapSenderGetServiceTimesTachoDetail($login, $idDriver, $dateDeb, $dateFin);
 	
 	$resultTT = null;
-	set_time_limit ( 180 );
+	set_time_limit ( 360 );
 	try {
 		$resultTT = $client->Get_ServiceTimesTachoDetail($sender);
 	} catch (Exception $e) {
