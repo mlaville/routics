@@ -17,7 +17,7 @@ include 'configSoap.inc.php';
 
 // Liste des conducteurs
 function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
-	set_time_limit ( 180 );
+	set_time_limit ( 300 );
 	
 	/* Create Soap client */
 //	$clientSoap = null;

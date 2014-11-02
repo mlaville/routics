@@ -274,7 +274,11 @@ function gereDepassement( tr ) {
 	return depassement;
 }
 
-// Affiche une ligne du calendrier
+/**
+ * Affiche une ligne du calendrier
+ * dataConduct : Object
+ * tabOuvres : Array
+ */
 function ligneTT( dataConduct, tabOuvres ) {
 
 	var trConducteur = document.createElement('tr'),
@@ -727,7 +731,7 @@ window.addEventListener('load', function() {
 	 * Affichage du pdf planing
 	 */
 	document.getElementById('btnImprime').addEventListener( 'click', function() {
-	
+	/*
 		var objPdf = document.createElement('object');
 	
 		objPdf.setAttribute('type', 'application/pdf');
@@ -738,7 +742,8 @@ window.addEventListener('load', function() {
 		document.body.appendChild(
 			winManager.domFenetre( 'Planning des Absences', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
 		);
-
+	*/
+		return document.body.appendChild( domFenetrePdf( pdfPlanning( document.getElementById('table-calendrier'), gridAT.tabTypeAt() ) ), 'Planning des Absences' );
 	});
 	
 	return changeMonth( dateRef );
