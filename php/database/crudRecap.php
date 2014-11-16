@@ -5,13 +5,14 @@
  * @auteur     marc laville
  * @Copyleft 2013-2014
  * @date      21/10/2013
- * @version    0.5
- * @revision   $1$
+ * @version    0.6
+ * @revision   $5
  *
  * @date revision 29/05/2014 Tableau des Heures Dues
  * @date revision 07/06/2014 Calcul la colonne réseve à partir de la table des heures dues (t_heure_du_hdu)
  * @date revision 19/06/2014 Gestion de la Rubrique Ajustement
  * @date revision 08/09/2014 Debug du Calcul de la réserve (requete SQL)
+ * @date revision 05/11/2014 Correctiondu calcul des reports des heures dues d'un mois sur l'autre
  *
  * crud des récapitulatifs mensuels d'activite conducteur et Heures Dues
  *
@@ -114,13 +115,11 @@ function chargeRecap($dbConn, $at_date ) {
 
 	$stmt = $dbConn->prepare( "SELECT"
 		. " t_ts_service_tsm.PersonTransicsID, tsm_conduiteDisque, tsm_totalDisque, tsm_taReel, tsm_taReelModif, tsm_modifDisque,"
-		. " IFNULL( hd.hdu_soldeHrPrec1,"
-		. " ( ( hd_prec.hdu_soldeHrPrec1 + hd_prec.hdu_duEntreprise1 - hd_prec.hdu_duConductHr1 ) * hd_prec.hdu_pxHr1"
-		. " - hd_prec.hdu_duConductMt1 - hd_prec.hdu_primeA1 - hd_prec.hdu_primeB1 ) / hd_prec.hdu_pxHr1 ) AS hdu_soldeHrPrec1,"
+		. " 0 AS hdu_soldeHrPrec1,"
 		. " IFNULL( hd.hdu_soldeHrPrec2,"
 		. " ( ( hd_prec.hdu_soldeHrPrec2 + hd_prec.hdu_duEntreprise2 - hd_prec.hdu_duConductHr2 ) * hd_prec.hdu_pxHr2"
 //		. " - hd_prec.hdu_primeA - hd_prec.hdu_primeB - hd_prec.hdu_primeC ) / hd_prec.hdu_pxHr2 ) AS hdu_soldeHrPrec2,"
-		. " - hd_prec.hdu_primeB - hd_prec.hdu_primeC ) / hd_prec.hdu_pxHr2 ) AS hdu_soldeHrPrec2,"
+		. " - hd_prec.hdu_primeB - hd_prec.hdu_primeC ) / hd_prec.hdu_pxHr2 + hd_prec.hdu_duEntrepriseAjust) AS hdu_soldeHrPrec2,"
 		. " IFNULL( hd.hdu_pxHr1, hd_prec.hdu_pxHr1 ) AS hdu_pxHr1,"
 		. " IFNULL( hd.hdu_pxHr2, hd_prec.hdu_pxHr2 ) AS hdu_pxHr2,"
 		. " hd.hdu_duEntreprise1, hd.hdu_duEntreprise2,"
