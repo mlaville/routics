@@ -1,0 +1,3 @@
+# Règle pour tous les robots
+User-agent: *
+Disallow: /

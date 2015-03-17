@@ -286,7 +286,6 @@ function ligneTT( dataConduct, tabOuvres ) {
 		typeTTs = ['RD', 'AA', 'AO', 'arretTravail'],
 		cumulTachy = { RD:0, AR:0, AA:0, AO:0, arretTravail:0 },
 		ttMois = dataConduct.tt.ttMois,
-//		ttMois = dataConduct.tService,
 		atMois = dataConduct.arretsTravail,
 		actiMois = dataConduct.activite,
 		typeActi = ['RD', 'A', 'O'],
@@ -717,33 +716,21 @@ window.addEventListener('load', function() {
 		dateRef = ( dateParts.length == 2 ) ? new Date( dateParts[1], dateParts[0] - 1, 1 ) : new Date(),
 		inputMois = document.getElementById('input-mois');
 
-		inputMois.value = [dateRef.getMonth() + 1, dateRef.getFullYear()].join( '-' );
+	inputMois.value = [dateRef.getMonth() + 1, dateRef.getFullYear()].join( '-' );
 
 	document.getElementById('btnEditTypeAT').addEventListener( 'click', function() {
 		var eltTable = document.getElementById("table-typeAT");
 		
-		document.body.appendChild(
-			winManager.domFenetre( 'Types Arrêt de Travail', eltTable, { x:'36%', y:'120px', width:'424px', height: '560px' } ) 
-		);
+		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:'36%', y:'120px', width:'424px', height: '560px' } );
 		eltTable.style.display = 'block';
+		
+		return;
 	});
 	/*
 	 * Affichage du pdf planing
 	 */
 	document.getElementById('btnImprime').addEventListener( 'click', function() {
-	/*
-		var objPdf = document.createElement('object');
-	
-		objPdf.setAttribute('type', 'application/pdf');
-		objPdf.setAttribute('width', '100%');
-		objPdf.setAttribute('height', '100%');
-		objPdf.setAttribute('data', pdfPlanning( document.getElementById('table-calendrier'), gridAT.tabTypeAt() ));
-
-		document.body.appendChild(
-			winManager.domFenetre( 'Planning des Absences', objPdf, { x:'5%', y:'120px', width:'880px', height: '420px' }, true )
-		);
-	*/
-		return document.body.appendChild( domFenetrePdf( pdfPlanning( document.getElementById('table-calendrier'), gridAT.tabTypeAt() ) ), 'Planning des Absences' );
+		return domFenetrePdf( pdfPlanning( document.getElementById('table-calendrier'), gridAT.tabTypeAt() ), 'Planning des Absences' );
 	});
 	
 	return changeMonth( dateRef );

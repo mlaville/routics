@@ -1,4 +1,22 @@
- 
+/**
+ * listVehicule.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       18/03/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Gestion des ordres de réparation
+ * 
+ *
+ * A Faire
+ * - gerer les requetes ajax sans JQuery
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
 h2 {
   font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
   margin: 0;
@@ -159,11 +177,23 @@ nav input[type="radio"]:checked + label  img{
 	border-top: 1px solid #fff;
 	color: #669;
 }
-#table-or td a{
+#table-or td a {
+	background-position:  center center;
+	background-repeat: no-repeat;
+	display:inline-block;
 	padding: 0 4px;
 	margin: 0 8px;
+	width: 16px;
+	height: 16px;
 }
 
+#table-or td a:first-child {
+	background-image: url(../img/b_edit.png);
+}
+#table-or td a:last-child {
+	background-image: url(../img/b_drop.png);
+}
+	
 #table-or tbody tr td:last-child {
 width: 82px;
  /*   text-align:right; */

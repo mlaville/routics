@@ -19,7 +19,6 @@
  *
  * Appel :
  * - ./php/syntheseActiDriver.php
- * - ./php/pdfRecapService.php -- obsolète
  * - ./php/getRecapTpsServ.php"
  * - ./php/validRecap.php"
  * - ./php/crudDriver.php
@@ -826,10 +825,12 @@ window.addEventListener('load', function() {
 	 * Gere les éditions
 	 */
 	document.getElementById('btn_impRecap').addEventListener('click', function() {
-		return document.body.appendChild( domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ) ), 'Récapitulatif Mensuel d\'Activité' );
+//		return document.body.appendChild( domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ) ), 'Récapitulatif Mensuel d\'Activité' );
+		return domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ), 'Récapitulatif Mensuel d\'Activité' );
 	});
 	document.getElementById('btn_impHeuresDues').addEventListener('click', function() {
-		return document.body.appendChild( domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ) ), 'Tableau des Heures Dûes' );
+//		return document.body.appendChild( domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ) ), 'Tableau des Heures Dûes' );
+		return domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ), 'Tableau des Heures Dûes' );
 	});
 	document.getElementById('cb-codeOptiGest').addEventListener('change', mvcConducteur.switchEditCodeOptigest);
 	
