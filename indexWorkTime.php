@@ -226,7 +226,7 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="polinux.fr" />
 		</a>
 	</footer><!-- #footer -->
-<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/pdfRecapMensuel.js"></script>
 	<script type="text/javascript" src="./js/pdfHeuresDues.js"></script>

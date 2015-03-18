@@ -68,8 +68,8 @@ button.close::before {
   display: block;
   position: absolute;
   font-size: 1.4em;
-  left: -.1em;
-  top: -.05em;
+  left: -.05em;
+  top: .05em;
 }
 button:active {
   border: 2px inset #666666;

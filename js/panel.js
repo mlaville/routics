@@ -96,9 +96,11 @@ var winManager = (function (document) {
 				btnClose = document.createElement("button"),
 				divContent = labelRd.appendChild( document.createElement("div") ),
 				closeFenetre = function(e) {
+				
 					e.preventDefault();
+					unContenu.style.display = 'none';
+
 					if( (keepContentOnClose || false) == true ) {
-						unContenu.style.display = 'none';
 						divFenetre.parentNode.appendChild(unContenu);
 					}
 					
@@ -187,7 +189,7 @@ function domFenetrePdf(chainePDF, unTitre) {
 	objPdf.setAttribute('height', '100%');
 	objPdf.setAttribute('data', chainePDF);
 	
-	return winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, null, pos, true );
+	return winManager.domFenetre( unTitre, objPdf, null, pos, true );
 }
 
 var menuFactory = (function (document) {

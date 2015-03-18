@@ -718,16 +718,19 @@ window.addEventListener('load', function() {
 
 	inputMois.value = [dateRef.getMonth() + 1, dateRef.getFullYear()].join( '-' );
 
+	/*
+	 * Affichage de la fenêtre de gestion des types d'arret de travail
+	 */
 	document.getElementById('btnEditTypeAT').addEventListener( 'click', function() {
 		var eltTable = document.getElementById("table-typeAT");
 		
-		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:'36%', y:'120px', width:'424px', height: '560px' } );
+		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:'36%', y:'120px', width:'424px', height: '560px' }, true );
 		eltTable.style.display = 'block';
 		
 		return;
 	});
 	/*
-	 * Affichage du pdf planing
+	 * Affichage du pdf planning
 	 */
 	document.getElementById('btnImprime').addEventListener( 'click', function() {
 		return domFenetrePdf( pdfPlanning( document.getElementById('table-calendrier'), gridAT.tabTypeAt() ), 'Planning des Absences' );
