@@ -56,6 +56,9 @@ function statVehicle($dbConn, $tabParam) {
 	$sqlStat = str_replace( '{rupture}', ( $rupture == 'transport' ) ? 'Filter' : 'ChassisNumber', $sqlStat );
 	$stmt = $dbConn->prepare( $sqlStat );
 	
+//		$response["sqlStat"] = $sqlStat;
+	$response = array( "sqlStat" => $sqlStat );
+	
 //	if( $stmt->execute( array( $dateInf, $dateSup, $dateInf, $dateSup, $rupture ) ) ) {
 	if( $stmt->execute( array( $dateInf, $dateSup, $dateInf, $dateSup ) ) ) {
 		$response["result"] = $stmt->fetchAll( PDO::FETCH_ASSOC );
@@ -81,7 +84,7 @@ function statVehicle($dbConn, $tabParam) {
 	} else {
 		$err = $stmt->errorInfo();
 		$response["error"] = array( "reason"=>$err[2] );
-		$response["sqlStat"] = $sqlStat;
+//		$response["sqlStat"] = $sqlStat;
 	}
 	
 	return $response;

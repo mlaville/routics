@@ -3,7 +3,7 @@
 */
 include 'ident.inc.php';
 include './soap/configSoap.inc.php';
-include 'fonctionSoap.inc.php';
+include './soap/funcVehicles.php';
 
 function cmp($a, $b) {
     return intval( $a->VehicleID ) - intval( $b->VehicleID );
@@ -13,10 +13,9 @@ $response = identSoap( $login );
 
 if( $response["success"] ) {
 	$dateRef = date( DateTime::W3C, mktime(0, 0, 0, date("m")  , date("d")-30, date("Y")) ); // '2013-03-26T00:51:30+00:00'
-	$resultVehicule = soapGetVehicles( $wsdl, $login, $dateRef );
 
-	$response["result"] = $resultVehicule->Get_VehiclesResult->Vehicles->VehicleResult;
-
+	$response = soapGetVehicles( $wsdl, $login, $dateRef );
+	
 	usort($response["result"], "cmp");
 }
 

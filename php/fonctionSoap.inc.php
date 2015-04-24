@@ -73,9 +73,11 @@ function soapGetVehicles( $unWsdl, $login, $uneDate ){
 
 	/* Create selection object */
 	$VehicleSelection = new stdClass();
-	$VehicleSelection->DateTimeRange = $DateTimeRange;
+//	$VehicleSelection->DateTimeRange = $DateTimeRange;
 	$VehicleSelection->IncludeDrivers = true;
 	$VehicleSelection->IncludeActivity = true;
+	$VehicleSelection->IncludeTechnicalInfo = true;
+	$VehicleSelection->Identifiers = Array();
 
 	/* Create global sender object */
 	$sender = new stdClass();
@@ -83,7 +85,7 @@ function soapGetVehicles( $unWsdl, $login, $uneDate ){
 	$sender->VehicleSelection=$VehicleSelection;
 
 	/* Call the webservice */
-	return $client->Get_Vehicles($sender);
+	return $client->Get_Vehicles_V7($sender);
 }
 
 
