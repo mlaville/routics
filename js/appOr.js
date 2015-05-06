@@ -1,3 +1,26 @@
+/**
+ * formOr.js
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       03/05/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Gestion des ordres de réparation
+ * 
+ * Appel  ajax:
+ * - ./php/getVehicule.php
+ * - ./php/getTrailers.php
+ *
+ * Note : les appels getVehicule et getTrailers sont parametrés par le dataset de document.body
+ *
+ * A Faire
+ * - gerer les requetes ajax sans JQuery
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 AppOr = {
 	typeVehicule : 0,
 	vehicule : null
@@ -6,21 +29,21 @@ AppOr = {
 // VehicleView
 function ajoutVehicule( objet, unUl ) {
 	var	li_vehicule = unUl.appendChild( document.createElement("li") ),
-		a_vehicule = li_vehicule.appendChild( document.createElement("a") );
+		a_vehicule = li_vehicule.appendChild( document.createElement("a") ),
+		span_idTransics = document.createElement("span"),
+		span_numParc = document.createElement("span"),
+		span_immat = document.createElement("span"),
+		div_km = document.createElement("span");
 		
-    span_idTransics = document.createElement("span");
 	span_idTransics.classList.add("idTransics");
     span_idTransics.textContent = objet.VehicleTransicsID;
 	
-    span_numParc = document.createElement("span");
 	span_numParc.classList.add("numParc");
 //    span_numParc.textContent = objet.VehicleExternalCode;
     span_numParc.textContent = objet.VehicleID;
 		
-    span_immat = document.createElement("span");
     span_immat.textContent = objet.LicensePlate;
 	
-    div_km = document.createElement("span");
 	div_km.classList.add("km");
     div_km.textContent = ("000000" + objet.CurrentKms).substr(-7);
 	
@@ -44,13 +67,14 @@ function ajoutRemorque( objet ) {
 }
 
 function loadVehicules( ) {
-	$.post("./php/getVehicule.php", { },
-//        $.post("./php/getRemoteVehicule.php", { "dateRef": "" },
+//	$.post("./php/getVehicule.php", { },
+	$.post( document.body.dataset.vehicule, { },
 		function(data){
 			data.result.forEach( ajoutTracteur );
 	}, "json");
 	
-	$.post("./php/getTrailers.php", { },
+//	$.post("./php/getTrailers.php", { },
+	$.post( document.body.dataset.trailers, { },
 		function(data){
 			data.result.forEach( ajoutRemorque );
 	}, "json");
@@ -68,12 +92,12 @@ function switchVehicle( rd ) {
 	}
 	
 	for( i = 0 ; i < arrUl.length ; i++ ) {
-		if( AppOr.typeVehicule == i ) {
-//				arrUl[i].style.removeProperty('display');
+/*		if( AppOr.typeVehicule == i ) {
 			arrUl[i].style.display = 'block';
 		} else {
 			arrUl[i].style.display = 'none';
-		}
+		}*/
+		arrUl[i].style.display = ( AppOr.typeVehicule == i ) ? 'block' : 'none';
 	}
 	
 	return false;

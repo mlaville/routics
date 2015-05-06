@@ -14,8 +14,24 @@
  * @date   revision   marc laville  08/02/2015 : menuFactory
  * @date   revision   marc laville  27/02/2015 : btnClose remplace divClose
  * @date   revision   marc laville  01/03/2015 : revise le mécanisme de mise au premier plan
+ * @date   revision   marc laville  16/03/2015 : nettoyage du code
+ * @date   revision   marc laville  19/03/2015 : nouvelle methode createDomPanel + gestion du decalage de position à la creation de la fenetre
+ * @date   revision   marc laville  05/05/2015 : correction dans l'adressage de contenu dans la procedure closeFenetre
  *
  * A faire : case de miniaturisation, plein ecran
+ *
+ Ext.create('Ext.window.Window', {
+    title: 'Hello',
+    height: 200,
+    width: 400,
+    layout: 'fit',
+    items: {  // Let's put an empty grid in just to illustrate fit layout
+        xtype: 'grid',
+        border: false,
+        columns: [{header: 'World'}],                 // One header just for show. There's no data,
+        store: Ext.create('Ext.data.ArrayStore', {}) // A dummy empty data store
+    }
+}).show();
  * 
  */
 var winManager = (function (document) {
@@ -86,38 +102,72 @@ var winManager = (function (document) {
 		},
 		/**
 		 * Création d'une fenêtre
-		 * Construction de tous les élèments du dom constituant la fenetre
 		 */
 		createDomFenetre = function ( unTitre, unContenu, nomAppli, param, keepContentOnClose ) {
+
+			return createDomPanel({
+						title: unTitre,
+						appName:nomAppli,
+						item: unContenu,
+						keepContentOnClose: keepContentOnClose,
+						closable : true,
+						frame : param ? { position: {x:param.x, y:param.y}, size: {width:param.width, height:param.height} } : undefined
+					});
+		},
+		/**
+		 * Retourne la position pour une novelle fenêtre : gère le décalage (20px, 20px)
+		 */
+		posRef = function ( nomAppli ) {
+			var pos = { x:120, y:60 };
+			
+			if( listDivWindows[ nomAppli ] ) {
+				var w = listDivWindows[ nomAppli ].lastChild,
+					s = w ? w.style : null;
+					
+				if(s) {
+					pos.x = ( parseInt( s.left ) + 20 );
+					pos.y = ( parseInt( s.top ) + 20 );
+				}
+			}
+			return pos;
+		}, 
+		/**
+		 * Création d'une fenêtre
+		 * Construction de tous les élèments du dom constituant la fenetre
+		 */
+		createDomPanel = function ( options ) {
 			var divFenetre = document.createElement("div"),
-				labelRd = divFenetre.appendChild( document.createElement("label") )
+				labelRd = divFenetre.appendChild( document.createElement("label") ),
 				inputRd = labelRd.appendChild( document.createElement("input") ),
 				divTitre = labelRd.appendChild( document.createElement("div") ),
 				btnClose = document.createElement("button"),
 				divContent = labelRd.appendChild( document.createElement("div") ),
-				closeFenetre = function(e) {
+				nomAppli = options.appName || '_',
+				frame = options.frame || { position: posRef(nomAppli), size: {width:320, height:240} },
 				
+				closeFenetre = function(e) {
 					e.preventDefault();
-					unContenu.style.display = 'none';
-
-					if( (keepContentOnClose || false) == true ) {
-						divFenetre.parentNode.appendChild(unContenu);
+					if( (options.keepContentOnClose || false) == true ) {
+//						unContenu.style.display = 'none';
+						divContent.firstChild.style.display = 'none';
+						divFenetre.parentNode.appendChild(divContent.firstChild);
 					}
 					
 					return divFenetre.parentNode.removeChild(divFenetre);
 				};
-			nomAppli = nomAppli || '_';
 			inputRd.setAttribute( 'type', 'radio' );
 			inputRd.setAttribute( 'name', nomAppli );
 			inputRd.setAttribute( 'form', nomAppli );
 			inputRd.addEventListener( "change", changeKeyWindows );
 			
-			if( param != undefined ) {
-				divFenetre.style.left = param.x;
-				divFenetre.style.top = param.y;
-				divFenetre.style.width = param.width;
-				divFenetre.style.height = param.height;
-			}
+			/*
+			 * positionnement du panel
+			 */
+			divFenetre.style.left = frame.position.x + 'px';
+			divFenetre.style.top = frame.position.y + 'px';
+			divFenetre.style.width = frame.size.width + 'px';
+			divFenetre.style.height = frame.size.height + 'px';
+
 			divFenetre.className = "fenetre";
 			divTitre.className = "titreFenetre";
 			btnClose.className = "close";
@@ -126,23 +176,30 @@ var winManager = (function (document) {
 			btnClose.addEventListener( "click", closeFenetre );
 			
 			divTitre.appendChild( btnClose );
-			divTitre.appendChild( document.createTextNode(unTitre) );
-			if(unContenu) {
-				divContent.appendChild(unContenu);
+			divTitre.appendChild( document.createTextNode(options.title) );
+			
+			/*
+			 * place le conteu de la fenetre
+			 */
+			if(options.item) {
+				divContent.appendChild(options.item);
 			}
 			
 			$(divFenetre).draggable({ handle: '.titreFenetre' });
 			divFenetre.style.position = 'fixed';
 			
 			addWindow(divFenetre, nomAppli);
+			/*
+			 * pour passer la fenêtre au premier plan
+			 */
 			inputRd.dispatchEvent( new MouseEvent( "click", { bubbles: true, cancelable: true, view: window } ) );
 			
 			return divFenetre;
 		}
 
   return {
+	createDomPanel: createDomPanel,
 	domFenetre : createDomFenetre,
-	// listeFenetres : listDomFenetres,
 	addListWindows : addListWindows,
 	quitApp:quitApp,
 	frontWindow : frontWindow
@@ -162,7 +219,6 @@ function domItemMenu(unTitre, nomMenu, action) {
 	label.appendChild( document.createTextNode(unTitre) );
 	
 	if( action !== undefined ) {
-//		item.addEventListener('click', action);
 		input.addEventListener('change', action);
 	}
 
@@ -181,7 +237,7 @@ function domMenu(unTitre) {
 }
 
 function domFenetrePdf(chainePDF, unTitre) {
-	var pos = { x:'5%', y:'120px', width:'880px', height: '420px' },
+	var pos = { x: 48, y: 128, width: 780, height: 620 },
 		objPdf = document.createElement('object');
 
 	objPdf.setAttribute('type', 'application/pdf');
@@ -189,7 +245,7 @@ function domFenetrePdf(chainePDF, unTitre) {
 	objPdf.setAttribute('height', '100%');
 	objPdf.setAttribute('data', chainePDF);
 	
-	return winManager.domFenetre( unTitre, objPdf, null, pos, true );
+	return winManager.domFenetre( 'Récapitulatif Mensuel d\'Activité', objPdf, null, pos, true );
 }
 
 var menuFactory = (function (document) {
@@ -210,7 +266,6 @@ var menuFactory = (function (document) {
 			
 			input.setAttribute( 'type', 'radio' );
 			input.setAttribute( 'name', 'menu_' + nomMenu );
-//			input.setAttribute( 'id', nomMenu + '-' + unTitre );
 			
 			span.textContent = unTitre;
 			

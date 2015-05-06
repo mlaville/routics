@@ -13,6 +13,7 @@
  * @date revision   21/04/2014  Edition du planning
  * @date revision   25/05/2014  Interprétation du window.location.search
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
+ * @date revision   05/05/2015  Prise en compte des données custom
  *
  * Affichage du planning client
  * 
@@ -661,9 +662,11 @@ function chargeOdb( strMois, trConduct, synchronise ) {
 
 function chargeTt( uneDate, unTableau ) {
 
-	var param = { mois: uneDate.getFullYear() + '-' + ( uneDate.getMonth() + 1 ) },
-			jqxhr = $.post("./php/getDrivers.php", param,
+//		jqxhr = $.post("./php/getDrivers.php", param,
 //	 jqxhr = $.post("./data/getDrivers.json", param,
+	var	param = { mois: [ uneDate.getFullYear(), uneDate.getMonth() + 1 ].join('-') },
+		jqxhr = $.post( document.body.dataset.drivers, 
+			param,
 			function(data){
 				document.getElementById('ajax-loader').style.display='none';
 
@@ -724,7 +727,7 @@ window.addEventListener('load', function() {
 	document.getElementById('btnEditTypeAT').addEventListener( 'click', function() {
 		var eltTable = document.getElementById("table-typeAT");
 		
-		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:'36%', y:'120px', width:'424px', height: '560px' }, true );
+		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:136, y:120, width:424, height: 560 }, true );
 		eltTable.style.display = 'block';
 		
 		return;

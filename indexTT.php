@@ -12,6 +12,7 @@
  * 
  * @date revision  marc laville le 08/01/2014 administration des types d'arrêts (temps, couleur)
  * @date revision  marc laville le 26/06/2014 Usage de input type=color en lieu et place de spectrum
+ * @date revision   05/05/2015  Prise en compte des données custom
  *
  * A Faire
  * - fixer les entetes de colonne
@@ -29,9 +30,17 @@ if( !isset( $_SESSION['ident']) ) {
 }
 
 include './php/soap/configSoap.inc.php';
-include './php/fonctionSoap.inc.php';
 
 $user = isset($_SESSION['firstname'], $_SESSION['lastname']) ? $_SESSION['firstname'] . ' ' . $_SESSION['lastname'] : '** **';
+
+/* Lecture des parametres pour l'affichage de l'entete */
+$param = json_decode( file_get_contents( './custom/param.json') );
+
+$demo = isset($param->demo) ? $param->demo : false;
+$ajaxDrivers = $demo ? './response/getDrivers.json' : './php/getDrivers.php';
+
+$dataUrlImg = $param->dataUrlImg;
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -55,7 +64,8 @@ $user = isset($_SESSION['firstname'], $_SESSION['lastname']) ? $_SESSION['firstn
 	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script>
 
 </head>
-<body>
+<body data-drivers="<?php echo $ajaxDrivers; ?>" >
+<input type="hidden" id="dataUrl" value="<?php echo $dataUrlImg; ?>" />
 	<header>
 		<img alt="Gestion des TT" src="./img/time_machine.png">Gestion des Temps de Travail
 		<ul>
@@ -79,7 +89,7 @@ $user = isset($_SESSION['firstname'], $_SESSION['lastname']) ? $_SESSION['firstn
 				<a href="./php/deconnexion.php">Déconnexion</a>
 			</div>
 		</nav>
-		<h3>bouquerod<p>pierre s.a.s.</p></h3>
+			<?php echo $param->header; ?>
 	</header>
 	<div>
 		<label for="afficheTT">Afficher les temps de Travail</label>

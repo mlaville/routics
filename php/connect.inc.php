@@ -11,6 +11,7 @@
  *  Connexion  à la base de données
  *
  */
+ 
 include 'config.inc.php';
 
 try {

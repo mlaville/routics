@@ -1,10 +1,33 @@
 <?php
+/**
+ * indexOR.php
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       03/05/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Gestion des ordres de réparation
+ * 
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
 session_name("flotte");
 session_start();
 
 if( !isset( $_SESSION['ident']) ) {
 	header("Location: ./");
 }
+/* Lecture des parametres pour l'affichage de l'entete */
+$param = json_decode( file_get_contents( './custom/param.json') );
+
+$demo = isset($param->demo) ? $param->demo : false;
+$ajaxVehicule = $demo ? './response/getVehicule.json' : './php/getVehicule.php';
+$ajaxDetailVehicule = $demo ? './response/getDetailVehicule.json' : './php/getDetailVehicule.php';
+$ajaxTrailers = $demo ? './response/getTrailers.json' : './php/getTrailers.php';
+$ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,10 +48,10 @@ if( !isset( $_SESSION['ident']) ) {
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	
 </head>
-<body>
+<body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
 	<header>
 			<img alt="Gestion des OR" src="./img/dossierOr.png">Gestion des Ordres de Réparation
-			<h3>bouquerod<p>pierre s.a.s.</p></h3>
+			<?php echo $param->header; ?>
 			<nav>
 			<form name="frm_menu">
 				<input type="radio" id="rd-saisie" name="menu" checked >

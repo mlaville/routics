@@ -184,7 +184,7 @@ tr:last-child td {
 }
 tr td:last-child{
 	border-width:0px 0px 1px 0px;
-	font-size:12px;
+   font-size: 1.1em;
 	font-weight:bold;
 	text-align:center;
 }

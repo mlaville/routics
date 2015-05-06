@@ -65,7 +65,6 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 						libelle: formAT.inputLibelle.value,
 						code: formAT.inputCode.value,
 						duree: time2mn( formAT.inputDuree.value ),
-//						couleur:$(formAT.inputColor).spectrum("get").toHexString()
 						couleur:formAT.inputColor.value
 					},
 					vueTbTypeAT
@@ -74,7 +73,6 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 		editElmt = function ( elmt ) {
 			if( elmt == null ) {
 				formAT.idTypeAt.value = '';
-//				$(formAT.inputColor).spectrum("set", '#fff');
 				formAT.inputColor.value = '#fff';
 				formAT.inputLibelle.value = '';
 				formAT.inputCode.value = '';
@@ -82,7 +80,6 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 			} else {
 				// Affichage de l'objet dans le form
 				formAT.idTypeAt.value = elmt.IdTypeAt;
-//				$(formAT.inputColor).spectrum("set", elmt.tpa_couleur);
 				formAT.inputColor.value = elmt.tpa_couleur;
 				formAT.inputLibelle.value = elmt.tpa_libelle;
 

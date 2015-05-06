@@ -9,6 +9,12 @@
  *
  * Gestion des ordres de réparation
  * 
+ * Appel  ajax:
+ * - ../php/crudOR.php
+ * - ./php/getDetailVehicule.php
+ * - ./php/getKmCompteur.php
+ *
+ * Note : les appels getVehicule et getTrailers sont parametrés par le dataset de document.body
  *
  * A Faire
  * - gerer les requetes ajax sans JQuery
@@ -51,9 +57,11 @@
 	}
 	
 	document.getElementById('marque').textContent = '';
-	$.post("./php/getDetailVehicule.php", { "typeVehicule": AppOr.typeVehicule, "idVehicule": idTransics },
+//	$.post("./php/getDetailVehicule.php",
+	$.post( document.body.dataset.detail_vehicule,
+		{ "typeVehicule": AppOr.typeVehicule, "idVehicule": idTransics },
 		function(data){
-			if(data.success){
+			if(data.success) {
 				document.getElementById('marque').textContent = data.marque;
 			}
 	}, "json");
@@ -116,16 +124,12 @@ function afficheListOr( unTab, htmlTable ) {
 					} );
 				},
 				addTd = function( lib ) {
-					 trOr.appendChild( document.createElement('td') ).textContent = lib;
-					 
-					 return;
+					 return trOr.appendChild( document.createElement('td') ).textContent = lib;
 				};
 			
-//			aEdit.appendChild( document.createElement('img') ).setAttribute('src', "./img/b_edit.png");
 			aEdit.setAttribute('href', "#");
 			aEdit.addEventListener('click', editOr);
 			
-//			aSup.appendChild( document.createElement('img') ).setAttribute('src', "./img/b_drop.png");
 			aSup.setAttribute('href', "#");
 			aSup.addEventListener( 'click', deleteOr );
 		
@@ -229,7 +233,8 @@ window.addEventListener('load', function() {
 		
 			if( document.forms["frm_nav"].typeElement[0].checked ) {
 			
-				$.post("./php/getKmCompteur.php", {
+//				$.post("./php/getKmCompteur.php", {
+				$.post(document.body.dataset.km_compteur, {
 						"idVehicule": document.getElementById('idTransics').value,
 						"dateOr": dateText 
 					},
@@ -239,10 +244,10 @@ window.addEventListener('load', function() {
 						noeud.value = data.km;
 						
 						if(data.km != null) {
-						do {
-							noeud = noeud.previousSibling;
-						} while(noeud.nodeType != Node.ELEMENT_NODE);
-						noeud.getElementsByTagName('span')[0].textContent = 'compteur';
+							do {
+								noeud = noeud.previousSibling;
+							} while(noeud.nodeType != Node.ELEMENT_NODE);
+							noeud.getElementsByTagName('span')[0].textContent = 'compteur';
 						} else {
 						}
 						return;

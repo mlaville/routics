@@ -181,18 +181,20 @@ set_time_limit( 300 );
 
 $filename = './trace.log';
 $tab = file( $filename, FILE_SKIP_EMPTY_LINES );
-$lastDate = new DateTime( array_pop( $tab ) , new DateTimeZone('Europe/Paris') );
+$tz = new DateTimeZone('Europe/Paris');
+$lastDate = new DateTime( array_pop( $tab ), $tz );
 
-$lastDate->add(new DateInterval('P1D'));
+if( $lastDate < new DateTime( '2 days ago', $tz ) ) {
+	$lastDate->add(new DateInterval('P1D'));
 
-insertActiConduite( $dbFlotte,
-				new SoapClient("http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL"),
-				calcLogin(),
-				$lastDate
-//				date( "Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 1, date("y")) )
-//				date( "Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 2, 2013) )
-			); // '2013-03-26T00:51:30+00:00'
+	insertActiConduite( $dbFlotte,
+					new SoapClient("http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL"),
+					calcLogin(),
+					$lastDate
+	//				date( "Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 1, date("y")) )
+	//				date( "Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 2, 2013) )
+				); // '2013-03-26T00:51:30+00:00'
 
-file_put_contents( $filename, date_format($lastDate, 'Y-m-d') . PHP_EOL, FILE_APPEND | LOCK_EX );
-
+	file_put_contents( $filename, date_format($lastDate, 'Y-m-d') . PHP_EOL, FILE_APPEND | LOCK_EX );
+}
 ?>

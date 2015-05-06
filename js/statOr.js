@@ -101,7 +101,8 @@ function afficheStat(f){
 		rupture: f["rupture"][0].checked ? 'marque' : 'transport'
 	};
 	
-	$.post("./php/getStatVehicles.php", param,
+//	$.post("./php/getStatVehicles.php", param,
+	$.post( document.body.dataset.stat, param,
 		function(data){
 			listStatVehicule( data.result, param.rupture );
 			f["calculStat"].disable = false;
@@ -112,11 +113,18 @@ function afficheStat(f){
 
 function editStat(f, typeEdit){
 
-	return visuPdf( './php/pdfStatVehicle.php?dateInf=' + f["dateInf"].value
-			+ '&dateSup=' + f["dateSup"].value 
-			+ '&typeVehicule=' + ( ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' )
-			+ '&typeEdit=' + typeEdit
-			);
+		return domFenetrePdf( './php/pdfStatVehicle.php'
+					+ '?dateInf=' + f["dateInf"].value
+					+ '&dateSup=' + f["dateSup"].value 
+					+ '&typeVehicule=' + ( ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' )
+					+ '&typeEdit=' + typeEdit,
+				'Statistiques' );
+
+//		return visuPdf( './php/pdfStatVehicle.php?dateInf=' + f["dateInf"].value
+//			+ '&dateSup=' + f["dateSup"].value 
+//			+ '&typeVehicule=' + ( ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' )
+//			+ '&typeEdit=' + typeEdit
+//			);
 }
 
 window.addEventListener('load', function() {

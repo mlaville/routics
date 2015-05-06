@@ -51,7 +51,8 @@ window.addEventListener('load', function() {
 		
 		document.getElementById('ajax-loader').style.display = 'block';
 		
-		$.post("./php/login.php", { login: f['login'].value, pwd: f['pwd'].value },
+//		$.post("./php/login.php", { login: f['login'].value, pwd: f['pwd'].value },
+		$.post( document.body.dataset.login, { login: f['login'].value, pwd: f['pwd'].value },
 			function(data){
 				document.getElementById('ajax-loader').style.display = 'none';
 				if(data.succes) {

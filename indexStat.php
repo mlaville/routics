@@ -1,10 +1,31 @@
 ﻿<?php
+/**
+ * indexStat.php
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       04/05/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Statisyique sur les ordres de réparation
+ * 
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 session_name("flotte");
 session_start();
 
 if( !isset( $_SESSION['ident']) ) {
 	header("Location: ./");
 }
+/* Lecture des parametres pour l'affichage de l'entete */
+$param = json_decode( file_get_contents( './custom/param.json') );
+
+$demo = isset($param->demo) ? $param->demo : false;
+$ajaxVehicule = $demo ? './response/getVehicule.json' : './php/getVehicule.php';
+$ajaxTrailers = $demo ? './response/getTrailers.json' : './php/getTrailers.php';
+$ajaxStat = $demo ? './response/getStatVehicles.php' : './php/getStatVehicles.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -14,22 +35,22 @@ if( !isset( $_SESSION['ident']) ) {
 	<meta content="marc Laville - polinux" name="author" />
 	<meta content="Transics Véhicules" name="description" />
 	
+	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" />
 	<link rel="stylesheet" type="text/css" href="./css/layout-old.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/listVehicule.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/form.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/tableGenerator.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="./css/pdfViewer.css" />
 
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	
 </head>
-<body>
+<body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-stat="<?php echo $ajaxStat; ?>" >
 	<header>
 			<img alt="Gestion des OR" src="./img/dossierOr.png">Gestion des Ordres de Réparation
-			<h3>bouquerod<p>pierre s.a.s.</p></h3>
+			<?php echo $param->header; ?>
 			<nav>
 			<form name="frm_menu">
 				<input type="radio" id="rd-saisie" name="menu">
@@ -140,8 +161,8 @@ if( !isset( $_SESSION['ident']) ) {
 			<img src="http://bao.polinux.net/img/polinux-micro.gif" alt="www.polinux.net" style="border-style: none;">
 		</a>
 	</footer><!-- #footer -->
+	<script type="text/javascript" src="./js/panel.js"></script>
 	<script src="./js/appOr.js" type="text/javascript"></script>
 	<script src="./js/statOr.js" type="text/javascript"></script>
-	<script src="./js/pdfViewer.js" type="text/javascript"></script>
 </body>
 </html>

@@ -68,14 +68,21 @@ button.close::before {
   display: block;
   position: absolute;
   font-size: 1.4em;
-  left: -.05em;
+  left: -.1em;
+  top: -.05em;
+}
+button.close:active::before {
+  left: 0;
   top: .05em;
 }
+
+
 button:active {
   border: 2px inset #666666;
-  left: .2em;
-  top: .2em;
+  left: .1em;
+  top: .1em;
 }
+
 button.dirty:after {
   content:'\25CF';
   color: #a9a9a9;
