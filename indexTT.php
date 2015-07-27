@@ -61,7 +61,8 @@ $dataUrlImg = $param->dataUrlImg;
 	
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script>
+<!--	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script> -->
+<script type="text/javascript" src="http://lib.polinux.net/js/jspdf.js"></script>
 
 </head>
 <body data-drivers="<?php echo $ajaxDrivers; ?>" >
@@ -148,7 +149,7 @@ $dataUrlImg = $param->dataUrlImg;
 	</tfoot>
     <tbody></tbody>
 </table>
-	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/crudAT.js"></script>
 	<script type="text/javascript" src="./js/tt.js"></script>

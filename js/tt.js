@@ -14,6 +14,7 @@
  * @date revision   25/05/2014  Interprétation du window.location.search
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
  * @date revision   05/05/2015  Prise en compte des données custom
+ * @date revision   27/07/2015  Passage du parametre zone pour la requete des jours fériés
  *
  * Affichage du planning client
  * 
@@ -662,7 +663,7 @@ function chargeOdb( strMois, trConduct, synchronise ) {
 
 function chargeTt( uneDate, unTableau ) {
 
-//		jqxhr = $.post("./php/getDrivers.php", param,
+//	jqxhr = $.post("./php/getDrivers.php", param,
 //	 jqxhr = $.post("./data/getDrivers.json", param,
 	var	param = { mois: [ uneDate.getFullYear(), uneDate.getMonth() + 1 ].join('-') },
 		jqxhr = $.post( document.body.dataset.drivers, 
@@ -686,11 +687,14 @@ function chargeTt( uneDate, unTableau ) {
 }
 
 function changeMonth( uneDate ) {
-	/** a retablir */
+
 	return $.post("./php/joursVacancesMois.php",
-		{ mois: [ uneDate.getFullYear(), ('0' + ( uneDate.getMonth() + 1 )).slice(-2) ].join('') },
+		{
+			mois: [ uneDate.getFullYear(), ('0' + ( uneDate.getMonth() + 1 )).slice(-2) ].join(''),
+			zone: 'A'
+		},
 		function( data ) {
-			chargeTt( uneDate, fillRowTHeader( uneDate, document.querySelector('#table-calendrier thead tr'), data ) );
+			return chargeTt( uneDate, fillRowTHeader( uneDate, document.querySelector('#table-calendrier thead tr'), data ) );
 		},
 		"json"
 	);

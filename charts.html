@@ -109,13 +109,6 @@ function alertContents(httpRequest) {
 	window.addEventListener( 'load', function(){
 		var ctx = document.getElementById("canvas").getContext("2d"),
 			formInfo = document.forms.namedItem("formInfo");
-	/*		
-		window.myLine = new Chart(ctx).Line(lineChartData, {
-			responsive: true
-		});
-		*/
-		/* https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects */
-
 		formInfo.addEventListener('submit', function(ev) {
 
 			ev.preventDefault();
