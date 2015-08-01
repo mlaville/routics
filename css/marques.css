@@ -1,0 +1,38 @@
+/**
+ * marques.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       01/08/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Personnalisation de l'affichage d'un vehicule suivant sa marque
+ * 
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+.marque output{
+  display: block;
+    width: 100%;
+	height: 128px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding: 2px;
+  font-size: .7em;
+  color:#999;
+}
+
+.renault {
+  background-image: url(./marques/logo-renault.png);
+}
+.man {
+  background-image: url(./marques/logo-man.png);
+}
+.scania {
+  background-image: url(./marques/logo-scania.png);
+}
+.mercedes {
+  background-image: url(./marques/logo-mercedes.png);
+}
+

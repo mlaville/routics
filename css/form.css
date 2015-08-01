@@ -1,29 +1,84 @@
 /* ----------- My Form ----------- */
-.myform{
-margin:0 auto;
-width:400px;
-padding:14px;
-}
-
 /* ----------- stylized ----------- */
-#stylized{
-border:solid 2px #b7ddf2;
-background:#ebf4fb;
-}
+
 #content h1 {
 	font-size:14px;
 	font-weight:bold;
 	margin-bottom:8px;
 }
-/*
-#content p{
-	font-size:11px;
-	color:#666666;
-	margin-bottom:20px;
-	border-bottom:solid 1px #b7ddf2;
-	padding-bottom:10px;
+
+/* ----------- stylized ----------- */
+
+figure {
+  background: #ddd none repeat scroll 0 0;
+  border: 1px solid #aaa;
+  display: flex;
+  flex: 0 0 0;
+  flex-flow: column nowrap;
+  margin: -12px 0 0 64px;
+  padding: 2px;
+  position: relative;
 }
-*/
+
+.box {
+  background-color: #fff;
+  flex: 1 1 0;
+  margin: 2px;
+  padding: 1px;
+  position: relative;
+}
+
+
+.numParc {
+  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset,
+	0 1px rgba(255, 255, 255, 0.2);
+  color: #9e0f09;
+  font-family: Arial Black;
+  width: 42px;
+}
+
+fieldset .idTransics {
+  background-image: url(../img/transics-icon.png);
+  background-position: left top;
+  background-repeat: no-repeat;
+  border-left: 1px solid #ff9900;
+  border-bottom: 1px solid #ff9900;
+  border-radius: 2px;
+  padding-top: 2px;
+  padding-left: 12px;
+  font-size: 0.9em;
+  width: 48px;
+  text-align: left;
+  font-family: "Courier New", Courier, monospace;
+}
+
+#fs_visu legend {
+  height: 48px;
+  background-position: left top;
+  background-repeat: no-repeat;
+  padding-top: 2px;
+  padding-left: 24px;
+}
+
+.tracteur legend {
+  background-image: url(../img/tracteur-mini.png);
+}
+.remorque legend {
+  background-image: url(../img/citerne.png);
+}
+
+#vehicule-card {
+	float:left;
+}
+#vehicule-card label{
+	display: block;
+}
+#vehicule-card label:.marque {
+  height: 120px;
+}
+
 #content label{
 	display:block;
 	font-weight:bold;
@@ -81,6 +136,26 @@ output {
 	line-height: 2.1em;
 	border-radius:0 3px 3px 0;
 	margin-left:4px
+}
+
+legend {
+  height: 48px;
+  background-image: url(http://localhost/routics/img/tracteur-mini.png);
+  background-position: left top;
+  background-repeat: no-repeat;
+  padding-top: 2px;
+  padding-left: 24px;
+}
+
+.marque output{
+  display: block;
+  width: 128px;
+  height: 128px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding: 2px;
+  font-size: .7em;
+  color:#999;
 }
 
 /* Ajax loader */
@@ -155,10 +230,8 @@ output {
 	padding: 5px 10px 6px; 
 	color: #fff; 
 	text-decoration: none;
-	-moz-border-radius: 6px; 
-	-webkit-border-radius: 6px;
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+	border-radius: 6px; 
+	box-shadow: 0 1px 3px rgba(0,0,0,0.6);
 	text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
 	border-bottom: 1px solid rgba(0,0,0,0.25);
 	position: relative;
@@ -246,11 +319,7 @@ fieldset.listSelect {
     background: -webkit-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
     background: -moz-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
     border: 1px solid #AACFE3;
-    -webkit-border-radius: 10px 10px 10px 10px;
-    -moz-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
-    -webkit-box-shadow: 0 0 15px #AAAAAA;
-    -moz-box-shadow: 0 0 15px #AAAAAA;
     box-shadow: 0 0 15px #AAAAAA;
     margin: 8px;
     padding: 8px;
@@ -258,8 +327,7 @@ fieldset.listSelect {
 fieldset.listSelect legend {
 	color:#00458B;
     text-align: right;
-    background: -webkit-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
-    background: -moz-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
+    background: linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
     -webkit-border-radius: 10px 10px 10px 10px;
     -moz-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
@@ -292,8 +360,8 @@ fieldset.listSelect input[type="radio"]:checked + label p {
 	font-weight: bold;
 }
 
- /******/
- /* header div a,*****/
+/******/
+
 fieldset.listSelect li a {
     background: -moz-linear-gradient(90deg, #0459B7, #08ADFF) repeat scroll 0 0 transparent;
     background: -webkit-linear-gradient(90deg, #0459B7, #08ADFF) repeat scroll 0 0 transparent;
@@ -330,6 +398,9 @@ fieldset.listSelect li a:active {
     outline: medium none;
 }
  /******/
+ 
+ 
+ 
 	.button:hover							{ background-color: #111; color: #fff; }
 	.button:active							{ top: 1px; }
 	.small.button, .small.button:visited 			{ font-size: 11px}

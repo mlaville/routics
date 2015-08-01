@@ -8,6 +8,8 @@
  * @version    0.5
  * @revision   $0$
  *
+ * @date revision   01/08/2015 Affichade de la card du véhicle : vehicule-card
+ *
  * Gestion des ordres de réparation
  * 
  * Licensed under the GPL license:
@@ -37,22 +39,23 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<meta content="marc Laville - polinux" name="author" />
 	<meta content="Routics - Saisie OR" name="description" />
 	
-	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="./css/layout-old.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/listVehicule.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/form.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/table.css" />
 
-	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
-	<script src="http://lib.polinux.net/js/JQuery/ui/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	
 </head>
 <body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
 	<header>
-			<img alt="Gestion des OR" src="./img/dossierOr.png">Gestion des Ordres de Réparation
-			<?php echo $param->header; ?>
-			<nav>
+		<img alt="Gestion des OR" src="./img/dossierOr.png">Gestion des Ordres de Réparation
+		<?php echo $param->header; ?>
+		<nav>
 			<form name="frm_menu">
 				<input type="radio" id="rd-saisie" name="menu" checked >
 				<label for="rd-saisie">Saisie OR</label>
@@ -63,26 +66,30 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 				<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
 				<a href="./php/deconnexion.php">Déconnexion</a>
 			</div>
-			</nav>
+		</nav>
 	</header>
     <div id="wrapper">
         <div id="contentliquid">
 		<div id="content">
 			<form id="form-or" name="form-or">
-				<h1>Saisie des Ordres de Réparation</h1>
+<!-- 				<h1>Saisie des Ordres de Réparation</h1> -->
 				<fieldset id="fs_visu">
 					<legend>
 						<output name="num-parc" class="numParc" id="num-parc" ></output>
-						<img id="img-typeElement" src="./img/tracteur.png" />
 					</legend>
-					
-					<output name="idTransics" class="idTransics" id="idTransics"></output>
-					<output name="marque" id="marque"></output>
-					<figure>
-					<output name="immat" class="immat" id="immat"></output>
+					<figure id="vehicule-card">
+						<div class="box">
+							<output name="idTransics" class="idTransics"></output></div>
+						<div class="box marque">
+							<output name="marque"></output>
+						</div>
+						<div class="box">
+							<output name="immat" class="immat"></output>
+						</div>
 					</figure>
+					
 					<figure>
-						<output name="km-vehicule" id="km-vehicule" class="km"></output>
+						<output name="km-vehicule" class="km"></output>
 						<figcaption>compteur</figcaption>
 					</figure>
 				</fieldset>

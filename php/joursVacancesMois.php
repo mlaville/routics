@@ -21,7 +21,11 @@
   
   try {
 //	$rep = $client->getDatesVacances( isset($_POST["mois"]) ? $_POST["mois"] : "201407" );
-	$rep = $client->getDatesVacancesBasic( isset($_POST["mois"]) ? $_POST["mois"] : "201407", $_POST["zone"] || "A", 'test@bouquerodpierre.fr' );
+	$rep = $client->getDatesVacancesBasic(
+		isset($_POST["mois"]) ? $_POST["mois"] : "201512",
+		isset($_POST["zone"]) ? $_POST["zone"] : "A",
+		'test@bouquerodpierre.fr'
+	);
   }
   
   catch (SoapFault $exception) {

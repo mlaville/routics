@@ -4,11 +4,13 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       18/03/2015
- * @version    0.5
+ * @version    0.5.5
  * @revision   $0$
  *
  * Gestion des ordres de réparation
  * 
+ * @date revision   01/08/2015 Affichade de la card du véhicle
+ *
  * Appel  ajax:
  * - ../php/crudOR.php
  * - ./php/getDetailVehicule.php
@@ -29,16 +31,37 @@
 		numParc = spans[1].textContent,
 		li = a.parentNode,
 		listLi = li.parentNode.getElementsByTagName('li'),
-		cmptLi = listLi.length;
+		cmptLi = listLi.length,
+		
+		formVehicule = document.forms['form-or'],
+		champMarque = formVehicule.marque,
+		outputKmVehicule = formVehicule['km-vehicule'],
+		figcaption = outputKmVehicule.parentNode.lastElementChild,
+		/* {"success":true,
+		 	"CurrentKms":335933,
+			"marque":"RENAULT",
+			"transport":"BOUQUEROD\/CIMENT\/TXMAX",
+			"Category":"BulkTransport"
+		 }
+		*/
+		showDetailVehicle = function(data){
+			if(data.success) {
+				var marque = data.marque;
+					
+				champMarque.textContent = marque;
+				champMarque.className = marque.toLowerCase();
+			}
+			
+			return data.success;
+		};
 		
 	// Affichage du logo dans la legende du fieldset
-	document.getElementById('img-typeElement').setAttribute("src", ( AppOr.typeVehicule == 0 ) ? "./img/tracteur.png" : "./img/citerne.png");
+	document.getElementById('fs_visu').className = ( AppOr.typeVehicule == 0 ) ? "tracteur" : "remorque";
 	
-	document.getElementById('idTransics').textContent = idTransics;
+	formVehicule.idTransics.textContent = idTransics;
 	document.getElementById('num-parc').value = numParc;
-	document.getElementById('immat').textContent = spans[2].textContent;
-	document.getElementById('km-vehicule').textContent = spans[3].textContent;
-	figcaption = document.getElementById('km-vehicule').parentNode.getElementsByTagName('figcaption')[0];
+	formVehicule.immat.textContent = spans[2].textContent;
+	outputKmVehicule.textContent = spans[3].textContent;
 	figcaption.textContent = ( document.forms["frm_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
 	
 	document.getElementById('fs_visu').style.opacity = 1;
@@ -56,16 +79,15 @@
 		}
 	}
 	
-	document.getElementById('marque').textContent = '';
+	champMarque.textContent = '';
+	champMarque.className = '';
 //	$.post("./php/getDetailVehicule.php",
 	$.post( document.body.dataset.detail_vehicule,
 		{ "typeVehicule": AppOr.typeVehicule, "idVehicule": idTransics },
-		function(data){
-			if(data.success) {
-				document.getElementById('marque').textContent = data.marque;
-			}
-	}, "json");
-	
+		showDetailVehicle,
+		"json"
+	);
+
 	// Affichage des saisie d'OR
 	listOrVehicule( numParc )
 
