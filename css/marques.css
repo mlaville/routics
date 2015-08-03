@@ -12,15 +12,15 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-.marque output{
-  display: block;
-    width: 100%;
+.marque output {
+	display: block;
+	width: 100%;
 	height: 128px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  padding: 2px;
-  font-size: .7em;
-  color:#999;
+	background-position: center center;
+	background-repeat: no-repeat;
+	padding: 2px;
+	font-size: .7em;
+	color:#999;
 }
 
 .renault {
@@ -34,5 +34,24 @@
 }
 .mercedes {
   background-image: url(./marques/logo-mercedes.png);
+}
+
+.acerbi {
+  background-image: url(./marques/logo-acerbi.png);
+}
+.fruehauf {
+  background-image: url(./marques/logo-fruehauf.png);
+}
+.magyar {
+  background-image: url(./marques/logo-magyar.png);
+}
+.maisonneuve {
+  background-image: url(./marques/logo-maisonneuve.png);
+}
+.spitzer {
+  background-image: url(./marques/logo-spitzer.png);
+}
+.trailor {
+  background-image: url(./marques/logo-trailor.png);
 }
 

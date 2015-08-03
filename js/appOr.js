@@ -23,8 +23,26 @@
  */
 AppOr = {
 	typeVehicule : 0,
-	vehicule : null
-};
+	vehicule : null,
+	posVehicule : new google.maps.LatLng(47.021750000,5.71455),
+	carte : (function() {
+		var myCenter = new google.maps.LatLng(47.021750000,5.71455),
+			mapProp = {
+			  center: myCenter,
+			  zoom:9,
+			  mapTypeId:google.maps.MapTypeId.ROADMAP
+			},
+			map = new google.maps.Map( document.getElementById("googleMap"), mapProp );
+//			marker = new google.maps.Marker( { position: myCenter } );
+			
+//		marker.setMap(map);
+		
+		return map;
+	})()
+}
+
+AppOr.marqueur = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000,5.71455) } );
+AppOr.marqueur.setMap(AppOr.carte);
 
 // VehicleView
 function ajoutVehicule( objet, unUl ) {

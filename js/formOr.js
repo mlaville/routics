@@ -36,6 +36,7 @@
 		formVehicule = document.forms['form-or'],
 		champMarque = formVehicule.marque,
 		outputKmVehicule = formVehicule['km-vehicule'],
+//		googleMap = document.getElementById("#googleMap"),
 		figcaption = outputKmVehicule.parentNode.lastElementChild,
 		/* {"success":true,
 		 	"CurrentKms":335933,
@@ -46,10 +47,26 @@
 		*/
 		showDetailVehicle = function(data){
 			if(data.success) {
-				var marque = data.marque;
-					
+				var marque = data.marque,
+					position =  data.position,
+					latLng = new google.maps.LatLng( +position.Latitude, +position.Longitude );
+					marker = new google.maps.Marker( { position: latLng } );
+
+	
 				champMarque.textContent = marque;
 				champMarque.className = marque.toLowerCase();
+				
+				outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
+				
+//				google.maps.event.trigger(AppOr.carte, 'resize');
+				AppOr.carte.setZoom(8);
+AppOr.carte.panTo(new google.maps.LatLng(48.3906042, -4.4869013));
+//				AppOr.carte.panTo(latLng);
+//				AppOr.carte.panTo({lat: position.Latitude, lng: position.Longitude});
+
+				marker.setMap(AppOr.carte);
+				
+				document.getElementById('fs_visu').style.opacity = 1;
 			}
 			
 			return data.success;
@@ -57,6 +74,7 @@
 		
 	// Affichage du logo dans la legende du fieldset
 	document.getElementById('fs_visu').className = ( AppOr.typeVehicule == 0 ) ? "tracteur" : "remorque";
+	document.getElementById('fs_visu').style.opacity = .2;
 	
 	formVehicule.idTransics.textContent = idTransics;
 	document.getElementById('num-parc').value = numParc;
@@ -64,7 +82,7 @@
 	outputKmVehicule.textContent = spans[3].textContent;
 	figcaption.textContent = ( document.forms["frm_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
 	
-	document.getElementById('fs_visu').style.opacity = 1;
+//	document.getElementById('fs_visu').style.opacity = 1;
 
 	// Vide le formulaire de saisie
 	afficheOr( null );
@@ -234,6 +252,17 @@ function supprimeOr( unIdentOr ){
 
 window.addEventListener('load', function() {
 
+	var myCenter = new google.maps.LatLng(47.021750000,5.71455),
+		mapProp = {
+		  center: myCenter,
+		  zoom:10,
+		  mapTypeId:google.maps.MapTypeId.ROADMAP
+		},
+		map = new google.maps.Map( document.getElementById("googleMap"), mapProp ),
+		marker = new google.maps.Marker( { position: myCenter } );
+
+//	marker.setMap(map);
+
     document.getElementById('a_vehicule').addEventListener('click', function() {
 		loadVehicules( )
     });
@@ -241,6 +270,8 @@ window.addEventListener('load', function() {
 	document.forms["frm_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
+	
+	
 	
 	$( "#dateOR" ).datepicker({
 		onSelect: function(dateText, inst) {

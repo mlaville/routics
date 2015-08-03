@@ -77,6 +77,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<legend>
 						<output name="num-parc" class="numParc" id="num-parc" ></output>
 					</legend>
+					<div>
 					<figure id="vehicule-card">
 						<div class="box">
 							<output name="idTransics" class="idTransics"></output></div>
@@ -87,11 +88,17 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 							<output name="immat" class="immat"></output>
 						</div>
 					</figure>
-					
 					<figure>
-						<output name="km-vehicule" class="km"></output>
-						<figcaption>compteur</figcaption>
+						 <div class="cadran">
+							<output name="km-vehicule" class="km"></output>
+							<label>compteur</label>
+						</div>
 					</figure>
+					<figure class="transparent">
+						<div id="googleMap"></div>
+						<figcaption></figcaption>
+					</figure>
+					</div>
 				</fieldset>
 				<fieldset>
 					<legend>Saisie d'un Ordre de Réparation
@@ -183,6 +190,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="polinux.fr" style="border-style: none;">
 		</a>
 	</footer><!-- #footer -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHCJvUwGSsJk4PuEoaUB6EYJ2ahIeqzn4" type="text/javascript"></script>
+	<script src="http://lib.polinux.fr/js/js-util.js" type="text/javascript"></script>
 	<script src="./js/appOr.js" type="text/javascript"></script>
 	<script src="./js/formOr.js" type="text/javascript"></script>
 </body>

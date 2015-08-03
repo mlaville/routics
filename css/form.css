@@ -1,6 +1,25 @@
-/* ----------- My Form ----------- */
-/* ----------- stylized ----------- */
+/**
+ * listVehicule.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       03/08/2015
+ * @version    0.1
+ * @revision   $0$
+ *
+ * Formulaire véhicule
+ * 
+ *
+ * A Faire
+ * - gerer les requetes ajax sans JQuery
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 
+ .transparent {
+	opacity: 0;
+ }
 #content h1 {
 	font-size:14px;
 	font-weight:bold;
@@ -15,9 +34,15 @@ figure {
   display: flex;
   flex: 0 0 0;
   flex-flow: column nowrap;
-  margin: -12px 0 0 64px;
+  margin: -12px 0 0 0;
   padding: 2px;
   position: relative;
+}
+
+fieldset div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
 }
 
 .box {
@@ -28,6 +53,11 @@ figure {
   position: relative;
 }
 
+#googleMap {
+  box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
+  height: 200px;
+  width: 320px;
+}
 
 .numParc {
   background-color: #fefefe;
@@ -37,6 +67,19 @@ figure {
   color: #9e0f09;
   font-family: Arial Black;
   width: 42px;
+}
+
+/* 
+ * pour affichage de la liste des véhicules
+li .idTransics {
+  float: right;
+  font-size: 0.6em;
+}
+ */
+
+.idTransics {
+	font-size:.6em;
+	float:right;
 }
 
 fieldset .idTransics {
@@ -54,8 +97,40 @@ fieldset .idTransics {
   font-family: "Courier New", Courier, monospace;
 }
 
+.cadran {
+  background-color: #555;
+  border-radius: 100%;
+  box-shadow: 3px 6px 3px 0 #eee inset, 3px 6px 3px 0 #eee;
+  display: inline-block;
+  height: 160px;
+  margin: 12px 16px 12px 0;
+  padding: 5%;
+  text-align: center;
+  width: 160px;
+}
+#content .cadran label{
+	display: inline;
+	float: left;
+	line-height: 12px;
+	color: #aaa;
+}
+
+.km {
+  background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(10, 10, 10, 1) 25%, rgba(178, 178, 178, 1) 51%, rgba(10, 10, 10, 1) 91%, rgba(0, 0, 0, 1) 100%) repeat scroll 0 0;
+  color: #fff;
+  display: inline-block;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 1.9em;
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-top: 36px;
+  padding: 0 4px;
+  text-align: right;
+}
+
 #fs_visu legend {
   height: 48px;
+  width: 76px;
   background-position: left top;
   background-repeat: no-repeat;
   padding-top: 2px;
@@ -105,14 +180,16 @@ output {
 	padding:0 8px;
 }
 .immat {
-	border-style: solid;
-	border-width: 1px;
-	border-radius:4px;
-	display: inline;
-	font-weight: bold;
-	font-family: Arial Narrow, Arial;
-	font-size: 24px;
-	padding: 2px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  display: inline;
+  font-family: Arial Narrow,Arial;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 2px;
+  text-align: center;
+  width: 142px;
 }
 
 .immat:before {
@@ -138,6 +215,7 @@ output {
 	margin-left:4px
 }
 
+/*
 legend {
   height: 48px;
   background-image: url(http://localhost/routics/img/tracteur-mini.png);
@@ -146,7 +224,7 @@ legend {
   padding-top: 2px;
   padding-left: 24px;
 }
-
+*/
 .marque output{
   display: block;
   width: 128px;
