@@ -129,11 +129,10 @@ fieldset .idTransics {
 }
 
 #fs_visu legend {
-  height: 48px;
+  height: 42px;
   width: 76px;
   background-position: left top;
   background-repeat: no-repeat;
-  padding-top: 2px;
   padding-left: 24px;
 }
 

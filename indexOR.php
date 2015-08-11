@@ -94,7 +94,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 							<label>compteur</label>
 						</div>
 					</figure>
-					<figure class="transparent">
+					<figure class="transparent-">
 						<div id="googleMap"></div>
 						<figcaption></figcaption>
 					</figure>
@@ -190,7 +190,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="polinux.fr" style="border-style: none;">
 		</a>
 	</footer><!-- #footer -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHCJvUwGSsJk4PuEoaUB6EYJ2ahIeqzn4" type="text/javascript"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
 	<script src="http://lib.polinux.fr/js/js-util.js" type="text/javascript"></script>
 	<script src="./js/appOr.js" type="text/javascript"></script>
 	<script src="./js/formOr.js" type="text/javascript"></script>

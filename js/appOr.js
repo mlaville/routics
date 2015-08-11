@@ -21,28 +21,25 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-AppOr = {
-	typeVehicule : 0,
-	vehicule : null,
-	posVehicule : new google.maps.LatLng(47.021750000,5.71455),
-	carte : (function() {
-		var myCenter = new google.maps.LatLng(47.021750000,5.71455),
-			mapProp = {
-			  center: myCenter,
-			  zoom:9,
-			  mapTypeId:google.maps.MapTypeId.ROADMAP
-			},
-			map = new google.maps.Map( document.getElementById("googleMap"), mapProp );
-//			marker = new google.maps.Marker( { position: myCenter } );
+var AppOr = {
+		typeVehicule : 0,
+		vehicule : null,
+		position : new google.maps.LatLng(46.680184,5.5803363),
+		carte: new google.maps.Map(
+			document.getElementById("googleMap"), {
+			center: this.position,
+			zoom:12,
+			mapTypeId:google.maps.MapTypeId.ROADMAP
+		}),
+		marker : null,
+		changePos : function( pos ) {
 			
-//		marker.setMap(map);
-		
-		return map;
-	})()
-}
-
-AppOr.marqueur = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000,5.71455) } );
-AppOr.marqueur.setMap(AppOr.carte);
+			AppOr.carte.panTo( pos );
+			return AppOr.marker.setPosition( pos );
+		}
+	},
+	initialize = function() {
+	};
 
 // VehicleView
 function ajoutVehicule( objet, unUl ) {

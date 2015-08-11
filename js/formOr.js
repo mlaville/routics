@@ -50,21 +50,17 @@
 				var marque = data.marque,
 					position =  data.position,
 					latLng = new google.maps.LatLng( +position.Latitude, +position.Longitude );
-					marker = new google.maps.Marker( { position: latLng } );
+					
+//				AppOr.carte.panTo( latLng );
+//				AppOr.marker.setPosition( latLng );
 
-	
+				AppOr.changePos( latLng );
+
 				champMarque.textContent = marque;
 				champMarque.className = marque.toLowerCase();
 				
 				outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 				
-//				google.maps.event.trigger(AppOr.carte, 'resize');
-				AppOr.carte.setZoom(8);
-AppOr.carte.panTo(new google.maps.LatLng(48.3906042, -4.4869013));
-//				AppOr.carte.panTo(latLng);
-//				AppOr.carte.panTo({lat: position.Latitude, lng: position.Longitude});
-
-				marker.setMap(AppOr.carte);
 				
 				document.getElementById('fs_visu').style.opacity = 1;
 			}
@@ -252,16 +248,8 @@ function supprimeOr( unIdentOr ){
 
 window.addEventListener('load', function() {
 
-	var myCenter = new google.maps.LatLng(47.021750000,5.71455),
-		mapProp = {
-		  center: myCenter,
-		  zoom:10,
-		  mapTypeId:google.maps.MapTypeId.ROADMAP
-		},
-		map = new google.maps.Map( document.getElementById("googleMap"), mapProp ),
-		marker = new google.maps.Marker( { position: myCenter } );
-
-//	marker.setMap(map);
+	AppOr.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: AppOr.carte  } );
+	AppOr.changePos( AppOr.position );
 
     document.getElementById('a_vehicule').addEventListener('click', function() {
 		loadVehicules( )
@@ -270,7 +258,6 @@ window.addEventListener('load', function() {
 	document.forms["frm_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
-	
 	
 	
 	$( "#dateOR" ).datepicker({

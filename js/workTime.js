@@ -520,14 +520,27 @@ var mvcConducteur = (function ( document ) {
 					}
 					
 					return tr_conduct;
+				},
+				/*
+				 * Construction des tables 
+				 * pour chaque conducteur, on construit 
+				 * - un element tr dans tbodyRecap
+				 * - un element tr dans tbody_hrDues
+				 */
+				traiteConducteur = function( item ) {
+					
+					tabTrConduct[item.PersonTransicsID] = tbodyRecap.appendChild( calcTrRecapConduct(item) );
+					cibleDrop( tbodyRecap.lastChild );
+					
+					if( item.recapTpsService != undefined ) {
+	//					tabHrDuConduct[modele[i].PersonTransicsID] = 
+							document.getElementById('tbody_hrDues').appendChild( calcTrHrDuesConduct(item) );
+					}
+					return;
 				};
 			
-			/*
-			 * Construction des tables 
-			 * pour chaque conducteur, on construit 
-			 * - un element tr dans tbodyRecap
-			 * - un element tr dans tbody_hrDues
-			 */
+			modele.forEach(traiteConducteur);
+/*			
 			for( var i = 0 ; i < nbConducteur ; i++ ) {
 
 				tabTrConduct[modele[i].PersonTransicsID] = tbodyRecap.appendChild( calcTrRecapConduct( modele[i] ) );
@@ -538,7 +551,7 @@ var mvcConducteur = (function ( document ) {
 						document.getElementById('tbody_hrDues').appendChild( calcTrHrDuesConduct( modele[i] ) );
 				}
 			}
-			
+*/			
 			return;
 		};
 		/**
