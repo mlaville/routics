@@ -37,7 +37,7 @@ p {
 }
 
 #content figure {
-	display:inline-block;
+/*	display:inline-block; */
 }
 
 
@@ -55,7 +55,7 @@ margin: 0;
 padding: 0;
 width: 180px;
 }
-
+/*
 #leftcolumn li a{
 	color: white;
 	display: block;
@@ -63,7 +63,7 @@ width: 180px;
 	text-decoration: none;
 	font-weight: bold;
 	border: 1px solid;
-	border-color:#D5BFD0 #5A3A54 #5A3A54 #D5BFD0; /*light dark dark light*/
+	border-color:#D5BFD0 #5A3A54 #5A3A54 #D5BFD0; 
 	background-color: #126FB4;
 	text-decoration:none;
 }
@@ -77,6 +77,8 @@ width: 180px;
 	color: black;
 	background-color: #CDB4C8;
 }
+
+*/
 ul {
 	list-style-type: none;
 	margin: 0;

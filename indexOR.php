@@ -35,7 +35,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 <html lang="fr">
 <head>
 	<meta charset="utf-8" />
-	<title>Transics - Véhicules</title>
+	<title>Routics - Véhicules</title>
 	<meta content="marc Laville - polinux" name="author" />
 	<meta content="Routics - Saisie OR" name="description" />
 	
@@ -45,10 +45,6 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/form.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/table.css" />
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	
 </head>
 <body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
@@ -94,9 +90,15 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 							<label>compteur</label>
 						</div>
 					</figure>
-					<figure class="transparent-">
-						<div id="googleMap"></div>
-						<figcaption></figcaption>
+					<figure id="position">
+						<div>
+							<div id="googleMap"></div>
+							<div id="indication">
+								<div class="localite"></div>
+								<div class="destination"></div>
+							</div>
+						</div>
+						<figcaption><output name="dateInfoVehicule"></output></figcaption>
 					</figure>
 					</div>
 				</fieldset>
@@ -190,7 +192,11 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="polinux.fr" style="border-style: none;">
 		</a>
 	</footer><!-- #footer -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+	
 	<script src="http://lib.polinux.fr/js/js-util.js" type="text/javascript"></script>
 	<script src="./js/appOr.js" type="text/javascript"></script>
 	<script src="./js/formOr.js" type="text/javascript"></script>

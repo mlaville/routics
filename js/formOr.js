@@ -4,12 +4,13 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       18/03/2015
- * @version    0.5.5
+ * @version    0.7
  * @revision   $0$
  *
  * Gestion des ordres de réparation
  * 
- * @date revision   01/08/2015 Affichade de la card du véhicle
+ * @date revision   01/08/2015 Affichage de la card du véhicule
+ * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  *
  * Appel  ajax:
  * - ../php/crudOR.php
@@ -25,19 +26,27 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
- function clicklistVehicle( a ) {
-	var spans = a.querySelectorAll('span'),
-		idTransics = a.querySelector('.idTransics').textContent,
-		numParc = spans[1].textContent,
-		li = a.parentNode,
-		listLi = li.parentNode.getElementsByTagName('li'),
-		cmptLi = listLi.length,
+ function afficheVehicle( idTransics, numParc, immat, kmVehicule ) {
 		
 		formVehicule = document.forms['form-or'],
 		champMarque = formVehicule.marque,
 		outputKmVehicule = formVehicule['km-vehicule'],
-//		googleMap = document.getElementById("#googleMap"),
 		figcaption = outputKmVehicule.parentNode.lastElementChild,
+		outputDateInfo = formVehicule.dateInfoVehicule,
+		divLocalite = formVehicule.querySelector('.localite'),
+		divDestination = formVehicule.querySelector('.destination'),
+		// Traite une chaine de la forme : 0.3km N De Besain
+		formatPosition = function (str) {
+			var reg = /([0-9]*)\.([0-9]*)km\s[N|E|O|S|\s]*De\s(\b.*\b)/ig,
+			match = reg.exec(str);
+			
+			return match == null ? '' : '<span>' + match[3] + '</span><span>' + match[1] + ',' + match[2] + ' </span>';
+		},
+		formatDate = function (uneDate) {
+		  var dateTimeFormat = new Intl.DateTimeFormat( 'fr', { year: "numeric", month: "long", day: "numeric"} );
+		  
+		  return dateTimeFormat.format(uneDate) + ' à ' + uneDate.getHours() + 'h' + uneDate.getMinutes().toString().lpad( '0', 2 );
+		},
 		/* {"success":true,
 		 	"CurrentKms":335933,
 			"marque":"RENAULT",
@@ -48,19 +57,19 @@
 		showDetailVehicle = function(data){
 			if(data.success) {
 				var marque = data.marque,
-					position =  data.position,
-					latLng = new google.maps.LatLng( +position.Latitude, +position.Longitude );
+					position = data.position;
 					
-//				AppOr.carte.panTo( latLng );
-//				AppOr.marker.setPosition( latLng );
-
-				AppOr.changePos( latLng );
 
 				champMarque.textContent = marque;
 				champMarque.className = marque.toLowerCase();
 				
 				outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 				
+				AppOr.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
+				divLocalite.innerHTML = formatPosition(position.DistanceFromLargeCity);
+				divDestination.innerHTML = formatPosition( position.DistanceFromPointOfInterest.toLowerCase() );
+
+				outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( Date.fromISO(data.dateModif) ) : '';
 				
 				document.getElementById('fs_visu').style.opacity = 1;
 			}
@@ -74,24 +83,12 @@
 	
 	formVehicule.idTransics.textContent = idTransics;
 	document.getElementById('num-parc').value = numParc;
-	formVehicule.immat.textContent = spans[2].textContent;
-	outputKmVehicule.textContent = spans[3].textContent;
+	formVehicule.immat.textContent = immat;
+	outputKmVehicule.textContent = kmVehicule;
 	figcaption.textContent = ( document.forms["frm_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
-	
-//	document.getElementById('fs_visu').style.opacity = 1;
 
 	// Vide le formulaire de saisie
 	afficheOr( null );
-	
-	// "marquage" du véhicule séléctionné
-	for (var i = 0 ; i < cmptLi ; i++) {
-		var liCourrant = listLi[i];
-		if ( liCourrant == li ) {
-			liCourrant.classList.add("selected");
-		} else {
-			liCourrant.classList.remove("selected");
-		}
-	}
 	
 	champMarque.textContent = '';
 	champMarque.className = '';
@@ -107,7 +104,6 @@
 
 	return idTransics;
 }
-
 
 function afficheOr( unOr ) {
 	var f = document.forms["form-or"];
@@ -204,14 +200,14 @@ function listOrVehicule( unNumParc ) {
 function validOr(f){
 
 	var param = { idVehicule: f["num-parc"].value,
-				idTransics: f["idTransics"].value,
-				dateOR: f["dateOR"].value,
-				kmOR: f["kmOR"].value,
-				lieuOR: f["lieuOR"].value,
-				numFactOR: f["numFactOR"].value,
-				montantOR: f["montantOR"].value,
-				descriptOr: f["descriptOr"].value
-			},
+			idTransics: f["idTransics"].value,
+			dateOR: f["dateOR"].value,
+			kmOR: f["kmOR"].value,
+			lieuOR: f["lieuOR"].value,
+			numFactOR: f["numFactOR"].value,
+			montantOR: f["montantOR"].value,
+			descriptOr: f["descriptOr"].value
+		},
 		idOr = f["idOr"].value;
 			
 	f["validOr"].disable = true;
@@ -251,10 +247,10 @@ window.addEventListener('load', function() {
 	AppOr.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: AppOr.carte  } );
 	AppOr.changePos( AppOr.position );
 
-    document.getElementById('a_vehicule').addEventListener('click', function() {
+ /*   document.getElementById('a_vehicule').addEventListener('click', function() {
 		loadVehicules( )
     });
-
+*/
 	document.forms["frm_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
@@ -319,13 +315,13 @@ window.addEventListener('load', function() {
 	document.forms["form-or"].addEventListener("keypress", 
 		function(e){
 			if(e.keyCode==13) {
-				var noeud = e.target.nextSibling,
+				var noeud = e.target.nextElementSibling,
 					nextInput = false;
 				
 				e.preventDefault();
 				while( !nextInput ) {
-					noeud = noeud.nextSibling;
-					if( noeud.nodeName == 'INPUT' || noeud.nodeName == 'TEXTAREA' ) {
+					noeud = noeud.nextElementSibling;
+					if( ['INPUT', 'TEXTAREA'].indexOf(noeud.nodeName) > -1 ) {
 						noeud.focus();
 						nextInput = true;
 					}

@@ -9,6 +9,8 @@
  *
  * Gestion des ordres de réparation
  * 
+ * @date revision   01/08/2015 Affichage de la card du véhicule
+ *
  * Appel  ajax:
  * - ./php/getVehicule.php
  * - ./php/getTrailers.php
@@ -27,7 +29,7 @@ var AppOr = {
 		position : new google.maps.LatLng(46.680184,5.5803363),
 		carte: new google.maps.Map(
 			document.getElementById("googleMap"), {
-			center: this.position,
+			center: new google.maps.LatLng(46.680184,5.5803363),
 			zoom:12,
 			mapTypeId:google.maps.MapTypeId.ROADMAP
 		}),
@@ -37,14 +39,13 @@ var AppOr = {
 			AppOr.carte.panTo( pos );
 			return AppOr.marker.setPosition( pos );
 		}
-	},
-	initialize = function() {
 	};
 
 // VehicleView
 function ajoutVehicule( objet, unUl ) {
-	var	li_vehicule = unUl.appendChild( document.createElement("li") ),
-		a_vehicule = li_vehicule.appendChild( document.createElement("a") ),
+	var	li_vehicule = document.createElement("li"),
+		label_vehicule = li_vehicule.appendChild( document.createElement("label") ),
+		input_select = label_vehicule.appendChild( document.createElement("input") ),
 		span_idTransics = document.createElement("span"),
 		span_numParc = document.createElement("span"),
 		span_immat = document.createElement("span"),
@@ -54,7 +55,6 @@ function ajoutVehicule( objet, unUl ) {
     span_idTransics.textContent = objet.VehicleTransicsID;
 	
 	span_numParc.classList.add("numParc");
-//    span_numParc.textContent = objet.VehicleExternalCode;
     span_numParc.textContent = objet.VehicleID;
 		
     span_immat.textContent = objet.LicensePlate;
@@ -62,15 +62,17 @@ function ajoutVehicule( objet, unUl ) {
 	div_km.classList.add("km");
     div_km.textContent = ("000000" + objet.CurrentKms).substr(-7);
 	
-	a_vehicule.setAttribute('href', '#')
-    a_vehicule.appendChild(span_idTransics);
-    a_vehicule.appendChild(span_numParc);
-    a_vehicule.appendChild(span_immat);
-    a_vehicule.appendChild(div_km);
-    a_vehicule.addEventListener('click', function(e) {
-		clicklistVehicle( e.currentTarget );
+	input_select.setAttribute('type', 'radio')
+	input_select.setAttribute( 'name', ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' )
+	
+    label_vehicule.appendChild(span_idTransics);
+    label_vehicule.appendChild(span_numParc);
+    label_vehicule.appendChild(span_immat);
+    label_vehicule.appendChild(div_km);
+    input_select.addEventListener('change', function(e) {
+		afficheVehicle( objet.VehicleTransicsID, objet.VehicleID, objet.LicensePlate, objet.CurrentKms );
    });
-	return;
+	return unUl.appendChild(li_vehicule);
 }
 
 function ajoutTracteur( objet ) {
@@ -107,11 +109,6 @@ function switchVehicle( rd ) {
 	}
 	
 	for( i = 0 ; i < arrUl.length ; i++ ) {
-/*		if( AppOr.typeVehicule == i ) {
-			arrUl[i].style.display = 'block';
-		} else {
-			arrUl[i].style.display = 'none';
-		}*/
 		arrUl[i].style.display = ( AppOr.typeVehicule == i ) ? 'block' : 'none';
 	}
 	

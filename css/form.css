@@ -8,10 +8,8 @@
  * @revision   $0$
  *
  * Formulaire véhicule
- * 
  *
- * A Faire
- * - gerer les requetes ajax sans JQuery
+ * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -20,6 +18,7 @@
  .transparent {
 	opacity: 0;
  }
+ 
 #content h1 {
 	font-size:14px;
 	font-weight:bold;
@@ -29,17 +28,12 @@
 /* ----------- stylized ----------- */
 
 figure {
-  background: #ddd none repeat scroll 0 0;
-  border: 1px solid #aaa;
-  display: flex;
-  flex: 0 0 0;
-  flex-flow: column nowrap;
   margin: -12px 0 0 0;
   padding: 2px;
   position: relative;
 }
 
-fieldset div {
+fieldset>div {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -67,37 +61,14 @@ fieldset div {
   color: #9e0f09;
   font-family: Arial Black;
   width: 42px;
+   padding: 0 2px;
 }
 
 /* 
  * pour affichage de la liste des véhicules
-li .idTransics {
-  float: right;
-  font-size: 0.6em;
-}
  */
 
-.idTransics {
-	font-size:.6em;
-	float:right;
-}
-
-fieldset .idTransics {
-  background-image: url(../img/transics-icon.png);
-  background-position: left top;
-  background-repeat: no-repeat;
-  border-left: 1px solid #ff9900;
-  border-bottom: 1px solid #ff9900;
-  border-radius: 2px;
-  padding-top: 2px;
-  padding-left: 12px;
-  font-size: 0.9em;
-  width: 48px;
-  text-align: left;
-  font-family: "Courier New", Courier, monospace;
-}
-
-.cadran {
+ .cadran {
   background-color: #555;
   border-radius: 100%;
   box-shadow: 3px 6px 3px 0 #eee inset, 3px 6px 3px 0 #eee;
@@ -108,6 +79,7 @@ fieldset .idTransics {
   text-align: center;
   width: 160px;
 }
+
 #content .cadran label{
 	display: inline;
 	float: left;
@@ -128,19 +100,31 @@ fieldset .idTransics {
   text-align: right;
 }
 
+#position>div {
+display: flex;
+  flex: 0 0 0;
+  flex-flow: row nowrap;
+
+}
+
 #fs_visu legend {
   height: 42px;
   width: 76px;
   background-position: left top;
   background-repeat: no-repeat;
   padding-left: 24px;
+  margin-left: 32px;
 }
 
+#fs_visu  figcaption output {
+	font-size: .8em;
+	font-style: italic;
+}
 .tracteur legend {
   background-image: url(../img/tracteur-mini.png);
 }
 .remorque legend {
-  background-image: url(../img/citerne.png);
+  background-image: url("../img/citerne.png");
 }
 
 #vehicule-card {
@@ -151,6 +135,53 @@ fieldset .idTransics {
 }
 #vehicule-card label:.marque {
   height: 120px;
+}
+
+
+#indication {
+	background-color: #6BA0C8;
+	background-color: #6BA0C8;
+	color: #1A232C
+	flex-flow: column wrap;
+	justify-content: space-around;
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+.localite:empty,
+.destination:empty {
+	display: none;
+}
+
+.localite, .destination {
+  background-color: #ccc;
+  margin: 4px;
+  padding: 1px 4px;
+  width: 160px;
+}
+
+.localite {
+	border-radius:4px;
+	border: 3px solid #404040;
+	font-weight: bold;
+	font-size: 1.1em;
+	letter-spacing:.05em;
+}
+.localite span {
+	text-transform: uppercase;
+}
+
+.localite  span:last-child,
+.destination  span:last-child {
+	float: right;
+	font-size:.85em;
+}
+.destination {
+	font-family: Arial,Helvetica,sans-serif;
+	font-style: italic;
+	letter-spacing:.05em;
+}
+.destination span {
+	text-transform: capitalize;
 }
 
 #content label{
@@ -175,6 +206,10 @@ fieldset .idTransics {
 	height:72px;
 }
 
+figcaption {
+  background-color: #aaa;
+  text-align: center;
+}
 output {
 	padding:0 8px;
 }
@@ -262,19 +297,19 @@ legend {
 		0 -.4em       0 0 rgba(0,0,0,1),
 		-.28em -.28em 0 0 rgba(0,0,0,.75),
 		-.4em 0       0 0 rgba(0,0,0,.50),
-		-.28em .28em  0 0 rgba(0,0,0,.25)
-	;
+		-.28em .28em  0 0 rgba(0,0,0,.25);
 
-	-webkit-animation: .85s ajax-loader-rotate steps(8) infinite;
-	-moz-animation: .85s ajax-loader-rotate steps(8) infinite;
 	animation: .85s ajax-loader-rotate steps(8) infinite;
 }
 
 /* references par id */
 #fs_visu {
-	opacity:0;
+  background-color: #555;
+  background: linear-gradient(to bottom, rgba(85,85,85,0.38) 0%, rgba(85,85,85,1) 15%, rgba(85,85,85,1) 100%);
+  border: medium none;
+  border-radius: 150px / 50px;
+  opacity: 0;
 }
-
 .popup {
   background-color: #FFFFFF;
   border: 3px solid #FFFFFF;
@@ -297,7 +332,7 @@ legend {
 	display:inline;
 }
 
-#form-or li{ 
+#form-or li { 
 	padding:4px 0;
 }	
 
@@ -328,7 +363,6 @@ legend {
   z-index: 99999;
 }
 
-
 #content textarea,
 #content input{
 	float:left;
@@ -337,17 +371,13 @@ legend {
 	border:solid 1px #aacfe4;
 }
 
-
 #content input[type=radio]{
 	margin:4px
 }
 #content textarea{
 	margin:6px;
 }
- 
- 
- 
- 
+
 #content button:before {
     background: none repeat scroll 0 0 transparent;
     border-radius: 50% 50% 50% 50%;

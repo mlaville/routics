@@ -23,65 +23,80 @@ h2 {
   padding: 0;
 }
  
- /*
-.km {
-	letter-spacing:4px;
-	font-family: Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	text-align: right;
-	padding: 0 4px;
-	color: #fff;
-	font-size:1.9em;
-	background: rgb(0,0,0); 
-	background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(10,10,10,1) 25%,rgba(178,178,178,1) 51%,rgba(10,10,10,1) 91%,rgba(0,0,0,1) 100%); /* W3C */
+li {
+   list-style: none;
+ }
+ 
+ul {
+   margin: 2px;
+   padding: 0;
+ }
+ 
+#leftcolumn li label {
+   background-color: #126fb4;
+   border-color: #d5bfd0 #5a3a54 #5a3a54 #d5bfd0;
+   border-style: solid;
+   border-width: 1px;
+   color: white;
+   display: block;
+   font-weight: bold;
+   padding: 3px 4px 2px;
+   cursor: pointer;
+ }
+#leftcolumn li label:hover {
+	color: black;
+	background-color: #CDB4C8;
 }
-*/
-
-.numParc {
-	color: #9e0f09;
-	font-family: Arial Black;
-	background-color: #fefefe;
-	border-radius:8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset, 0 1px rgba(255, 255, 255, 0.2);
-	width:42px;
+ 
+ li .numParc {
+   display: inline-block;
+   text-align: right;
+ }
+ 
+ #leftcolumn li label input,
+ li .km {
+   display: none;
+ }
+ 
+.numParc + span {
+   border-radius: 4px;
+   border-style: solid;
+   border-width: 1px;
+   font-family: Arial Narrow, Arial;
+   font-size: 1.1em;
+   font-weight: bold;
+   margin: 0 12px;
+   padding: 1px 2px;
+ }
+ 
+ input:checked ~ .numParc + span {
+   background-color: #fff;
+   color: #000;
+ }
+ 
+ label .idTransics {
+   float: right;
+ }
+ 
+.idTransics {
+  background-image: url("../img/transics-icon.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid #ff9900;
+  border-left: 1px solid #ff9900;
+  border-radius: 2px;
+  font-family: "Courier New",Courier,monospace;
+  font-size: 0.9em;
+  font-style: italic;
+  font-weight: bold;
+  color: #ff660f;
+  line-height: 14px;
+  padding-left: 16px;
+  text-align: left;
+  width: 32px;
 }
-li .numParc {
-	width:42px;
-	display:inline-block;
-	text-align:right;
-}
-
-li .km {
-	display:none;
-}
-
-.numParc + span { /* immat */
-	border-radius: 4px 4px 4px 4px;
-    border-style: solid;
-    border-width: 1px;
-	font-family: Arial Narrow, Arial;
-    font-weight: bold;
-    padding: 1px 2px;
-    margin: 0 12px;
-	font-size:1.1em;
-}
-
-a:hover .numParc + span {
-	transform: scale(1.2, 1.2);
-	-moz-transform: scale(1.2, 1.2);
-	background-color: #fff;
-}
-
-.selected .numParc + span{ /* immat */
-	background-color: #fff;
-	color: #000;
-}
-
-li:last-child .vnav-item {
-    border-bottom-color: #50575F;
-}
-
-li span{
+ 
+ li span{
 	padding:0 4px;
 }
 
@@ -144,14 +159,10 @@ nav input[type="radio"]:checked + label  img{
 }
 
 #table-or th:first-child {
-    -moz-border-radius: 6px 0 0 0;
-    -webkit-border-radius: 6px 0 0 0;
     border-radius: 8px 0 0 0;
 }
 
 #table-or th:last-child {
-    -moz-border-radius: 0 6px 0 0;
-    -webkit-border-radius: 0 6px 0 0;
     border-radius: 0 8px 0 0;
 }
 

@@ -61,6 +61,7 @@ if( $response["success"] ) {
 			$response["DateInit"] =  $resultVehicleInfo['DateInit'];
 //			$response["marque"] = $resultVehicleInfo['ChassisNumber'];
 			$response["marque"] = $vehicleInfo->TechnicalInfo->ChassisNumber;
+			$response["dateModif"] = $vehicleInfo->Modified;
 
 			$response["transport"] =  $resultVehicleInfo['Filter'];
 			$response["Category"] = null;
