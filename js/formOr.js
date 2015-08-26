@@ -26,9 +26,25 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
+var posVehicule = {
+	carte: new google.maps.Map(
+		document.getElementById("googleMap"), {
+			center: new google.maps.LatLng(46.680184, 5.5803363),
+			zoom:12,
+			mapTypeId:google.maps.MapTypeId.ROADMAP
+	}),
+	marker : null,
+	changePos : function( pos ) {
+		
+		posVehicule.carte.panTo( pos );
+		
+		return posVehicule.marker.setPosition( pos );
+	}
+};
+
  function afficheVehicle( idTransics, numParc, immat, kmVehicule ) {
 		
-		formVehicule = document.forms['form-or'],
+	var	formVehicule = document.forms['form-or'],
 		champMarque = formVehicule.marque,
 		outputKmVehicule = formVehicule['km-vehicule'],
 		figcaption = outputKmVehicule.parentNode.lastElementChild,
@@ -57,19 +73,20 @@
 		showDetailVehicle = function(data){
 			if(data.success) {
 				var marque = data.marque,
-					position = data.position;
+					position = data.position,
+					dateModif = Date.fromISO(data.dateModif);
 					
-
 				champMarque.textContent = marque;
 				champMarque.className = marque.toLowerCase();
 				
 				outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 				
-				AppOr.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
+				posVehicule.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
 				divLocalite.innerHTML = formatPosition(position.DistanceFromLargeCity);
 				divDestination.innerHTML = formatPosition( position.DistanceFromPointOfInterest.toLowerCase() );
 
-				outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( Date.fromISO(data.dateModif) ) : '';
+				outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( dateModif ) : '';
+				outputDateInfo.style.color = ( dateModif.diff() > 48 * 3600 * 1000) ? 'red' : 'black';
 				
 				document.getElementById('fs_visu').style.opacity = 1;
 			}
@@ -78,14 +95,14 @@
 		};
 		
 	// Affichage du logo dans la legende du fieldset
-	document.getElementById('fs_visu').className = ( AppOr.typeVehicule == 0 ) ? "tracteur" : "remorque";
+	document.getElementById('fs_visu').className = ['tracteur', 'remorque'][AppOr.typeVehicule];
 	document.getElementById('fs_visu').style.opacity = .2;
 	
 	formVehicule.idTransics.textContent = idTransics;
 	document.getElementById('num-parc').value = numParc;
 	formVehicule.immat.textContent = immat;
 	outputKmVehicule.textContent = kmVehicule;
-	figcaption.textContent = ( document.forms["frm_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
+	figcaption.textContent = ( document.forms["form_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
 
 	// Vide le formulaire de saisie
 	afficheOr( null );
@@ -124,68 +141,69 @@ function afficheOr( unOr ) {
 	return;
 }
 
-function afficheListOr( unTab, htmlTable ) {
-
-	var tbody = htmlTable.getElementsByTagName('tbody')[0],
-		tfoot = htmlTable.getElementsByTagName('tfoot')[0],
-		tot = 0,
-		addOr = function( unOr ) {
-			var trOr = tbody.appendChild( document.createElement('tr') ),
-				tdAction = document.createElement('td'),
-				aEdit = tdAction.appendChild( document.createElement('a') ),
-				aSup = tdAction.appendChild( document.createElement('a') ),
-				deleteOr = function( e ) {
-					var tds = trOr.getElementsByTagName('td');
-					
-					if( confirm( "Supprimer l'Ordre de Réparation ?\n\n" + tds[5].textContent ) ){
-					/* Recherche l'Id de la ligne */
-						supprimeOr( tds[0].textContent );
-					}
-					return;
-				}
-				editOr = function( e ) {
-					var tds = trOr.getElementsByTagName('td');
-					
-					return afficheOr( {"IdOR" : tds[0].textContent,
-							"or_date" : tds[1].textContent,
-							"or_km" : tds[4].textContent,
-							"or_prestataire" : tds[2].textContent,
-							"or_numFacture" : tds[3].textContent,
-							"or_description" : tds[5].textContent,
-							"or_montant" : tds[6].textContent
-					} );
-				},
-				addTd = function( lib ) {
-					 return trOr.appendChild( document.createElement('td') ).textContent = lib;
-				};
-			
-			aEdit.setAttribute('href', "#");
-			aEdit.addEventListener('click', editOr);
-			
-			aSup.setAttribute('href', "#");
-			aSup.addEventListener( 'click', deleteOr );
-		
-			[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
-
-			trOr.appendChild( tdAction );
-			
-			tot += unOr.or_montant * 100;
-		};
-		
-	// retire tous les enfants d'un élément
-	while (tbody.firstChild) {
-	  tbody.removeChild(tbody.firstChild);
-	};
-	
-	unTab.forEach(addOr);
-
-	trfoot = tfoot.getElementsByTagName('tr')[0];
-	trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? tot / 100 : '';
-	
-	return;
-}
 
 function listOrVehicule( unNumParc ) {
+	var afficheListOr = function ( unTab, htmlTable ) {
+
+		var tbody = htmlTable.getElementsByTagName('tbody')[0],
+			tfoot = htmlTable.getElementsByTagName('tfoot')[0],
+			tot = 0,
+			addOr = function( unOr ) {
+				var trOr = tbody.appendChild( document.createElement('tr') ),
+					tdAction = document.createElement('td'),
+					aEdit = tdAction.appendChild( document.createElement('a') ),
+					aSup = tdAction.appendChild( document.createElement('a') ),
+					deleteOr = function( e ) {
+						var tds = trOr.getElementsByTagName('td');
+						
+						if( confirm( "Supprimer l'Ordre de Réparation ?\n\n" + tds[5].textContent ) ){
+						/* Recherche l'Id de la ligne */
+							supprimeOr( tds[0].textContent );
+						}
+						return;
+					},
+					editOr = function( e ) {
+						var tds = trOr.getElementsByTagName('td');
+						
+						return afficheOr( {"IdOR" : tds[0].textContent,
+								"or_date" : tds[1].textContent,
+								"or_km" : tds[4].textContent,
+								"or_prestataire" : tds[2].textContent,
+								"or_numFacture" : tds[3].textContent,
+								"or_description" : tds[5].textContent,
+								"or_montant" : tds[6].textContent
+						} );
+					},
+					addTd = function( lib ) {
+						 return trOr.appendChild( document.createElement('td') ).textContent = lib;
+					};
+				
+				aEdit.setAttribute('href', "#");
+				aEdit.addEventListener('click', editOr);
+				
+				aSup.setAttribute('href', "#");
+				aSup.addEventListener( 'click', deleteOr );
+			
+				[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
+
+				trOr.appendChild( tdAction );
+				
+				tot += unOr.or_montant * 100;
+			};
+			
+		// retire tous les enfants d'un élément
+		while (tbody.firstChild) {
+		  tbody.removeChild(tbody.firstChild);
+		};
+		
+		unTab.forEach(addOr);
+
+		trfoot = tfoot.getElementsByTagName('tr')[0];
+		trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? tot / 100 : '';
+		
+		return;
+	};
+	
 	$.post("./php/crudOR.php", { cmd: 'load', idVehicule: unNumParc },
 		function(data){
 			afficheListOr( data.result, document.getElementById('table-or') );
@@ -244,17 +262,11 @@ function supprimeOr( unIdentOr ){
 
 window.addEventListener('load', function() {
 
-	AppOr.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: AppOr.carte  } );
-	AppOr.changePos( AppOr.position );
+	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
 
- /*   document.getElementById('a_vehicule').addEventListener('click', function() {
-		loadVehicules( )
-    });
-*/
-	document.forms["frm_nav"].addEventListener('change', function(e) {
+	document.forms["form_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
-	
 	
 	$( "#dateOR" ).datepicker({
 		onSelect: function(dateText, inst) {
@@ -267,7 +279,7 @@ window.addEventListener('load', function() {
 			};
 			ajaxLoad.style.display = 'inline-block';
 		
-			if( document.forms["frm_nav"].typeElement[0].checked ) {
+			if( document.forms["form_nav"].typeElement[0].checked ) {
 			
 //				$.post("./php/getKmCompteur.php", {
 				$.post(document.body.dataset.km_compteur, {
@@ -314,15 +326,15 @@ window.addEventListener('load', function() {
 	
 	document.forms["form-or"].addEventListener("keypress", 
 		function(e){
-			if(e.keyCode==13) {
-				var noeud = e.target.nextElementSibling,
-					nextInput = false;
+			var elmt = e.target.nextElementSibling,
+				nextInput = false;
 				
+			if(e.keyCode == 13) {
 				e.preventDefault();
 				while( !nextInput ) {
-					noeud = noeud.nextElementSibling;
-					if( ['INPUT', 'TEXTAREA'].indexOf(noeud.nodeName) > -1 ) {
-						noeud.focus();
+					elmt = elmt.nextElementSibling;
+					if( ['INPUT', 'TEXTAREA'].indexOf(elmt.nodeName) > -1 ) {
+						elmt.focus();
 						nextInput = true;
 					}
 				};
@@ -337,7 +349,7 @@ window.addEventListener('load', function() {
 	});
 
 	loadVehicules( );
-	switchVehicle( document.forms["frm_nav"].typeElement );
+//	switchVehicle( document.forms["frm_nav"].typeElement );
 	
 	return;
 });

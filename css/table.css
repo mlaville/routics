@@ -1,21 +1,33 @@
+/**
+ * table.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       03/08/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Formulaire véhicule
+ *
+ * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 #table-or {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
-	margin: 24px;
+	margin: 12px;
 	width: 90%;
 	text-align: left;
 	border-collapse: collapse;
 }
 
 th:first-child {
-    -moz-border-radius: 6px 0 0 0;
-    -webkit-border-radius: 6px 0 0 0;
     border-radius: 8px 0 0 0;
 }
 
 th:last-child {
-    -moz-border-radius: 0 6px 0 0;
-    -webkit-border-radius: 0 6px 0 0;
     border-radius: 0 8px 0 0;
 }
 
@@ -39,5 +51,68 @@ th:last-child {
 }
 
 #rounded-corner tbody tr:hover td {
+	background: #d0dafd;
+}
+
+/*
+ * Affichage de la liste des OR
+ */
+#table-or th:first-child {
+    border-radius: 8px 0 0 0;
+}
+
+#table-or th:last-child {
+    border-radius: 0 8px 0 0;
+}
+
+#table-or th {
+	padding: 8px;
+	font-weight: normal;
+	font-size: 13px;
+	color: #039;
+	background: #b9c9fe;
+}
+
+#table-or td {
+	padding: 8px;
+	background: #e8edff;
+	border-top: 1px solid #fff;
+	color: #669;
+}
+
+#table-or td:nth-child(4),
+#table-or td:nth-child(5),
+#table-or td:nth-child(7),
+#table-or tfoot td:nth-child(2) {
+	text-align: right;
+}
+#table-or td:nth-child(7),
+#table-or tfoot td:nth-child(2) {
+  font-family: "Courier New",Courier,monospace;
+}
+
+#table-or td a {
+	background-position:  center center;
+	background-repeat: no-repeat;
+	display:inline-block;
+	padding: 0 4px;
+	margin: 0 8px;
+	width: 16px;
+	height: 16px;
+}
+
+#table-or td a:first-child {
+	background-image: url(../img/b_edit.png);
+}
+#table-or td a:last-child {
+	background-image: url(../img/b_drop.png);
+}
+	
+#table-or tbody tr td:last-child {
+width: 82px;
+ /*   text-align:right; */
+}
+
+#table-or tbody tr:hover td {
 	background: #d0dafd;
 }

@@ -157,8 +157,8 @@ $ajaxStat = $demo ? './response/getStatVehicles.php' : './php/getStatVehicles.ph
     </div>
 	<div id="divFondPdf"></div>
 	<footer>
-		<a target="_blank" href="http://www.polinux.net" style="float:left">
-			<img src="http://bao.polinux.net/img/polinux-micro.gif" alt="www.polinux.net" style="border-style: none;">
+		<a target="_blank" href="http://polinux.fr" style="float:left">
+			<img src="http://lib.polinux.fr/img/polinux-micro.gif" alt="polinux.fr" style="border-style: none;">
 		</a>
 	</footer><!-- #footer -->
 	<script type="text/javascript" src="./js/panel.js"></script>

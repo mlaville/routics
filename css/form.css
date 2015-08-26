@@ -4,7 +4,7 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       03/08/2015
- * @version    0.1
+ * @version    0.5
  * @revision   $0$
  *
  * Formulaire véhicule
@@ -68,7 +68,7 @@ fieldset>div {
  * pour affichage de la liste des véhicules
  */
 
- .cadran {
+.cadran {
   background-color: #555;
   border-radius: 100%;
   box-shadow: 3px 6px 3px 0 #eee inset, 3px 6px 3px 0 #eee;
@@ -101,10 +101,9 @@ fieldset>div {
 }
 
 #position>div {
-display: flex;
-  flex: 0 0 0;
-  flex-flow: row nowrap;
-
+	display: flex;
+	flex: 0 0 0;
+	flex-flow: row nowrap;
 }
 
 #fs_visu legend {
@@ -124,7 +123,7 @@ display: flex;
   background-image: url(../img/tracteur-mini.png);
 }
 .remorque legend {
-  background-image: url("../img/citerne.png");
+  background-image: url(../img/citerne.png);
 }
 
 #vehicule-card {
@@ -133,11 +132,11 @@ display: flex;
 #vehicule-card label{
 	display: block;
 }
+/*
 #vehicule-card label:.marque {
   height: 120px;
 }
-
-
+*/
 #indication {
 	background-color: #6BA0C8;
 	background-color: #6BA0C8;
@@ -202,8 +201,8 @@ display: flex;
 }
 
 #content textarea{
-	width:460px;
-	height:72px;
+	width:480px;
+	height:62px;
 }
 
 figcaption {

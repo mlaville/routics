@@ -159,7 +159,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 				<tfoot>
 					<tr>
 						<td class="rounded-foot-left" colspan="6"><em>Totaux</em></td>
-						<td> </td>
+						<td></td>
 						<td class="rounded-foot-right">&nbsp;</td>
 					</tr>
 				</tfoot>
@@ -168,23 +168,20 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</div>
 	   </div>
         <div id="leftcolumn">
-			<a href="#" id="a_vehicule">Actualiser</a>
-			<nav>
-				<form name="frm_nav">
-					<input type="radio" id="rd-tracteur" value="tracteur" name="typeElement" checked >
-					<label for="rd-tracteur"><img src="./img/tracteur.png" /></label>
-					<input type="radio" id="rd-remorque" value="remorque" name="typeElement">
-					<label for="rd-remorque"><img src="./img/citerne.png" /></label>
-				</form>
-			</nav>
-			<form class="form-recherche">
-				<input id="search" type="text" placeholder="Recherche ...">
-				<input id="submit" type="submit" value="go">
+			<a href="#" id="a_vehicule">Actualiser</a><br />
+			<form name="form_nav">
+				<input type="radio" id="rd-tracteur" value="tracteur" name="typeElement" checked />
+				<label for="rd-tracteur"><img src="./img/tracteur.png" /></label>
+				<input type="radio" id="rd-remorque" value="remorque" name="typeElement" />
+				<label for="rd-remorque"><img src="./img/citerne.png" /></label>
+
+				<input id="search" type="text" placeholder="Recherche ..." style="display: none;">
+
+				<div id="div_vehicule">
+					<ul id="ul_tracteur"></ul>
+					<ul id="ul_remorque"></ul>
+				</div>
 			</form>
-			<div id="div_vehicule">
-				<ul id="ul_tracteur"></ul>
-				<ul id="ul_remorque"></ul>
-			</div>
         </div>
     </div>
 	<footer>
