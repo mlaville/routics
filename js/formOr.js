@@ -54,7 +54,7 @@ var posVehicule = {
 		// Traite une chaine de la forme : 0.3km N De Besain
 		formatPosition = function (str) {
 			var reg = /([0-9]*)\.([0-9]*)km\s[N|E|O|S|\s]*De\s(\b.*\b)/ig,
-			match = reg.exec(str);
+				match = reg.exec(str);
 			
 			return match == null ? '' : '<span>' + match[3] + '</span><span>' + match[1] + ',' + match[2] + ' </span>';
 		},

@@ -33,9 +33,6 @@
   border-color: #1c65b2 #18589c #18589c;
   border-radius: 4px;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
-  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.12) 51%, rgba(0, 0, 0, 0.04));
-  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.12) 51%, rgba(0, 0, 0, 0.04));
-  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.12) 51%, rgba(0, 0, 0, 0.04));
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.12) 51%, rgba(0, 0, 0, 0.04));
 }
 
@@ -59,9 +56,6 @@
   background: #1f71c8;
   border-color: #113f70 #154c86 #1c65b2;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px rgba(255, 255, 255, 0.4);
-  background-image: -webkit-linear-gradient(top, #1a5da5, #3a8be0);
-  background-image: -moz-linear-gradient(top, #1a5da5, #3a8be0);
-  background-image: -o-linear-gradient(top, #1a5da5, #3a8be0);
   background-image: linear-gradient(to bottom, #1a5da5, #3a8be0);
 }
 
@@ -85,9 +79,6 @@
   text-shadow: 0 -1px #0d4d09;
   background: #189210;
   border-color: #093606 #0d4d09 #147b0e;
-  background-image: -webkit-linear-gradient(top, #126d0c, #20c016);
-  background-image: -moz-linear-gradient(top, #126d0c, #20c016);
-  background-image: -o-linear-gradient(top, #126d0c, #20c016);
   background-image: linear-gradient(to bottom, #126d0c, #20c016);
 }
 
@@ -103,9 +94,6 @@
   text-shadow: 0 -1px #72100d;
   background: #b61a15;
   border-color: #5b0d0b #72100d #9f1713;
-  background-image: -webkit-linear-gradient(top, #921511, #e4201b);
-  background-image: -moz-linear-gradient(top, #921511, #e4201b);
-  background-image: -o-linear-gradient(top, #921511, #e4201b);
   background-image: linear-gradient(to bottom, #921511, #e4201b);
 }
 
@@ -129,4 +117,8 @@ input.btn-block[type="submit"], input.btn-block[type="reset"], input.btn-block[t
 	background-position: center center;
 	background-repeat: no-repeat;
 	height:34px;
+}
+
+.btn:disabled {
+	opacity: .5;
 }

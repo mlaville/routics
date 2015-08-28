@@ -23,7 +23,7 @@ $param = json_decode( file_get_contents( './custom/param.json') );
 	<meta content="marc Laville - polinux" name="author" />
 	<meta content="Routics Login" name="description" />
 	<link rel="icon" href="/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="http://lib.polinux.net/js/month-picker/monthPicker.css" />	
+	<link rel="stylesheet" type="text/css" href="http://lib.polinux.fr/js/month-picker/monthPicker.css" />	
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/ajaxLoader.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/bouton.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/login.css" />
@@ -62,24 +62,23 @@ $param = json_decode( file_get_contents( './custom/param.json') );
 					<input type="text" id="input-mois-recap" name="recap" >
 				</li>
 			</ul>            
-            <input class="btn btn-primary btn-lg btn-block" type="submit" value="Connexion" />
+            <input name="soumettre" class="btn btn-primary btn-lg btn-block" type="submit" value="Connexion" disabled />
 			<div id="ajax-loader"></div>
-			<section id="info-transics">
-			</section >
+			<hr />
+			<section id="info-transics"></section>
        </div>
     </form>
-
 </div>
 <footer>
 	<a style="float:left" href="http://polinux.fr" target="_blank">
-		<img style="border-style: none;" alt="polinux.fr" src="http://lib.polinux.net/img/polinux-micro.gif">
+		<img style="border-style: none;" alt="polinux.fr" src="http://lib.polinux.fr/img/polinux-micro.gif">
 	</a>
 </footer>
 
-<script type="text/javascript" src="http://lib.polinux.net/js/zepto.js"></script>
+<script type="text/javascript" src="http://lib.polinux.fr/js/zepto.js"></script>
 
-<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
-<script type="text/javascript" src="http://lib.polinux.net/js/month-picker/monthPicker.js"></script>
+<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+<script type="text/javascript" src="http://lib.polinux.fr/js/month-picker/monthPicker.js"></script>
 
 <script src="./js/cookies.js" type="text/javascript"></script>
 <script src="./js/login.js" type="text/javascript"></script>

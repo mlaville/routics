@@ -147,6 +147,21 @@ input[type="radio"]:checked + label img {
 	display:inline;
 }
 
+#info-transics {
+  background-image: url(../img/transics-icon.png);
+  background-position: left top;
+  background-repeat: no-repeat;
+  font-family: "Courier New",Courier,monospace;
+  font-size: 0.7em;
+  font-style: italic;
+  font-weight: bold;
+  color: #ff660f;
+  line-height: 16px;
+  padding-left: 16px;
+  text-align: left;
+  height: 16px;
+}
+
 footer {
   background: none repeat scroll 0 50% #ccc;
   bottom: 0;
