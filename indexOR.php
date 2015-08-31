@@ -76,7 +76,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<div>
 					<figure id="vehicule-card">
 						<div class="box">
-							<output name="idTransics" class="idTransics"></output></div>
+							<output name="idTransics" class="idTransics" id="idTransics" ></output></div>
 						<div class="box marque">
 							<output name="marque"></output>
 						</div>

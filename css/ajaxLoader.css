@@ -2,29 +2,17 @@
  * ajaxLoader.css
  * 
  * @auteur     marc laville
- * @Copyleft 2013
- * @date       26/11/2013
+ * @Copyleft 2015
+ * @date       31/08/2015
  * @version    0.1
  * @revision   $0$
  *
- * Affichage des relevés d'activité mensuels
- *
- * Appel :
- * - ./php/getDrivers.php
- * - ./php/syntheseActiDriver.php
+ * Style des loader
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-@-webkit-keyframes ajax-loader-rotate {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-@-moz-keyframes ajax-loader-rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 @keyframes ajax-loader-rotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -42,8 +30,6 @@
     -.28em .28em  0 0 rgba(0,0,0,.25)
   ;
 
-  -webkit-animation: .85s ajax-loader-rotate steps(8) infinite;
-  -moz-animation: .85s ajax-loader-rotate steps(8) infinite;
   animation: .85s ajax-loader-rotate steps(8) infinite;
 
   display: none;
@@ -53,6 +39,21 @@
   font-size: 29px;
 }
 
+#transics-loader {
+	opacity: 1;
+	border-radius: 50%;
+	background-color: red;
+	box-shadow:
+		0 -.2em       0 0 rgba(0,0,0,1),
+		-.14em -.14em 0 0 rgba(0,0,0,.75),
+		-.2em 0       0 0 rgba(0,0,0,.50),
+		-.14em .14em  0 0 rgba(0,0,0,.25)
+	;  
+	animation: .85s ajax-loader-rotate steps(8) infinite;
+	width: .25em;
+	height: .25em;
+	font-size: 29px;
+}
 
 @keyframes "loading" {
  from {
@@ -60,46 +61,6 @@
  }
  to {
     background-position: 200%;
- }
-
-}
-
-@-moz-keyframes loading {
- from {
-   background-position: 0 0;
- }
- to {
-   background-position: 200%;
- }
-
-}
-
-@-webkit-keyframes "loading" {
- from {
-   background-position: 0 0;
- }
- to {
-   background-position: 200%;
- }
-
-}
-
-@-ms-keyframes "loading" {
- from {
-   background-position: 0 0;
- }
- to {
-   background-position: 200%;
- }
-
-}
-
-@-o-keyframes "loading" {
- from {
-   background-position: 0 0;
- }
- to {
-   background-position: 200%;
  }
 
 }

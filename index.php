@@ -48,16 +48,16 @@ $param = json_decode( file_get_contents( './custom/param.json') );
 			
 			<ul>
 				<li>
-					<input type="radio" checked="" id="rd_or" name="app">
+					<input type="radio" checked="" id="rd_or" name="app" value="OR" />
 					<label for="rd_or"><img src="./img/dossierOr.png" alt="Gestion des Ordres de Réparation"></label>
 				</li>
 				<li>
-					<input type="radio" id="rd_tt" name="app">
+					<input type="radio" id="rd_tt" name="app" value="TT" />
 					<label for="rd_tt"><img src="./img/time_machine.png" alt="Gestion des Temps de Travail"></label>
 					<input type="text" id="input-mois-planning" name="planning">
 				</li>
 				<li>
-					<input type="radio" id="rd_recap" name="app">
+					<input type="radio" id="rd_recap" name="app" value="RM" />
 					<label for="rd_recap"><img src="./img/wt.png" alt="Récapitulatif d'Activité"></label>
 					<input type="text" id="input-mois-recap" name="recap" >
 				</li>
@@ -65,8 +65,10 @@ $param = json_decode( file_get_contents( './custom/param.json') );
             <input name="soumettre" class="btn btn-primary btn-lg btn-block" type="submit" value="Connexion" disabled />
 			<div id="ajax-loader"></div>
 			<hr />
-			<section id="info-transics"></section>
-       </div>
+			<section id="info-transics">
+				<div id="transics-loader"></div>
+			</section>
+		</div>
     </form>
 </div>
 <footer>
@@ -74,8 +76,6 @@ $param = json_decode( file_get_contents( './custom/param.json') );
 		<img style="border-style: none;" alt="polinux.fr" src="http://lib.polinux.fr/img/polinux-micro.gif">
 	</a>
 </footer>
-
-<script type="text/javascript" src="http://lib.polinux.fr/js/zepto.js"></script>
 
 <script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
 <script type="text/javascript" src="http://lib.polinux.fr/js/month-picker/monthPicker.js"></script>
