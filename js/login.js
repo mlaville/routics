@@ -50,7 +50,9 @@ var requete = function( url, method, callBack, loader ) {
 				  console.error("Parsing error:", e); 
 				}
 				if(responseObject) {
-					callBack( responseObject );
+					if( !callBack( responseObject ) ){
+						xhr.send();
+					}
 				} else {
 					requete( url, method, callBack );
 				}
@@ -73,6 +75,17 @@ window.addEventListener('load', function() {
 		 * Appelé à la soumission du login
 		  * redirige vers la page correspondant à la selection du radio 
 		 */
+		testConnexion = function(data){
+			if(data.succes) {
+				var v1 = /'(.*)'/.exec(data.result[0]),
+					v2 = /'(.*)'/.exec(data.result[1]);
+					
+				document.getElementById('info-transics').textContent = [ v1[1], v2[1] ].join('/');
+				formSignup.soumettre.disabled = false;
+			} else {
+			}
+			return data.succes;
+		},
 		logRoutics = function(data){
 			var expireDelai = 3600 * 24 * 7,
 				app = formSignup.app.value, // selection du radio button
@@ -119,17 +132,8 @@ window.addEventListener('load', function() {
 	
 	formSignup.app.value = docCookies.getItem( 'module' ) || 'TT';
 
-	requete('./php/soapBuildVersion.php', 'GET', function(data) {
-			if(data.succes) {
-				var v1 = /'(.*)'/.exec(data.result[0]),
-					v2 = /'(.*)'/.exec(data.result[1]);
-					
-				document.getElementById('info-transics').textContent = [ v1[1], v2[1] ].join('/');
-				formSignup.soumettre.disabled = false;
-			}
-		},
-		document.getElementById('transics-loader')
-	).send();
+	requete('./php/soapBuildVersion.php', 'GET', testConnexion, document.getElementById('transics-loader') )
+		.send();
 
 	return;
 });

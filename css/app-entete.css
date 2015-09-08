@@ -1,0 +1,88 @@
+body>header {
+	background-image: linear-gradient(to bottom, #fefefe 28%, #c1dcf3 66%, #1e5799 100%);
+	border-bottom: 1px solid #1894ca;
+	box-shadow: 0 -1px rgba(255, 255, 255, 0.05) inset, 0 1px rgba(0, 0, 0, 0.05);
+	text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+	z-index: 1;
+	display:flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+	align-content: stretch;
+	align-items: flex-start;
+
+}
+
+body>header h2 {
+	margin-bottom: 4px;
+}
+
+body>header h3 {
+    background-color: #fefefe;
+    border-bottom: 2px solid #c95265;
+    color: #126fb4;
+    float: right;
+    font-family: Arial,Helvetica,sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    line-height: 0;
+    margin: 16px 4px 0;
+    padding: 0 16px 0 32px;
+    text-align: right;
+}
+
+body>header h3 p {
+  font-size: 0.7em;
+  font-weight: normal;
+  padding: 0;
+}
+body>header form {
+  display: inline;
+}
+body>header nav input[type="radio"] {
+  display: none;
+}
+
+
+body > header nav ul {
+  border-bottom: 1px solid #999;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+body>header nav {
+display:flex;
+}
+body>header nav a.btn{
+vertical-align: baseline;
+}
+
+body>header nav li:last-child {
+margin-left:32px;
+}
+
+body>header nav li {
+	display: inline-block;
+	margin: 0 8px;
+	padding: 0;
+}
+
+body>header nav label {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0 0 -1px 0;
+	border: 1px solid #999;
+	border-radius: 0.5em 0.5em 0 0;
+	padding: 0.5em;
+	font-family: sans-serif;
+	font-weight: bold;
+	background: #ddd linear-gradient(#fff, #bbb) repeat scroll 0 0;
+	color: black;
+}
+
+body>header nav input[type="radio"]:checked + label {
+	background: #448 linear-gradient(#66a, #226);
+	color: yellow;
+
+}

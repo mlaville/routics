@@ -16,7 +16,6 @@
 include 'ident.inc.php';
 include './soap/configSoap.inc.php';
 include './soap/funcVehicles.php';
-//include 'fonctionSoap.inc.php';
 
 include 'connect.inc.php';
 

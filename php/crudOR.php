@@ -5,10 +5,12 @@
  * @auteur     marc laville
  * @Copyleft 2013
  * @date       06/05/2013
- * @version    0.5
+ * @version    0.5.1
  * @revision   $0$
  *
- * - A Faire : Gestion des erreurs
+ * A Faire : 
+ * - Gestion des erreurs
+ * - Formalisation de l'API
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -17,6 +19,31 @@ include 'ident.inc.php';
 include './soap/configSoap.inc.php';
 
 include 'connect.inc.php';
+
+function loadStat($dbConn, $unIdVehicle) {
+	$reqSelectOr = "SELECT YEAR(BeginDate) AS Annee, MAX(KmEnd) - MIN(KmBegin) AS KmParcourus"
+		. " FROM t_km_parcourt"
+		. " WHERE Vehicle = ?"
+		. " GROUP BY YEAR(BeginDate) ASC";
+
+	$stmt = $dbConn->prepare( $reqSelectOr );
+	$rep = array( "success"=>$stmt->execute( array( $unIdVehicle ) ) );
+	
+	if( $rep["success"] ) {
+		$result = $stmt->fetchAll();
+		$stat = array();
+		foreach ($result as &$an) {
+			$stat[] = array( $an["Annee"] => $an["KmParcourus"] );
+		}
+		$rep["result"] = $stat;
+	} else {
+		$err = $stmt->errorInfo();
+		$rep["error"] = array( "reason"=>$err[2] );
+	}
+
+	return $rep;
+
+}
 
 function loadOr($dbConn, $unIdVehicle) {
 	$reqSelectOr = "SELECT IdOR, or_date, or_km, or_prestataire, or_numFacture, ROUND( or_montant / 100, 2 ) AS or_montant, or_description, or_user, or_date_saisie"
@@ -116,6 +143,8 @@ if( $response["success"] ) {
 				$response["success"] = $res["success"];
 				if( $response["success"] ) {
 					$response["result"] = $res["result"];
+					$response["stat"] = loadStat( $dbFlotte, $_POST["idVehicule"] );
+					
 				} else {
 					$response["error"] = $response["error"];
 				}

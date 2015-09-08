@@ -7,9 +7,9 @@
  * @version    0.5
  * @revision   $0$
  *
- * Formulaire véhicule
+ * Formulaire vÃ©hicule
  *
- * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
+ * @date revision   25/08/2015 Gestion de la sÃ©lection dans la liste de vÃ©hicule par des input radio
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -45,6 +45,11 @@ fieldset>div {
   margin: 2px;
   padding: 1px;
   position: relative;
+  text-align: center;
+}
+.box:first-of-type,
+.marque {
+  text-align: left;
 }
 
 #googleMap {
@@ -63,9 +68,25 @@ fieldset>div {
   width: 42px;
    padding: 0 2px;
 }
-
+.idTransics {
+  background-image: url("../img/transics-icon.png");
+  background-position: left top;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid #ff9900;
+  border-left: 1px solid #ff9900;
+  border-radius: 2px;
+  color: #ff660f;
+  font-family: "Courier New",Courier,monospace;
+  font-size: 0.9em;
+  font-style: italic;
+  font-weight: bold;
+  line-height: 14px;
+  padding-left: 16px;
+  text-align: left;
+  width: 32px;
+}
 /* 
- * pour affichage de la liste des véhicules
+ * pour affichage de la liste des vÃ©hicules
  */
 
 .cadran {
@@ -132,6 +153,10 @@ fieldset>div {
 #vehicule-card label{
 	display: block;
 }
+
+.transport {
+	font-size: .6em;
+}
 /*
 #vehicule-card label:.marque {
   height: 120px;
@@ -183,11 +208,51 @@ fieldset>div {
 	text-transform: capitalize;
 }
 
+#vehicule-stat {
+  display: table;
+  font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+  font-size: 12px;
+  margin: 4px;
+  text-align: center;
+  width: 180px;
+}
+
+#vehicule-stat>div {
+  display: table-cell;
+}
+
+#vehicule-stat>div>div {
+ border: 1px solid #aacfe3;
+  padding: 4px;
+}
+
+#vehicule-stat>div>div:first-child {
+  background: #b9c9fe none repeat scroll 0 0;
+  color: #039;
+}
+
+#vehicule-stat output {
+  font-family: 'Comic Sans MS', 'Lucida Handwriting';
+}
+
+.coutKm:after,
+.orMt:after {
+  font-size: .9em;
+  padding-left: 2px;
+}
+
+.orMt:after {
+  content: 'â‚¬';
+}
+.coutKm:after {
+  content: 'â‚¬/km';
+}
+
 #content label{
 	display:block;
 	font-weight:bold;
 	text-align:right;
-	width:160px;
+	width:120px;
 	float:left;
 }
 #content .small{
@@ -198,11 +263,6 @@ fieldset>div {
 	text-align:right;
 /*	float:right;
 	width:100%;*/
-}
-
-#content textarea{
-	width:480px;
-	height:62px;
 }
 
 figcaption {
@@ -307,6 +367,8 @@ legend {
   background: linear-gradient(to bottom, rgba(85,85,85,0.38) 0%, rgba(85,85,85,1) 15%, rgba(85,85,85,1) 100%);
   border: medium none;
   border-radius: 150px / 50px;
+}
+#fs_visu {
   opacity: 0;
 }
 .popup {
@@ -375,8 +437,14 @@ legend {
 }
 #content textarea{
 	margin:6px;
+	width: 452px;
+	height: 42px;
 }
 
+#content button {
+	float: right;
+}
+/*
 #content button:before {
     background: none repeat scroll 0 0 transparent;
     border-radius: 50% 50% 50% 50%;
@@ -388,6 +456,7 @@ legend {
     right: -20%;
     top: -25%;
 }
+
 
 #content button {
     -moz-border-bottom-colors: none;
@@ -417,19 +486,18 @@ legend {
     vertical-align: top;
 	margin:16px;
 }
- /******/
+******/
 
 fieldset.listSelect {
 	display:inline;
-    border: 0;
-    background: -webkit-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
-    background: -moz-linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
+    background: linear-gradient(90deg, #ccc, #fff) repeat scroll 0 0 transparent;
     border: 1px solid #AACFE3;
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: 0 0 15px #AAAAAA;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #aaa;
     margin: 8px;
     padding: 8px;
 }
+
 fieldset.listSelect legend {
 	color:#00458B;
     text-align: right;

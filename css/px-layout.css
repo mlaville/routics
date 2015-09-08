@@ -1,37 +1,67 @@
-/* 
+/**
  * px-layout.css
- * Footer * 
+ * 
  * @auteur     marc laville
- * @Copyleft 2014
- * @date       16/10/2014
- * @version    1.0
+ * @Copyleft 2015
+ * @date       04/09/2015
+ * @version    0.1
  * @revision   $0$
  *
- * style des boutons
+ * Trame de style de base - layout
+ * 
+ * A Faire
+ * - 
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-body, html {
-	margin: 0;
-}
-img{ border-style: none; }
-a { text-decoration: none; }
-/* 
- * footer
-* -----------------------------------------------------------------------------
-*/
-footer {
-	background: #ccc none repeat scroll 0pt 50%;
-	height: 15px; 
-	position: fixed;
-	width: 100%;
-	bottom: 0px;
-	text-align: center;
-}
-footer a:first-child {
-	float:left;
-	margin-right: 18px;
-	font-size: 12px;
+ 
+body,
+body>header {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
 }
 
+img {
+  border-style: none;
+}
+
+li {
+  list-style: none;
+}
+
+body>footer,
+body>header {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+body>header {
+  background: black;
+  color: #000;
+  top: 0;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  padding: 0 12px;
+}
+
+body>footer {
+  background: #ccc none repeat scroll 0 50%;
+  bottom: 0;
+  height: 15px;
+  text-align: center;
+}
+
+footer a:first-child {
+  float: left;
+  margin-right: 18px;
+  font-size: 12px;
+}
+
+main {
+  position: absolute;
+  bottom: 16px;
+  top: 86px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+}

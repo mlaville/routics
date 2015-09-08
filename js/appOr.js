@@ -59,7 +59,7 @@ function loadVehicules( ) {
 			label_vehicule.appendChild(span_immat);
 			label_vehicule.appendChild(div_km);
 			input_select.addEventListener('change', function(e) {
-				afficheVehicle( objet.VehicleTransicsID, objet.VehicleID, objet.LicensePlate, objet.CurrentKms );
+				ctrlFormVehicule.afficheVehicle( objet.VehicleTransicsID, objet.VehicleID, objet.LicensePlate, objet.CurrentKms );
 		    });
 		   
 			return unUl.appendChild(li_vehicule);

@@ -16,17 +16,6 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-
-h2 {
-  font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-}
- 
-li {
-   list-style: none;
-}
- 
 ul {
    margin: 2px;
    padding: 0;
@@ -79,24 +68,6 @@ li .km {
  label .idTransics {
    float: right;
  }
- 
-.idTransics {
-  background-image: url("../img/transics-icon.png");
-  background-position: left top;
-  background-repeat: no-repeat;
-  border-bottom: 1px solid #ff9900;
-  border-left: 1px solid #ff9900;
-  border-radius: 2px;
-  font-family: "Courier New",Courier,monospace;
-  font-size: 0.9em;
-  font-style: italic;
-  font-weight: bold;
-  color: #ff660f;
-  line-height: 14px;
-  padding-left: 16px;
-  text-align: left;
-  width: 32px;
-}
  
 li span{
 	padding:0 4px;

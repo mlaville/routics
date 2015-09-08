@@ -155,19 +155,15 @@ window.addEventListener('load', function() {
 		loadVehicules( )
     });
 
-	document.forms["frm_nav"].addEventListener('change', function(e) {
+/*	document.forms["frm_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
-
+*/
 	document.forms["form-or"].addEventListener('submit', function(event) {
 		event.preventDefault();
 		
 		return afficheStat( event.target );
 	});
-	
-    document.getElementById('a_vehicule').addEventListener('click', function() {
-		loadVehicules( )
-    });
 	
     document.getElementById('a_impDetail').addEventListener('click', function() {
 		return editStat( document.forms["form-or"], 'detail' );
@@ -178,7 +174,7 @@ window.addEventListener('load', function() {
     });
 	
 	loadVehicules( );
-	switchVehicle( document.forms["frm_nav"].typeElement );
+//	switchVehicle( document.forms["frm_nav"].typeElement );
 	
 	return;
 });

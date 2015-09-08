@@ -1,0 +1,53 @@
+/**
+ * app-layout.css
+ **/
+body {
+  color: #333;
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 13px;
+}
+main {
+  display: flex;
+  justify-content: space-around;
+  top: 58px;
+}
+
+main>div {
+  border: 2px solid silver;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#leftcolumn {
+  background: #d9edf8 none repeat scroll 0 0;
+  height: 100%;
+  width: 238px;
+  min-width: 228px;
+  flex: 0 1 auto;
+}
+
+#content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+
+#content fieldset {
+  border: 2px solid #ccc;
+  margin: 2px;
+}
+
+#content >.box {
+ /* border: thin solid red;*/
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#content >box div {
+  margin:2px;
+}
+
+content-stat {
+display: none;
+}

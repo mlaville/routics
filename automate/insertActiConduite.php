@@ -120,7 +120,7 @@ function calcLogin() {
 
 function insertActivite( $dbFlotte, $arrActivite ) {
 	$stmt = $dbFlotte->prepare( "REPLACE INTO t_km_parcourt ("
-					. " TransicsID, Driver, DriverTransicsId, Trailer, Vehicle, VehicleTransicsId, KmBegin, KmEnd, BeginDate, EndDate, AddressInfo, km_dateImport"
+					. " TransicsID, Driver, DriverTransicsId, Trailer, Vehicle, VehicleTransicsId, PoiID, KmBegin, KmEnd, BeginDate, EndDate, AddressInfo, km_dateImport"
 					. " ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW() )" );
 
 	foreach( $arrActivite as &$activite ) {
@@ -131,12 +131,12 @@ function insertActivite( $dbFlotte, $arrActivite ) {
 				? $activite->Trailer->ID
 				: ( isset($activite->Trailer_External) ? $activite->Trailer_External : 0 );
 			$AddressInfo = isset($activite->Position) ? $activite->Position->AddressInfo : null;
-			$data = array( $activite->ID,
-							$activite->Driver->ID,
+			$data = array( $activite->ID,							$activite->Driver->ID,
 							$activite->Driver->TransicsID,
 							$idTrailer, 
 							$activite->Vehicle->ID, 
 							$activite->Vehicle->TransicsID, 
+							isset( $activite->POI ) ? $activite->POI->PoiID : null,
 							$activite->KmBegin, 
 							$activite->KmEnd, 
 							$activite->BeginDate, 
