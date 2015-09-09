@@ -86,3 +86,20 @@ body>header nav input[type="radio"]:checked + label {
 	color: yellow;
 
 }
+
+header nav li a {
+  background: #ddd linear-gradient(#fff, #bbb) repeat scroll 0 0;
+  border: 1px solid #999;
+  border-radius: 0.5em 0.5em 0 0;
+  color: black;
+  display: block;
+  font-family: sans-serif;
+  font-weight: bold;
+  padding: 0.5em;
+  text-decoration: none;
+}
+
+li a:active {
+  background: #448 linear-gradient(#66a, #226) repeat scroll 0 0;
+  color: yellow;
+}

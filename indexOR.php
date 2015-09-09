@@ -10,6 +10,7 @@
  *
  * @date revision   01/08/2015 Affichage de la card du véhicle : vehicule-card
  * @date revision   08/09/2015 Revision de la mise en page css (flex-box)
+ * @date revision   08/09/2015 Integration de la page Stat
  *
  * Gestion des ordres de réparation
  * 
@@ -20,7 +21,7 @@
 session_name("flotte");
 session_start();
 
-if( !isset( $_SESSION['ident']) ) {
+if( !isset($_SESSION['ident']) ) {
 	header("Location: ./");
 }
 /* Lecture des parametres pour l'affichage de l'entete */
@@ -37,6 +38,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
   <head>
     <meta charset="UTF-8">
 	<title>Routics - Véhicules</title>
+	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" />
     <link rel='stylesheet' href='css/px-layout.css'>
     <link rel="stylesheet" href="./css/bouton.css">
     <link rel="stylesheet" href="css/app-layout.css">
@@ -45,21 +48,22 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     <link rel="stylesheet" href="./css/listVehicule.css">
     <link rel="stylesheet" href="./css/table.css">
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/tableGenerator.css" />
+	
   </head>
 <body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
 <header>
-	<img src="../img/dossierOr.png" alt="Gestion des OR">
+	<img src="./img/dossierOr.png" alt="Gestion des OR">
 	<h2>Gestion des Ordres de Réparation</h2>
 	<nav>
 		<form name="frm_menu">
 			<ul>
 			<li>
-			<input type="radio" checked="" name="menu" id="rd-saisie">
-			<label for="rd-saisie">Saisie OR</label>
+				<a href="#content">Saisie OR</a>
 			</li>
 			<li>
-			<input type="radio" name="menu" id="rd-stat">
-			<label for="rd-stat"><a href="./indexStat.php">Statistiques</a></label>
+				<a href="#content-stat">Statistiques</a>
 			</li>
 			<li>
 				<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
@@ -88,7 +92,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			</div>
 		</form>
 	</div>
-	<div id="content">
+	<section id="content">
 		<div class="box">
 			<form id="form-or" name="form-or">
 <!-- 				<h1>Saisie des Ordres de Réparation</h1> -->
@@ -128,7 +132,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 							<figcaption><output style="color: black;" name="dateInfoVehicule">Données collectées le 8 septembre 2015 à 8h28</output></figcaption>
 						</figure>
 					</div>
-									</fieldset>
+				</fieldset>
 				<fieldset>
 					<legend>Saisie d'un Ordre de Réparation
 						<output name="idOr" id="idOr" ></output>
@@ -218,8 +222,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</table>
 	  </div>
     </div>
-  </div>
-	<div id="content-stat">
+  </section>
+	<section id="content-stat"  class="blocReponse">
 		<form id="form-stat" name="form-stat">
 			<h1>Statistiques</h1>
 			<ul style="display:none">
@@ -286,7 +290,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<tbody></tbody>
 		</table>
 		</div>
-	</div>
+	</section>
 
 </main>
 	<footer>
@@ -299,8 +303,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
 	
-	<script src="http://lib.polinux.fr/js/js-util.js" type="text/javascript"></script>
-	<script src="./js/appOr.js" type="text/javascript"></script>
-	<script src="./js/formOr.js" type="text/javascript"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+	<script type="text/javascript" src="./js/appOr.js"></script>
+	<script type="text/javascript" src="./js/formOr.js"></script>
+	<script type="text/javascript" src="./js/panel.js"></script>
+	<script type="text/javascript" src="./js/statOr.js"></script>
   </body>
 </html>

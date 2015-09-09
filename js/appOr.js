@@ -28,7 +28,11 @@ var AppOr = {
 		typeVehicule : 0,
 		vehicule : null
 };
-
+/*
+$('a[href]').each(function() {
+    if ($(this).attr('href') == window.location.pathname || $(this).attr('href') == window.location.href)
+      $(this).addClass('active');
+  });*/
 // VehicleView
 function loadVehicules( ) {
 	var ajoutVehicule = function ( objet, unUl ) {
@@ -87,7 +91,8 @@ function loadVehicules( ) {
 }
 
 function switchVehicle( rd ) {
-	var i;
+	var i,
+		val = rd.value;
 
 	for( i = 0 ; i < rd.length ; i++ ) {
 		if( rd[i].checked ) {
