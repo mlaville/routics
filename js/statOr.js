@@ -1,19 +1,57 @@
+/**
+ * statOr.js
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       13/09/2015
+ * @version    0.5
+ * @revision   $0$
+ *
+ * Gestion des ordres de réparation
+ * 
+ * @date revision   
+ *
+ * Appel  ajax:
+ * - ../php/getStatVehicles.php
+ * - ./php/pdfStatVehicle.php
+ *
+ *
+ * A Faire
+ * - gerer les requetes ajax sans JQuery
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 
-function listStatVehicule( unTab, rupt ) {
+function listStatVehicule( unTab /* , rupt  */) {
 
 	var tbody = document.getElementById('table-stat').getElementsByTagName('tbody')[0],
 		lgTot = unTab[unTab.length - 1],// Référence la ligne de totaux 
-		clickSousTotal = function ( a ) {
-			previousTr = a.parentNode.parentNode.previousSibling;
-			
-			while( previousTr && !previousTr.classList.contains("sousTotal") ) {
-				previousTr.classList.toggle("masque");
-				previousTr = previousTr.previousSibling;
-			}
-			return false;
+		expendSousTotal = function(tr) {
+			return function() {
+				var previousTr = tr.previousSibling;
+				
+				while( previousTr && !previousTr.classList.contains("sousTotal") ) {
+					previousTr.classList.toggle("masque");
+					previousTr = previousTr.previousSibling;
+				}
+				return false;
+			};
 		},
+		
 		ajoutLigne = function( lg ) {
 			var tr = document.createElement('tr'),
+				expendCheck = function() {
+					var label = document.createElement('label'),
+						chk = label.appendChild( document.createElement('input') );
+					
+					chk.setAttribute('type', 'checkbox');
+					chk.addEventListener('change', expendSousTotal(tr));
+					
+					label.appendChild(document.createElement('div'));
+					
+					return label;
+				},
 				ajoutCell = function( lib, classArray ) {
 					var cellule = document.createElement('td');
 					
@@ -34,15 +72,10 @@ function listStatVehicule( unTab, rupt ) {
 				/* Ligne de Rupture */
 				tr.classList.add("sousTotal");
 				if( lg.Rupture != null ) {
-					/* Creation du lien pour gèrer l'expansion */
-					var a_expand = tr.appendChild( document.createElement('td') ).appendChild( document.createElement('a') ),
-						img = a_expand.appendChild( document.createElement('img') ).setAttribute("scr", "./img/bullet_arrow_up.png");
-						
-					a_expand.setAttribute("href", "#");
-					a_expand.textContent = ' ^ ';
-					a_expand.addEventListener('click', function(e) {
-						clickSousTotal( e.currentTarget );
-				   });
+					tr.appendChild( document.createElement('td') )
+						/* Creation du lien pour gèrer l'expansion */
+						.appendChild( expendCheck() );
+					
 					
 					ajoutCell(lg.NbVehicule + ' ' + lg.Rupture);
 					ajoutCell(Math.round( 1000 * lg.NbVehicule/lgTot.NbVehicule ) / 10, [ "nombre", "pourcent" ]);
@@ -86,19 +119,22 @@ function listStatVehicule( unTab, rupt ) {
 	return;
 }
 
-function afficheStat(f){
+function afficheStat(e){
 
-	var param = {
-		dateInf: f["dateInf"].value, 
-		dateSup: f["dateSup"].value,
-		typeVehicule: ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque',
-		rupture: f["rupture"][0].checked ? 'marque' : 'transport'
-	};
+	var f = e.target,
+		param = {
+			dateInf: f["dateInf"].value, 
+			dateSup: f["dateSup"].value,
+			typeVehicule: ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque',
+			rupture: f["rupture"][0].checked ? 'marque' : 'transport'
+		};
 	
-//	$.post("./php/getStatVehicles.php", param,
-	$.post( document.body.dataset.stat, param,
+	f["calculStat"].disable = true;
+	
+	$.post("./php/getStatVehicles.php", param,
+//	$.post( document.body.dataset.stat, param,
 		function(data){
-			listStatVehicule( data.result, param.rupture );
+			listStatVehicule( data.result /* , param.rupture  */);
 			f["calculStat"].disable = false;
 	}, "json");
 
@@ -114,52 +150,3 @@ function editStat(f, typeEdit){
 					+ '&typeEdit=' + typeEdit,
 				'Statistiques' );
 }
-
-window.addEventListener('load', function() {
-
-	/* Attache un datePicker aus champs date */
-	/* et initilisation au mois passé */
-	var dateRef = new Date(),
-		monthRef = dateRef.getMonth();
-	
-	dateRef.setDate(1);
-	
-	$( "#dateInf" ).datepicker({
-		defaultDate: "-1m",
-		changeMonth: true,
-		onClose: function( selectedDate ) {
-			$( "#dateSup" ).datepicker( "option", "minDate", selectedDate );
-		}
-	});
-	$( "#dateSup" ).datepicker({
-		defaultDate: "-1m",
-		changeMonth: true,
-		onClose: function( selectedDate ) {
-			$( "#dateInf" ).datepicker( "option", "maxDate", selectedDate );
-		}
-	});
-/*	
-    document.getElementById('a_vehicule').addEventListener('click', function() {
-		loadVehicules( )
-    });
-*/
-/*	document.forms["frm_nav"].addEventListener('change', function(e) {
-		return switchVehicle( this.typeElement );
-	});
-*/
-	document.forms["form-stat"].addEventListener('submit', function(event) {
-		event.preventDefault();
-		
-		return afficheStat( event.target );
-	});
-	
-    document.getElementById('a_impDetail').addEventListener('click', function() {
-		return editStat( document.forms['form-stat'], 'detail' );
-    });
-	
-    document.getElementById('a_impSynthese').addEventListener('click', function() {
-		return editStat( document.forms['form-stat'], 'synthese' );
-    });
-	
-	return;
-});

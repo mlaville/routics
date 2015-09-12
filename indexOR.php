@@ -57,20 +57,18 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<img src="./img/dossierOr.png" alt="Gestion des OR">
 	<h2>Gestion des Ordres de Réparation</h2>
 	<nav>
-		<form name="frm_menu">
-			<ul>
-			<li>
-				<a href="#content">Saisie OR</a>
-			</li>
-			<li>
-				<a href="#content-stat">Statistiques</a>
-			</li>
-			<li>
-				<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
-				<a class="btn btn-primary" href="./php/deconnexion.php">Déconnexion</a>
-			</li>
-			</ul>
-		</form>
+		<ul>
+		<li>
+			<a href="#content">Saisie OR</a>
+		</li>
+		<li>
+			<a href="#content-stat">Statistiques</a>
+		</li>
+		<li>
+			<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
+			<a class="btn btn-primary" href="./php/deconnexion.php">Déconnexion</a>
+		</li>
+		</ul>
 	</nav>
 	<?php echo $param->header; ?>
 </header>
@@ -224,14 +222,15 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     </div>
   </section>
 	<section id="content-stat"  class="blocReponse">
-		<form id="form-stat" name="form-stat">
 			<h1>Statistiques</h1>
+		<div class="box">
+		<form id="form-stat" name="form-stat">
 			<ul style="display:none">
 				<li><a class="medium button blue" href="#">Mois Précédent</a></li>
 				<li><a class="medium button blue" href="#">3 Mois Précédents</a></li>
 				<li><a class="medium button blue" href="#">Trimestre Précédent</a></li>
 			</ul>
-			<fieldset class="listSelect"><legend>Période</legend>
+			<fieldset><legend>Période</legend>
 				<ul>
 					<li>
 						<label for="dateInf">Du</label>
@@ -243,7 +242,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					</li>
 				</ul>
 			</fieldset>
-			<fieldset class="listSelect"><legend>Rupture</legend>
+			<fieldset><legend>Rupture</legend>
 				<ul>
 					<li>
 						<input type="radio" name="rupture" id="rd_marque" checked />
@@ -255,19 +254,20 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					</li>
 				</ul>
 			</fieldset>
-			<button name="calculStat" type="submit">Calculer ...</button>
+			<button class="btn btn-primary" name="calculStat" type="submit">Calculer ...</button>
 			<div class="ajax-loader"></div>
 			<fieldset class="listSelect"><legend>Imprimer ...</legend>
 				<ul>
 					<li>
-						<a href="#" id="a_impDetail">Détail</a>
+						<a class="btn btn-primary" href="#" id="a_impDetail">Détail</a>
 					</li>
 					<li>
-						<a href="#" id="a_impSynthese">Synthèse</a>
+						<a class="btn btn-primary" href="#" id="a_impSynthese">Synthèse</a>
 					</li>
 				</ul>
 			</fieldset>
 		</form>
+		</div>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 		<table summary="Récatituletif des ORs" id="table-stat" >
 			<thead>

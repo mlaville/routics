@@ -84,7 +84,6 @@ body>header nav label {
 body>header nav input[type="radio"]:checked + label {
 	background: #448 linear-gradient(#66a, #226);
 	color: yellow;
-
 }
 
 header nav li a {
@@ -99,6 +98,7 @@ header nav li a {
   text-decoration: none;
 }
 
+header nav li a.active,
 li a:active {
   background: #448 linear-gradient(#66a, #226) repeat scroll 0 0;
   color: yellow;

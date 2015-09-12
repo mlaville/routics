@@ -165,9 +165,11 @@ section nav li {
 	cursor: pointer;
 	padding-right: 12px;
 }
+/* A faire : preciser 
 nav li:hover {
 	border: 2px inset silver;
 }
+*/
 section nav li label {
   background-color: white;
   white-space: nowrap;

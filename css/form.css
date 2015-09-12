@@ -1,9 +1,9 @@
 /**
- * listVehicule.css
+ * form.css
  * 
  * @auteur     marc laville
  * @Copyleft 2015
- * @date       03/08/2015
+ * @date       12/09/2015
  * @version    0.5
  * @revision   $0$
  *
@@ -41,7 +41,7 @@ fieldset>div {
 
 .box {
   background-color: #fff;
-  flex: 1 1 0;
+/*  flex: 1 1 0; */
   margin: 2px;
   padding: 1px;
   position: relative;
@@ -248,11 +248,12 @@ fieldset>div {
   content: '€/km';
 }
 
+main section label,
 #content label{
 	display:block;
 	font-weight:bold;
 	text-align:right;
-	width:120px;
+	width:96px;
 	float:left;
 }
 #content .small{
@@ -412,11 +413,14 @@ legend {
 }
  /*******/
  
- #content input[type=text]{
+main section input[type=text],
+#content input[type=text]{
 	width:96px;
 	text-align:center;
 	margin:2px 0 20px 10px;
 }
+main section textarea:focus,
+main section input[type=text]:focus,
 #content textarea:focus,
 #content input[type=text]:focus {
   box-shadow: 0 0 3000px 3000px rgba(151, 125, 48, 0.3);
@@ -424,6 +428,8 @@ legend {
   z-index: 99999;
 }
 
+main section textarea,
+main section  input,
 #content textarea,
 #content input{
 	float:left;
@@ -515,26 +521,53 @@ fieldset.listSelect legend {
 	text-align: center;
 }
 
-fieldset.listSelect input[type="radio"] {
-	opacity: 0;
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding:12px 48px; 
+#content-stat input[type="radio"] {
+	display: none; 
 }
-fieldset.listSelect input[type="radio"] + label p {
+
+#content-stat input[type="radio"] + label {
+	width: 160px;
+}
+
+#content-stat input[type="radio"] + label p {
 	border:none;
 	margin: 2px;
 	padding:12px 48px; 
 	font-size: 1.2em;
 	cursor: pointer;
 }
+
+#content-stat input[type="radio"]:checked + label p,
 fieldset.listSelect input[type="radio"]:checked + label p {
 	background: transparent url(../img/aroundBlue.png) no-repeat scroll 0%;
 	font-weight: bold;
 }
 
-/******/
+#content-stat .sousTotal label {
+	width: 1em;
+}
+#content-stat .sousTotal label input {
+  display: none;
+}
+
+#content-stat .sousTotal label input+div {
+  display: inline-block;
+  border: thin solid #333;
+  text-align: center;
+  width: .8em;
+  line-height: .8em;
+  height: .8em;
+  vertical-align: button;
+}
+
+#content-stat .sousTotal label input+div:after {
+  content: '+';
+}
+
+#content-stat .sousTotal label input:checked+div:after {
+  content: '-';
+}
+/******
 
 fieldset.listSelect li a {
     background: -moz-linear-gradient(90deg, #0459B7, #08ADFF) repeat scroll 0 0 transparent;
@@ -558,7 +591,7 @@ fieldset.listSelect li a {
     -webkit-text-shadow: 0 1px 1px #333333;
     text-shadow: 0 1px 1px #333333;
 }
- /* header div a,*****/
+
 fieldset.listSelect li a:hover {
     background: -moz-linear-gradient(90deg, #067CD3, #0BCDFF) repeat scroll 0 0 transparent;
     background: -webkit-linear-gradient(90deg, #067CD3, #0BCDFF) repeat scroll 0 0 transparent;
@@ -571,7 +604,7 @@ fieldset.listSelect li a:active {
     border-color: #093C75;
     outline: medium none;
 }
- /******/
+ ******/
  
  
  

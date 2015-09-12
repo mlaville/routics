@@ -11,6 +11,7 @@
  * 
  * @date revision   01/08/2015 Affichage de la card du véhicule
  * @date revision   25/08/2015 Transfere la gestion de la googlemap dans dormOr.js
+ * @date revision   13/09/2015 Gere la totalité de evenement load de window.
  *
  * Appel  ajax:
  * - ./php/getVehicule.php
@@ -28,11 +29,7 @@ var AppOr = {
 		typeVehicule : 0,
 		vehicule : null
 };
-/*
-$('a[href]').each(function() {
-    if ($(this).attr('href') == window.location.pathname || $(this).attr('href') == window.location.href)
-      $(this).addClass('active');
-  });*/
+
 // VehicleView
 function loadVehicules( ) {
 	var ajoutVehicule = function ( objet, unUl ) {
@@ -102,3 +99,140 @@ function switchVehicle( rd ) {
 
 	return false;
 }
+
+window.addEventListener('load', function() {
+	var formOr = document.forms["form-or"],
+		headerNav = document.querySelectorAll('header nav li a'),
+		i,
+		activeLink = function() {
+			var i = 0,
+				loc = window.location,
+				link;
+			
+			for( i = 0 ; i < headerNav.length ; i++ ) {
+				link = headerNav[i];
+				
+				if( [ loc.pathname, loc.href, loc.hash ].indexOf( link.getAttribute('href') ) > -1 ) {
+					link.classList.add('active');
+				} else {
+					link.classList.remove('active');
+				}
+			}
+		},
+
+		selectDate = function(dateText, inst) {
+			var noeud = formOr.kmOR,
+				ajaxLoad = noeud.nextElementSibling;
+
+			ajaxLoad.style.display = 'inline-block';
+		
+			if( document.forms["form_nav"].typeElement[0].checked ) {
+			
+//				$.post("./php/getKmCompteur.php", {
+				$.post(document.body.dataset.km_compteur, {
+						"idVehicule": document.getElementById('idTransics').value,
+						"dateOr": dateText 
+					},
+					function(data){
+						
+						ajaxLoad.style.display = 'none';
+						noeud.value = data.km;
+						
+						if(data.km != null) {
+							noeud.previousElementSibling.getElementsByTagName('span')[0].textContent = 'compteur';
+						} else {
+						}
+						return;
+					}, "json"
+				);
+			} else {
+				$.post("./php/selectKmParcourus.php", {
+						"numParc": document.getElementById('num-parc').value,
+						"dateOr": dateText 
+					},
+					function(data){
+
+						ajaxLoad.style.display = 'none';
+						noeud.value = data.result.KmParcourus;
+						noeud.previousElementSibling.getElementsByTagName('span')[0].textContent = 'parcourus depuis le ' + data.result.DateInit;
+						
+						return;
+					}, "json"
+				);
+			}
+			
+			return formOr.lieuOR.focus();
+		},
+		dateRef = new Date(),
+		monthRef = dateRef.getMonth();
+
+	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
+
+	document.forms["form_nav"].addEventListener('change', function(e) {
+		return switchVehicle( this.typeElement );
+	});
+	
+	$( "#dateOR" ).datepicker({
+		onSelect: selectDate
+	});
+	
+	formOr.addEventListener("keypress", 
+		function(e){
+			var elmt = e.target.nextElementSibling,
+				nextInput = false;
+				
+			if(e.keyCode == 13) {
+				e.preventDefault();
+				while( !nextInput ) {
+					elmt = elmt.nextElementSibling;
+					if( ['INPUT', 'TEXTAREA'].indexOf(elmt.nodeName) > -1 ) {
+						elmt.focus();
+						nextInput = true;
+					}
+				};
+			}
+		},
+		false
+	);
+	
+	loadVehicules( );
+
+	/* Attache un datePicker aus champs date */
+	/* et initilisation au mois passé */
+	dateRef.setDate(1);
+	
+	$( "#dateInf" ).datepicker({
+		defaultDate: "-1m",
+		changeMonth: true,
+		onClose: function( selectedDate ) {
+			$( "#dateSup" ).datepicker( "option", "minDate", selectedDate );
+		}
+	});
+	$( "#dateSup" ).datepicker({
+		defaultDate: "-1m",
+		changeMonth: true,
+		onClose: function( selectedDate ) {
+			$( "#dateInf" ).datepicker( "option", "maxDate", selectedDate );
+		}
+	});
+
+	document.forms["form-stat"].addEventListener('submit', function(event) {
+		event.preventDefault();
+		
+		return afficheStat( event.target );
+	});
+	
+    document.getElementById('a_impDetail').addEventListener('click', function() {
+		return editStat( document.forms['form-stat'], 'detail' );
+    });
+	
+    document.getElementById('a_impSynthese').addEventListener('click', function() {
+		return editStat( document.forms['form-stat'], 'synthese' );
+    });
+
+	window.addEventListener("hashchange", activeLink, false);
+
+  headerNav[0].click();
+
+	return;
+});

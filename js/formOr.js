@@ -231,6 +231,9 @@ var ctrlFormVehicule = (function (formVehicule) {
 						outputDateInfo.style.color = ( dateModif.diff() > 48 * 3600 * 1000) ? 'red' : 'black';
 						
 						document.getElementById('fs_visu').style.opacity = 1;
+						
+						// Affichage des saisie d'OR
+						listOrVehicule( formVehicule['num-parc'].value );
 					}
 					
 					return data.success;
@@ -258,9 +261,6 @@ var ctrlFormVehicule = (function (formVehicule) {
 				"json"
 			);
 
-			// Affichage des saisie d'OR
-			listOrVehicule( numParc );
-
 			return idTransics;
 		}
 	
@@ -274,83 +274,3 @@ var ctrlFormVehicule = (function (formVehicule) {
 	
 })(document.forms["form-or"]);
 
-
-window.addEventListener('load', function() {
-	var formOr = document.forms["form-or"],
-		selectDate = function(dateText, inst) {
-			var noeud = formOr.kmOR,
-				ajaxLoad = noeud.nextElementSibling;
-
-			ajaxLoad.style.display = 'inline-block';
-		
-			if( document.forms["form_nav"].typeElement[0].checked ) {
-			
-//				$.post("./php/getKmCompteur.php", {
-				$.post(document.body.dataset.km_compteur, {
-						"idVehicule": document.getElementById('idTransics').value,
-						"dateOr": dateText 
-					},
-					function(data){
-						
-						ajaxLoad.style.display = 'none';
-						noeud.value = data.km;
-						
-						if(data.km != null) {
-							noeud.previousElementSibling.getElementsByTagName('span')[0].textContent = 'compteur';
-						} else {
-						}
-						return;
-					}, "json"
-				);
-			} else {
-				$.post("./php/selectKmParcourus.php", {
-						"numParc": document.getElementById('num-parc').value,
-						"dateOr": dateText 
-					},
-					function(data){
-
-						ajaxLoad.style.display = 'none';
-						noeud.value = data.result.KmParcourus;
-						noeud.previousElementSibling.getElementsByTagName('span')[0].textContent = 'parcourus depuis le ' + data.result.DateInit;
-						
-						return;
-					}, "json"
-				);
-			}
-			
-			return formOr.lieuOR.focus();
-		};
-
-	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
-
-	document.forms["form_nav"].addEventListener('change', function(e) {
-		return switchVehicle( this.typeElement );
-	});
-	
-	$( "#dateOR" ).datepicker({
-		onSelect: selectDate
-	});
-	
-	formOr.addEventListener("keypress", 
-		function(e){
-			var elmt = e.target.nextElementSibling,
-				nextInput = false;
-				
-			if(e.keyCode == 13) {
-				e.preventDefault();
-				while( !nextInput ) {
-					elmt = elmt.nextElementSibling;
-					if( ['INPUT', 'TEXTAREA'].indexOf(elmt.nodeName) > -1 ) {
-						elmt.focus();
-						nextInput = true;
-					}
-				};
-			}
-		},
-		false
-	);
-	
-	loadVehicules( );
-	
-	return;
-});

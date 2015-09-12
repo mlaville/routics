@@ -58,12 +58,22 @@ main>section:target {
   margin:2px;
 }
 
-#content-stat {
-/* display: none;*/
-}
-
 header nav li {
   display: inline-block;
   margin: 0 8px;
 }
 
+#content-stat {
+/* display: none;*/
+}
+
+#content-stat >.box {
+ /* border: thin solid red;
+  display: flex;
+  flex-flow: row nowrap;*/
+}
+#content-stat >.box form{
+  margin: 12px;
+  display: flex;
+  flex-flow: row nowrap;
+}
