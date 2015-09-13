@@ -216,11 +216,7 @@ window.addEventListener('load', function() {
 		}
 	});
 
-	document.forms["form-stat"].addEventListener('submit', function(event) {
-		event.preventDefault();
-		
-		return afficheStat( event.target );
-	});
+	document.forms["form-stat"].addEventListener('submit', afficheStat);
 	
     document.getElementById('a_impDetail').addEventListener('click', function() {
 		return editStat( document.forms['form-stat'], 'detail' );

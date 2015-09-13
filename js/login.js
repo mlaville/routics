@@ -4,13 +4,14 @@
  * @auteur     marc laville
  * @Copyleft 2013-2015
  * @date       23/08/2013
- * @version    1.0
+ * @version    1.0.1
  * @revision   $0$
  *
  * Gére la saisie du login utilisateur
  *
  * @date revision   29/08/2015 Teste la connexion Transics et récupère la version
- * @date revision   30/08/2015 Suppime la dependance à Zepto pour l'envoi des requetes Ajax
+ * @date revision   30/08/2015 Supprime la dependance à Zepto pour l'envoi des requetes Ajax
+ * @date revision   14/09/2015 Bip à la connexion transcis
  *
  * Appel  ajax:
  * - ./php/soapBuildVersion.php
@@ -76,10 +77,13 @@ window.addEventListener('load', function() {
 		  * redirige vers la page correspondant à la selection du radio 
 		 */
 		testConnexion = function(data){
+			var s = document.getElementById('clickSound');
+			
 			if(data.succes) {
 				var v1 = /'(.*)'/.exec(data.result[0]),
 					v2 = /'(.*)'/.exec(data.result[1]);
 					
+				s.play();
 				document.getElementById('info-transics').textContent = [ v1[1], v2[1] ].join('/');
 				formSignup.soumettre.disabled = false;
 			} else {

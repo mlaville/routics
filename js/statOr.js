@@ -119,9 +119,9 @@ function listStatVehicule( unTab /* , rupt  */) {
 	return;
 }
 
-function afficheStat(e){
+function afficheStat(event){
 
-	var f = e.target,
+	var f = event.target,
 		param = {
 			dateInf: f["dateInf"].value, 
 			dateSup: f["dateSup"].value,
@@ -129,13 +129,15 @@ function afficheStat(e){
 			rupture: f["rupture"][0].checked ? 'marque' : 'transport'
 		};
 	
-	f["calculStat"].disable = true;
+	event.preventDefault();
+		
+	f["calculStat"].disabled = true;
 	
 	$.post("./php/getStatVehicles.php", param,
 //	$.post( document.body.dataset.stat, param,
 		function(data){
 			listStatVehicule( data.result /* , param.rupture  */);
-			f["calculStat"].disable = false;
+			f["calculStat"].disabled = false;
 	}, "json");
 
 	return false;
