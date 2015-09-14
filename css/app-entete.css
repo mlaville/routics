@@ -1,3 +1,17 @@
+/**
+ * app-entete.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       14/09/2015
+ * @version    0.1
+ * @revision   $0$
+ *
+ * entete application routics
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ **/
 body>header {
 	background-image: linear-gradient(to bottom, #fefefe 28%, #c1dcf3 66%, #1e5799 100%);
 	border-bottom: 1px solid #1894ca;
@@ -9,7 +23,6 @@ body>header {
 	justify-content: space-between;
 	align-content: stretch;
 	align-items: flex-start;
-
 }
 
 body>header h2 {
@@ -76,7 +89,6 @@ body>header nav label {
 	border-radius: 0.5em 0.5em 0 0;
 	padding: 0.5em;
 	font-family: sans-serif;
-	font-weight: bold;
 	background: #ddd linear-gradient(#fff, #bbb) repeat scroll 0 0;
 	color: black;
 }
@@ -93,13 +105,12 @@ header nav li a {
   color: black;
   display: block;
   font-family: sans-serif;
-  font-weight: bold;
   padding: 0.5em;
   text-decoration: none;
 }
 
-header nav li a.active,
-li a:active {
-  background: #448 linear-gradient(#66a, #226) repeat scroll 0 0;
-  color: yellow;
+header nav li a.active {
+	background: #448 linear-gradient(#66a, #226) repeat scroll 0 0;
+	color: yellow;
+	font-weight: bold;
 }

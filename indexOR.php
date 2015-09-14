@@ -73,6 +73,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<?php echo $param->header; ?>
 </header>
 <main>
+	<audio id="clickSound">
+		<source src="http://s1download-universal-soundbank.com/mp3/sounds/2040.mp3"></source>
+		Audio not supported.
+	</audio>
 	<div id="leftcolumn">
 <!-- 			<a id="a_vehicule" href="#">Actualiser</a><br> -->
 

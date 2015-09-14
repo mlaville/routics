@@ -112,8 +112,8 @@ var ctrlFormVehicule = (function (formVehicule) {
 					addOr = function( unOr ) {
 						var trOr = tbody.appendChild( document.createElement('tr') ),
 							tdAction = document.createElement('td'),
-							aEdit = tdAction.appendChild( document.createElement('a') ),
-							aSup = tdAction.appendChild( document.createElement('a') ),
+							btEdit = tdAction.appendChild( document.createElement('button') ),
+							btSup = tdAction.appendChild( document.createElement('button') ),
 
 							deleteOr = function( e ) {
 								var tds = trOr.getElementsByTagName('td');
@@ -140,11 +140,11 @@ var ctrlFormVehicule = (function (formVehicule) {
 								 return trOr.appendChild( document.createElement('td') ).textContent = lib;
 							};
 						
-						aEdit.setAttribute('href', "#");
-						aEdit.addEventListener('click', editOr);
+//						btEdit.setAttribute('href', "#");
+						btEdit.addEventListener('click', editOr);
 						
-						aSup.setAttribute('href', "#");
-						aSup.addEventListener( 'click', deleteOr );
+//						aSup.setAttribute('href', "#");
+						btSup.addEventListener( 'click', deleteOr );
 					
 						[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
 

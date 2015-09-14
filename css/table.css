@@ -91,7 +91,8 @@ th:last-child {
   font-family: "Courier New",Courier,monospace;
 }
 
-#table-or td a {
+#table-or td button {
+	border: none;
 	background-position:  center center;
 	background-repeat: no-repeat;
 	display:inline-block;
@@ -99,12 +100,13 @@ th:last-child {
 	margin: 0 8px;
 	width: 16px;
 	height: 16px;
+	cursor: pointer;
 }
 
-#table-or td a:first-child {
+#table-or td button:first-child {
 	background-image: url(../img/b_edit.png);
 }
-#table-or td a:last-child {
+#table-or td button:last-child {
 	background-image: url(../img/b_drop.png);
 }
 	

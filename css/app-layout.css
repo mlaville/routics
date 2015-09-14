@@ -1,11 +1,23 @@
 /**
  * app-layout.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       14/09/2015
+ * @version    0.1
+ * @revision   $0$
+ *
+ * Mise en page application routics
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
  **/
 body {
   color: #333;
   font-family: Verdana,Arial,Helvetica,sans-serif;
   font-size: 13px;
 }
+
 main {
   display: flex;
   justify-content: space-around;
@@ -63,15 +75,6 @@ header nav li {
   margin: 0 8px;
 }
 
-#content-stat {
-/* display: none;*/
-}
-
-#content-stat >.box {
- /* border: thin solid red;
-  display: flex;
-  flex-flow: row nowrap;*/
-}
 #content-stat >.box form{
   margin: 12px;
   display: flex;
