@@ -23,7 +23,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-function listStatVehicule( unTab /* , rupt  */) {
+function listStatVehicule( unTab, rupt ) {
 
 	var tbody = document.getElementById('table-stat').getElementsByTagName('tbody')[0],
 		lgTot = unTab[unTab.length - 1],// Référence la ligne de totaux 
@@ -68,6 +68,7 @@ function listStatVehicule( unTab /* , rupt  */) {
 				ajoutCell();
 				ajoutCell(lg.VehicleID);
 				ajoutCell(lg.LicensePlate);
+				ajoutCell( rupt == 'marque' ? lg.Filter : lg.ChassisNumber);
 			} else {
 				/* Ligne de Rupture */
 				tr.classList.add("sousTotal");
@@ -84,9 +85,11 @@ function listStatVehicule( unTab /* , rupt  */) {
 					var tdTot = tr.appendChild( document.createElement('td') );
 					tdTot = tr.appendChild( document.createElement('td') );
 					
-					tdTot.setAttribute("colspan", "2");
+//					tdTot.setAttribute("colspan", "2");
 					tdTot.textContent = lg.NbVehicule + ' Véhicules';
+					ajoutCell();
 				}
+				ajoutCell('');
 			}
 			
 			ajoutCell(lg.Kms, [ 'td-km', 'nombre' ]);
@@ -94,7 +97,7 @@ function listStatVehicule( unTab /* , rupt  */) {
 			if( lg.VehicleID == null ) {
 				ajoutCell( Math.round( 1000 * lg.Kms/lgTot.Kms ) / 10, [ 'pourcent', 'nombre' ] );
 			} else {
-				tr.lastChild.setAttribute("colspan", "2");
+				ajoutCell( '' );
 			}
 			ajoutCell( lg.NbOr, [ 'nombre' ] );
 			ajoutCell( lg.TotCout, [ 'nombre', 'td-euro' ] );
@@ -136,7 +139,7 @@ function afficheStat(event){
 	$.post("./php/getStatVehicles.php", param,
 //	$.post( document.body.dataset.stat, param,
 		function(data){
-			listStatVehicule( data.result /* , param.rupture  */);
+			listStatVehicule( data.result, param.rupture );
 			f["calculStat"].disabled = false;
 	}, "json");
 

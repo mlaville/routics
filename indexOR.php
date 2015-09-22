@@ -26,6 +26,7 @@ if( !isset($_SESSION['ident']) ) {
 }
 /* Lecture des parametres pour l'affichage de l'entete */
 $param = json_decode( file_get_contents( './custom/param.json') );
+$dataUrlImg = $param->dataUrlImg;
 
 $demo = isset($param->demo) ? $param->demo : false;
 $ajaxVehicule = $demo ? './response/getVehicule.json' : './php/getVehicule.php';
@@ -47,12 +48,12 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/listVehicule.css">
     <link rel="stylesheet" href="./css/table.css">
-	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
-	
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/tableGenerator.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
 	
   </head>
 <body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
+<input type="hidden" id="dataUrl" value="<?php echo $dataUrlImg; ?>" />
 <header>
 	<img src="./img/dossierOr.png" alt="Gestion des OR">
 	<h2>Gestion des Ordres de Réparation</h2>
@@ -72,7 +73,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	</nav>
 	<?php echo $param->header; ?>
 </header>
-<main>
+<main style="display: none;">
 	<audio id="clickSound">
 		<source src="http://s1download-universal-soundbank.com/mp3/sounds/2040.mp3"></source>
 		Audio not supported.
@@ -263,10 +264,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<fieldset class="listSelect"><legend>Imprimer ...</legend>
 				<ul>
 					<li>
-						<a class="btn btn-primary" href="#" id="a_impDetail">Détail</a>
+						<button class="btn btn-primary" name="bt-impDetail">Détail</button>
 					</li>
 					<li>
-						<a class="btn btn-primary" href="#" id="a_impSynthese">Synthèse</a>
+						<button class="btn btn-primary" id="a_impSynthese" name="bt-impSynthese">Synthèse</button>
 					</li>
 				</ul>
 			</fieldset>
@@ -277,7 +278,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<thead>
 				<tr>
 					<th></th>
-					<th colspan=2>Parc</th>
+					<th colspan=3>Parc</th>
 					<th colspan=2>Km Parcourus</th>
 					<th>Nb OR</th>
 					<th colspan=2>Coût Total</th>
@@ -305,9 +306,18 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="http://lib.polinux.net/js/JQuery/ui/jquery.ui.datepicker-fr.js" type="text/javascript"></script>
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+<!--	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script> -->
+	<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHCJvUwGSsJk4PuEoaUB6EYJ2ahIeqzn4&callback=initMap">
+    </script>
+
+
+
+<!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> -->
+	<script type="text/javascript" src="./js/jspdf.debug.js"></script>
 	
 	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+	<script type="text/javascript" src="./js/pdfStatOr.js"></script>
 	<script type="text/javascript" src="./js/appOr.js"></script>
 	<script type="text/javascript" src="./js/formOr.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>

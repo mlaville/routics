@@ -34,7 +34,8 @@ $param = json_decode( file_get_contents( './custom/param.json') );
 <div class="container">
 
 	<audio id="clickSound">
-		<source src="https://freesound.org//data/previews/321/321906_1755779-lq.mp3"></source>
+<!--		<source src="https://freesound.org/data/previews/321/321906_1755779-lq.mp3"></source> -->
+		<source src="https://freesound.org/data/previews/26/26777_128404-lq.mp3"></source>
 		Audio not supported.
 	</audio>
     <form id="signup" name="signup" method="post" action="./php/login.php">

@@ -83,6 +83,7 @@ window.addEventListener('load', function() {
 				var v1 = /'(.*)'/.exec(data.result[0]),
 					v2 = /'(.*)'/.exec(data.result[1]);
 					
+				s.volume = 0.2;
 				s.play();
 				document.getElementById('info-transics').textContent = [ v1[1], v2[1] ].join('/');
 				formSignup.soumettre.disabled = false;

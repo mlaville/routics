@@ -1,5 +1,5 @@
 /**
- * formOr.js
+ * appOr.js
  * 
  * @auteur     marc laville
  * @Copyleft 2015
@@ -7,17 +7,17 @@
  * @version    0.5
  * @revision   $0$
  *
- * Gestion des ordres de rÈparation
+ * Gestion des ordres de r√©paration
  * 
- * @date revision   01/08/2015 Affichage de la card du vÈhicule
+ * @date revision   01/08/2015 Affichage de la card du v√©hicule
  * @date revision   25/08/2015 Transfere la gestion de la googlemap dans dormOr.js
- * @date revision   13/09/2015 Gere la totalitÈ de evenement load de window.
+ * @date revision   13/09/2015 Gere la totalit√© de evenement load de window.
  *
  * Appel  ajax:
  * - ./php/getVehicule.php
  * - ./php/getTrailers.php
  *
- * Note : les appels getVehicule et getTrailers sont parametrÈs par le dataset de document.body
+ * Note : les appels getVehicule et getTrailers sont parametr√©s par le dataset de document.body
  *
  * A Faire
  * - gerer les requetes ajax sans JQuery
@@ -102,6 +102,7 @@ function switchVehicle( rd ) {
 
 window.addEventListener('load', function() {
 	var formOr = document.forms["form-or"],
+		formStat = document.forms["form-stat"],
 		headerNav = document.querySelectorAll('header nav li a'),
 		i,
 		activeLink = function() {
@@ -198,7 +199,7 @@ window.addEventListener('load', function() {
 	loadVehicules( );
 
 	/* Attache un datePicker aus champs date */
-	/* et initilisation au mois passÈ */
+	/* et initilisation au mois pass√© */
 	dateRef.setDate(1);
 	
 	$( "#dateInf" ).datepicker({
@@ -216,19 +217,21 @@ window.addEventListener('load', function() {
 		}
 	});
 
-	document.forms["form-stat"].addEventListener('submit', afficheStat);
+	formStat.addEventListener('submit', afficheStat);
 	
-    document.getElementById('a_impDetail').addEventListener('click', function() {
-		return editStat( document.forms['form-stat'], 'detail' );
+    formStat['bt-impDetail'].addEventListener('click', function() {
+//		return editStat( formStat, 'detail' );
+		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), 'detail' ), 'Co√ªts Kilom√®triques' );
     });
 	
-    document.getElementById('a_impSynthese').addEventListener('click', function() {
-		return editStat( document.forms['form-stat'], 'synthese' );
+    formStat['bt-impSynthese'].addEventListener('click', function() {
+		return editStat( formStat, 'synthese' );
     });
 
 	window.addEventListener("hashchange", activeLink, false);
 
   headerNav[0].click();
+  document.querySelector('main').style.removeProperty('display');
 
 	return;
 });

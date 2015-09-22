@@ -11,6 +11,7 @@
  * 
  * @date revision   01/08/2015 Affichage de la card du véhicule
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
+ * @date revision   14/09/2015 Remplace les liens de la table des OR par des boutons
  *
  * Appel  ajax:
  * - ../php/crudOR.php
@@ -26,20 +27,24 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-var posVehicule = {
-	carte: new google.maps.Map(
-		document.getElementById("googleMap"), {
-			center: new google.maps.LatLng(46.680184, 5.5803363),
-			zoom:12,
-			mapTypeId:google.maps.MapTypeId.ROADMAP
-	}),
-	marker : null,
-	changePos : function( pos ) {
-		
-		posVehicule.carte.panTo( pos );
-		
-		return posVehicule.marker.setPosition( pos );
-	}
+ var posVehicule;
+ function initMap() {
+
+	posVehicule = {
+		carte: new google.maps.Map(
+			document.getElementById("googleMap"), {
+				center: new google.maps.LatLng(46.680184, 5.5803363),
+				zoom:12,
+				mapTypeId:google.maps.MapTypeId.ROADMAP
+		}),
+		marker : null,
+		changePos : function( pos ) {
+			
+			posVehicule.carte.panTo( pos );
+			
+			return posVehicule.marker.setPosition( pos );
+		}
+	};
 };
 
 var ctrlFormVehicule = (function (formVehicule) {
@@ -140,10 +145,7 @@ var ctrlFormVehicule = (function (formVehicule) {
 								 return trOr.appendChild( document.createElement('td') ).textContent = lib;
 							};
 						
-//						btEdit.setAttribute('href', "#");
 						btEdit.addEventListener('click', editOr);
-						
-//						aSup.setAttribute('href', "#");
 						btSup.addEventListener( 'click', deleteOr );
 					
 						[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)

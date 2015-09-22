@@ -10,6 +10,14 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 	header("Location: ./");
 }
 
+/* Lecture des parametres pour l'affichage de l'entete */
+$param = json_decode( file_get_contents( './custom/param.json') );
+
+$demo = isset($param->demo) ? $param->demo : false;
+$ajaxDrivers = $demo ? './response/getDrivers.json' : './php/getDrivers.php';
+
+$dataUrlImg = $param->dataUrlImg;
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,8 +28,9 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 	<meta content="Routics - Relevés d'Activité Mensuel" name="description" />
 	
 	<link rel="stylesheet" type="text/css" href="./css/px-layout.css" />
-	<link rel="stylesheet" type="text/css" href="./css/layout.css" />
+<link rel="stylesheet" type="text/css" href="./css/layout.css" />
 	<link rel="stylesheet" type="text/css" href="./css/ajaxLoader.css" />
+<!--	    <link rel="stylesheet" href="css/app-layout.css"> -->
 	<link rel="stylesheet" type="text/css" href="./css/bouton.css" />
 	<link rel="stylesheet" type="text/css" href="./css/workTime.css" />
 	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
@@ -29,9 +38,12 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
 
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	<script type="text/javascript" src="http://lib.polinux.net/js/jspdf.min.js"></script>
+<!--	<script type="text/javascript" src="http://lib.polinux.net/js/jspdf.min.js"></script> -->
+	<script type="text/javascript" src="./js/jspdf.debug.js"></script>
+
 </head>
 <body>
+	<input type="hidden" id="dataUrl" value="<?php echo $dataUrlImg; ?>" />
 	<header>
 			<img alt="Récapitulatif Mensuel" src="./img/wt.png">Récapitulatif Mensuel d'Activité Conducteur
 			<ul>
@@ -222,11 +234,11 @@ if( 'ADMIN' != $_SESSION['PersonExternalCode'] && strtolower($_SESSION['ident'])
     </div>
 
 	<footer>
-		<a target="_blank" href="http://polinux.fr">
-			<img src="http://lib.polinux.net/img/polinux-micro.gif" alt="polinux.fr" />
-		</a>
-	</footer><!-- #footer -->
-	<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
+	  <a href="http://polinux.fr" target="_blank">
+		<img alt="polinux.fr" src="http://lib.polinux.fr/img/polinux-micro.gif">
+	  </a>
+	</footer>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/pdfRecapMensuel.js"></script>
 	<script type="text/javascript" src="./js/pdfHeuresDues.js"></script>

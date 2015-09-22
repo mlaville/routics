@@ -42,10 +42,10 @@ main>section:target {
 
 #leftcolumn {
   background: #d9edf8 none repeat scroll 0 0;
-  height: 100%;
-  width: 238px;
-  min-width: 228px;
   flex: 0 1 auto;
+  height: 100%;
+  min-width: 228px;
+  width: 252px;
 }
 
 #content {

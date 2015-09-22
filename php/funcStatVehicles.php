@@ -7,7 +7,7 @@ function statVehicle($dbConn, $tabParam) {
 	$dateSup = isset($tabParam["dateSup"]) ? implode( '-', array_reverse( explode( '/', $tabParam["dateSup"] ) ) ) : "2013-04-30";
 	$rupture = isset($tabParam["rupture"]) ? $tabParam["rupture"] : 'Filter';
 	
-	$sqlStatVehicle = "SELECT VehicleID, TransicsID, LicensePlate, Filter, CodeVehicule, {rupture} AS Rupture, NbVehicule, Kms, NbOr, TotCout, CoutKm"
+	$sqlStatVehicle = "SELECT VehicleID, TransicsID, LicensePlate, Filter, ChassisNumber, CodeVehicule, {rupture} AS Rupture, NbVehicule, Kms, NbOr, TotCout, CoutKm"
 		. " FROM ("
 		. " SELECT VehicleID, VehicleTransicsID AS TransicsID, LicensePlate, Filter, VehicleID AS CodeVehicule, ChassisNumber,"
 		. " COUNT(*) AS NbVehicule, SUM( km ) AS Kms, SUM( Nb ) AS NbOr,"

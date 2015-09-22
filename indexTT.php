@@ -61,9 +61,10 @@ $dataUrlImg = $param->dataUrlImg;
 	
 	<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<!--	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script> -->
+<!--	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.min.js"></script> 
 <script type="text/javascript" src="http://lib.polinux.net/js/jspdf.js"></script>
-
+-->
+<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script>
 </head>
 <body data-drivers="<?php echo $ajaxDrivers; ?>" >
 <input type="hidden" id="dataUrl" value="<?php echo $dataUrlImg; ?>" />
