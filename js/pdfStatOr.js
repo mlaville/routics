@@ -37,8 +37,8 @@ function pdfStat( uneTable ) {
 		impair = true,
 		h = 26,
 		delta = 4,
-		marge = 10,
-		lgCol = 40,
+		marge = 8,
+		lgCol = 44,
 		lgCol1 = 92,
 		gauche = marge + lgCol1,
 		largJour = 6,
@@ -104,9 +104,6 @@ function pdfStat( uneTable ) {
 			  ['Coût Total', ''],
 			  ['Coût KM', ''] ].forEach(cellEntete);
 
-			doc.rect(gauche, h - delta, lgCol / 2, 12); // filled square with red borders
-			doc.text(gauche + 2, 5 + h, "-");
-			
 			h += 6;
 			
 			return;
@@ -114,8 +111,8 @@ function pdfStat( uneTable ) {
 		tableRow = function( unElmtTr ) {
 			var listCell = unElmtTr.querySelectorAll('td'),
 				bSousTotal = unElmtTr.classList.contains('sousTotal'),
-				fillColor = arrayBgColor = impair ? [ 255, 255, 255 ] : [ 230,230,230 ];
-
+				fontSize = bSousTotal ? 12 : 10,
+				arrayBgColor = bSousTotal ? [ 200,200,255 ] : ( impair ? [ 255, 255, 255 ] : [ 230,230,230 ] ),
 				tableCellNumber = function( unNumber ) {
 					doc.setFillColor( 100, 100, 100 );
 					doc.rect( gauche, h - delta, lgCol, 6, 'FD' );
@@ -139,22 +136,21 @@ function pdfStat( uneTable ) {
 			 * Dessine chaque cellule de la ligne 
 			 */
 			// Cellule Parc
-			doc.setFont('courier');
-			doc.setFontSize(10);
+			doc.setFont("helvetica");
+			doc.setFontSize(fontSize);
 			gauche = marge;
 			
 			doc.setDrawColor( 100, 100, 100 );
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
-			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' ); 
-			doc.text( gauche+1, h, ( '      ' + listCell[1].textContent.toUpperCase() ).slice(-12) );
+			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' );
+			doc.text( gauche+1, h, ( ( bSousTotal ? '' : '      ' ) + listCell[1].textContent.toUpperCase() ).slice(-12) );
 			gauche += lgCol1 / 3;
 
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' ); 
-			doc.text( gauche+1, h, ( '      ' + listCell[2].textContent.toUpperCase() ).slice(-12) );
+			doc.text( gauche+1, h, ( '      ' + listCell[2].textContent.toUpperCase() ).slice(-12) + (bSousTotal ? ' %' : '') );
 			gauche += lgCol1 / 3;
 
-			doc.setFont("helvetica");
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' ); 
 			doc.text( gauche+1, h, listCell[3].textContent.capitalize() );
@@ -163,15 +159,15 @@ function pdfStat( uneTable ) {
 			doc.setFont("courier");
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
-			doc.text( gauche+2, h, ( '      ' + new Number(listCell[4].textContent) ).slice(-8) );
+			doc.text( gauche+2, h, ( '          ' + new Number(listCell[4].textContent) ).slice(bSousTotal ? -8 : -12) );
 			gauche += lgCol;
 
 			if(bSousTotal){
 				doc.setFontSize(9);
-				doc.setTextColor(100, 100, 200) 
-				doc.text( gauche+1 - lgCol/2 , h, ( '   ' + new Number(listCell[5].textContent).toFixed(1) ).slice(-5) + ' %');
+				doc.setTextColor(200, 100, 100);
+				doc.text( gauche+1 - lgCol/2 , h, ( '       ' + new Number(listCell[5].textContent).toFixed(1) ).slice(-8) + ' %');
 				doc.setTextColor(0, 0, 0) 
-				doc.setFontSize(10);
+				doc.setFontSize(fontSize);
 			}
 			
 			doc.setFont("courier");
@@ -188,17 +184,16 @@ function pdfStat( uneTable ) {
 
 			if(bSousTotal){
 				doc.setFontSize(9);
-				doc.setTextColor(100, 100, 200) 
+				doc.setTextColor(200, 100, 100);
 				doc.text( gauche+1 - lgCol/2, h, ( '    ' + new Number(listCell[8].textContent).toFixed(1) ).slice(-6) + ' %');
 				doc.setTextColor(0, 0, 0) 
-				doc.setFontSize(10);
+				doc.setFontSize(fontSize);
 				
-				if(listCell.length > 9){
 					doc.setFont("courier");
 					doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 					doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
 					doc.text( gauche+1, h, ( '        ' + new Number(listCell[9].textContent).toFixed(7) ).slice(-12) );
-				}
+
 			} else {
 				doc.setFont("courier");
 				doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
@@ -207,7 +202,7 @@ function pdfStat( uneTable ) {
 				gauche += lgCol;
 			}
 			/* Fin de ligne */
-			impair = !impair;
+			impair = bSousTotal ? true : !impair;
 		};
 		
 	docHeader( );
