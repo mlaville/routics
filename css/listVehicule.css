@@ -16,7 +16,7 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-ul {
+#leftcolumn ul {
    margin: 2px;
    padding: 0;
 }

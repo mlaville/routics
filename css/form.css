@@ -15,7 +15,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
- .transparent {
+.transparent {
 	opacity: 0;
  }
  
@@ -248,8 +248,8 @@ fieldset>div {
   content: '€/km';
 }
 
-main section label,
-#content label{
+main section form label,
+#content form label{
 	display:block;
 	font-weight:bold;
 	text-align:right;
@@ -508,12 +508,8 @@ fieldset.listSelect legend {
 	color:#00458B;
     text-align: right;
     background: linear-gradient(90deg, #CCCCCC, #FFFFFF) repeat scroll 0 0 transparent;
-    -webkit-border-radius: 10px 10px 10px 10px;
-    -moz-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
-    -webkit-box-shadow: 0 0 15px #AAAAAA;
-    -moz-box-shadow: 0 0 15px #AAAAAA;
-    box-shadow: 0 0 15px #AAAAAA;
+    box-shadow: 0 0 15px #aaa;
     padding-right: 1em;
     padding-left: 1em;
     position: absolute;
@@ -567,46 +563,8 @@ fieldset.listSelect input[type="radio"]:checked + label p {
 #content-stat .sousTotal label input:checked+div:after {
   content: '-';
 }
-/******
 
-fieldset.listSelect li a {
-    background: -moz-linear-gradient(90deg, #0459B7, #08ADFF) repeat scroll 0 0 transparent;
-    background: -webkit-linear-gradient(90deg, #0459B7, #08ADFF) repeat scroll 0 0 transparent;
-    border: 1px solid #093C75;
-    -webkit-border-radius: 3px 3px 3px 3px;
-    -moz-border-radius: 3px 3px 3px 3px;
-    border-radius: 3px 3px 3px 3px;
-    -webkit-box-shadow: 0 1px 0 #FFFFFF;
-    -moz-box-shadow: 0 1px 0 #FFFFFF;
-    box-shadow: 0 1px 0 #FFFFFF;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-family: Arial,sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    margin: 4px;
-    padding: 5px 10px;
-    text-decoration: none;
-    -moz-text-shadow: 0 1px 1px #333333;
-    -webkit-text-shadow: 0 1px 1px #333333;
-    text-shadow: 0 1px 1px #333333;
-}
-
-fieldset.listSelect li a:hover {
-    background: -moz-linear-gradient(90deg, #067CD3, #0BCDFF) repeat scroll 0 0 transparent;
-    background: -webkit-linear-gradient(90deg, #067CD3, #0BCDFF) repeat scroll 0 0 transparent;
-    border-color: #093C75;
-    text-decoration: none;
-}
-fieldset.listSelect li a:active {
-    background: -moz-linear-gradient(90deg, #0BCDFF, #067CD3) repeat scroll 0 0 transparent;
-    background: -webkit-linear-gradient(90deg, #0BCDFF, #067CD3) repeat scroll 0 0 transparent;
-    border-color: #093C75;
-    outline: medium none;
-}
- ******/
- 
- 
+/******/
  
 	.button:hover							{ background-color: #111; color: #fff; }
 	.button:active							{ top: 1px; }

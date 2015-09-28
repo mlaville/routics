@@ -21,7 +21,12 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-function pdfStat( uneTable ) {
+String.prototype.lpad = String.prototype.lpad || function( lg, str ){
+//                              -------
+  return (lg > 0) ? (str || ' ').repeat(lg).concat(this).slice( -lg ) : '' ;
+};
+
+function pdfStat( uneTable, bSynthese ) {
 	// You'll need to make your image into a Data URL
 	// Use http://dataurl.net/#dataurlmaker
 	var imgData = document.getElementById('dataUrl').value,
@@ -108,7 +113,7 @@ function pdfStat( uneTable ) {
 			
 			return;
 		},
-		tableRow = function( unElmtTr ) {
+		tableRow = function( unElmtTr, bLigneTot ) {
 			var listCell = unElmtTr.querySelectorAll('td'),
 				bSousTotal = unElmtTr.classList.contains('sousTotal'),
 				fontSize = bSousTotal ? 12 : 10,
@@ -118,7 +123,8 @@ function pdfStat( uneTable ) {
 					doc.rect( gauche, h - delta, lgCol, 6, 'FD' );
 					doc.text( gauche + 2, h, ('     ' + unNumber).slice(-8) );
 					gauche += lgCol;
-				};
+				},
+				val;
 				
 			h += 6;
 			// Test le changement de page
@@ -143,12 +149,12 @@ function pdfStat( uneTable ) {
 			doc.setDrawColor( 100, 100, 100 );
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' );
-			doc.text( gauche+1, h, ( ( bSousTotal ? '' : '      ' ) + listCell[1].textContent.toUpperCase() ).slice(-12) );
+			doc.text( gauche+1, h, ( ' '.repeat( bSousTotal ? 0 : 12 ) + listCell[1].textContent.toUpperCase() ).slice(-12) );
 			gauche += lgCol1 / 3;
 
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol1 / 3, 6, 'FD' ); 
-			doc.text( gauche+1, h, ( '      ' + listCell[2].textContent.toUpperCase() ).slice(-12) + (bSousTotal ? ' %' : '') );
+			doc.text( gauche+1, h, ( ' '.repeat(12) + listCell[2].textContent.toUpperCase() ).slice(-12) + ( (bSousTotal && !bLigneTot) ? ' %' : '') );
 			gauche += lgCol1 / 3;
 
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
@@ -159,13 +165,13 @@ function pdfStat( uneTable ) {
 			doc.setFont("courier");
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
-			doc.text( gauche+2, h, ( '          ' + new Number(listCell[4].textContent) ).slice(bSousTotal ? -8 : -12) );
+			doc.text( gauche+2, h, ( ' '.repeat(12) + new Number(listCell[4].textContent) ).slice(bSousTotal ? -8 : -12) );
 			gauche += lgCol;
 
-			if(bSousTotal){
+			if(bSousTotal && !bLigneTot){
 				doc.setFontSize(9);
 				doc.setTextColor(200, 100, 100);
-				doc.text( gauche+1 - lgCol/2 , h, ( '       ' + new Number(listCell[5].textContent).toFixed(1) ).slice(-8) + ' %');
+				doc.text( gauche+1 - lgCol/2 , h, ( ' '.repeat(8) + new Number(listCell[5].textContent).toFixed(1) ).slice(-8) + ' %');
 				doc.setTextColor(0, 0, 0) 
 				doc.setFontSize(fontSize);
 			}
@@ -173,7 +179,7 @@ function pdfStat( uneTable ) {
 			doc.setFont("courier");
 			doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
-			doc.text( gauche+1, h, ( '   ' + new Number(listCell[6].textContent) ).slice(-5) );
+			doc.text( gauche+1, h, ( ' '.repeat(12) + new Number(listCell[6].textContent) ).slice(-12) );
 			gauche += lgCol;
 
 			doc.setFont("courier");
@@ -183,17 +189,17 @@ function pdfStat( uneTable ) {
 			gauche += lgCol;
 
 			if(bSousTotal){
-				doc.setFontSize(9);
-				doc.setTextColor(200, 100, 100);
-				doc.text( gauche+1 - lgCol/2, h, ( '    ' + new Number(listCell[8].textContent).toFixed(1) ).slice(-6) + ' %');
-				doc.setTextColor(0, 0, 0) 
-				doc.setFontSize(fontSize);
-				
-					doc.setFont("courier");
-					doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
-					doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
-					doc.text( gauche+1, h, ( '        ' + new Number(listCell[9].textContent).toFixed(7) ).slice(-12) );
-
+				if( !bLigneTot ) {
+					doc.setFontSize(9);
+					doc.setTextColor(200, 100, 100);
+					doc.text( gauche+1 - lgCol/2, h, ( ' '.repeat(8) + new Number(listCell[8].textContent).toFixed(1) ).slice(-8) + ' %' );
+					doc.setTextColor(0, 0, 0) 
+					doc.setFontSize(fontSize);
+				}
+				doc.setFont("courier");
+				doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
+				doc.rect( gauche, h - delta, lgCol, 6, 'FD' ); 
+				doc.text( gauche+1, h, ( '        ' + new Number(listCell[9].textContent).toFixed(7) ).slice(-12) );
 			} else {
 				doc.setFont("courier");
 				doc.setFillColor( arrayBgColor[0], arrayBgColor[1], arrayBgColor[2] );
@@ -210,9 +216,10 @@ function pdfStat( uneTable ) {
 	
 	for( var ligne = 0 ; ligne < nbLg ; ligne++ ) {
 		var eltTr = listTr[ligne];
+			bSousTotal = eltTr.classList.contains('sousTotal');
 
 		if( eltTr.style.display != 'none' ) {
-			tableRow(eltTr);
+			if( bSousTotal || !bSynthese ) tableRow(eltTr, ligne == nbLg-1 );
 		}
 	}
 	

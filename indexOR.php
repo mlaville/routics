@@ -41,6 +41,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<title>Routics - Véhicules</title>
 	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" />
+	<link rel="stylesheet" type="text/css" href="http://lib.polinux.fr/js/month-picker/monthPicker.css" />	
     <link rel='stylesheet' href='css/px-layout.css'>
     <link rel="stylesheet" href="./css/bouton.css">
     <link rel="stylesheet" href="css/app-layout.css">
@@ -64,6 +65,9 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</li>
 		<li>
 			<a href="#content-stat">Statistiques</a>
+		</li>
+		<li>
+			<a href="#content-km">Relevé KM</a>
 		</li>
 		<li>
 			<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
@@ -227,7 +231,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     </div>
   </section>
 	<section id="content-stat"  class="blocReponse">
-			<h1>Statistiques</h1>
+		<h1>Statistiques</h1>
 		<div class="box">
 		<form id="form-stat" name="form-stat">
 			<ul style="display:none">
@@ -295,6 +299,33 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<tbody></tbody>
 		</table>
 		</div>
+  </section>
+	<section id="content-km"  class="blocReponse">
+		<input type="text" id="input-mois-km" name="km" >
+
+		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
+		<table summary="Relevé Kilomètrique" id="table-km" >
+			<thead>
+				<tr>
+					<th>Véhicule</th>
+					<th>Parc</th>
+					<th>Date début</th>
+					<th>km début</th>
+					<th>Date fin</th>
+					<th>km fin</th>
+					<th>Km Parcourus</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td class="rounded-foot-left" colspan="4"><em></em></td>
+					<td></td>
+					<td class="rounded-foot-right">&nbsp;</td>
+				</tr>
+			</tfoot>
+			<tbody></tbody>
+		</table>
+		</div>
 	</section>
 
 </main>
@@ -314,9 +345,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 
 
 <!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> -->
-	<script type="text/javascript" src="./js/jspdf.debug.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.debug.js"></script>
 	
 	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/month-picker/monthPicker.js"></script>
 	<script type="text/javascript" src="./js/pdfStatOr.js"></script>
 	<script type="text/javascript" src="./js/appOr.js"></script>
 	<script type="text/javascript" src="./js/formOr.js"></script>

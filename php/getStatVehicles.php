@@ -1,11 +1,13 @@
 <?php
-/*
-*/
+/**
+ * getStatVehicles.php
+ *
+ */
 include 'ident.inc.php';
 include './soap/configSoap.inc.php';
 
 include 'connect.inc.php';
-include 'funcStatVehicles.php';
+include './database/funcStatVehicles.php';
 
 $response = identSoap( $login );
 if( $response["success"] ){

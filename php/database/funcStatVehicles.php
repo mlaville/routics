@@ -1,10 +1,24 @@
 <?php
-/*
-*/
+/**
+ * funcStatVehicles.php
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2013-14
+ * @date       28/09/2015
+ * @version    0.1
+ * @revision   $0$
+ *
+ * @date revision   
+ *
+ * Calcul des statistiques de cout kilometrique
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 function statVehicle($dbConn, $tabParam) {
 	$typeVehicule = isset( $tabParam["typeVehicule"] ) ? $tabParam["typeVehicule"] : '';
-	$dateInf = isset($tabParam["dateInf"]) ? implode( '-', array_reverse( explode( '/', $tabParam["dateInf"] ) ) ) : "2013-04-01";
-	$dateSup = isset($tabParam["dateSup"]) ? implode( '-', array_reverse( explode( '/', $tabParam["dateSup"] ) ) ) : "2013-04-30";
+	$dateInf = isset($tabParam["dateInf"]) ? implode( '-', array_reverse( explode( '/', $tabParam["dateInf"] ) ) ) : "2015-04-01";
+	$dateSup = isset($tabParam["dateSup"]) ? implode( '-', array_reverse( explode( '/', $tabParam["dateSup"] ) ) ) : "2015-04-30";
 	$rupture = isset($tabParam["rupture"]) ? $tabParam["rupture"] : 'Filter';
 	
 	$sqlStatVehicle = "SELECT VehicleID, TransicsID, LicensePlate, Filter, ChassisNumber, CodeVehicule, {rupture} AS Rupture, NbVehicule, Kms, NbOr, TotCout, CoutKm"
@@ -56,7 +70,6 @@ function statVehicle($dbConn, $tabParam) {
 	$sqlStat = str_replace( '{rupture}', ( $rupture == 'transport' ) ? 'Filter' : 'ChassisNumber', $sqlStat );
 	$stmt = $dbConn->prepare( $sqlStat );
 	
-//		$response["sqlStat"] = $sqlStat;
 	$response = array( "sqlStat" => $sqlStat );
 	
 //	if( $stmt->execute( array( $dateInf, $dateSup, $dateInf, $dateSup, $rupture ) ) ) {
@@ -84,7 +97,6 @@ function statVehicle($dbConn, $tabParam) {
 	} else {
 		$err = $stmt->errorInfo();
 		$response["error"] = array( "reason"=>$err[2] );
-//		$response["sqlStat"] = $sqlStat;
 	}
 	
 	return $response;

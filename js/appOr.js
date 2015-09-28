@@ -4,7 +4,7 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       03/05/2015
- * @version    0.5
+ * @version    0.5.1
  * @revision   $0$
  *
  * Gestion des ordres de réparation
@@ -12,6 +12,7 @@
  * @date revision   01/08/2015 Affichage de la card du véhicule
  * @date revision   25/08/2015 Transfere la gestion de la googlemap dans dormOr.js
  * @date revision   13/09/2015 Gere la totalité de evenement load de window.
+ * @date revision   24/09/2015 Redirige les boutons d'édition pour generer le PDF grace à)jsPdf
  *
  * Appel  ajax:
  * - ./php/getVehicule.php
@@ -164,8 +165,7 @@ window.addEventListener('load', function() {
 			
 			return formOr.lieuOR.focus();
 		},
-		dateRef = new Date(),
-		monthRef = dateRef.getMonth();
+		dateRef = new Date();
 
 	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
 
@@ -219,19 +219,25 @@ window.addEventListener('load', function() {
 
 	formStat.addEventListener('submit', afficheStat);
 	
-    formStat['bt-impDetail'].addEventListener('click', function() {
-//		return editStat( formStat, 'detail' );
-		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), 'detail' ), 'Coûts Kilomètriques' );
+    formStat['bt-impDetail'].addEventListener('click', function(e) {
+		e.preventDefault();
+		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), false ), 'Coûts Kilomètriques' );
     });
 	
-    formStat['bt-impSynthese'].addEventListener('click', function() {
-		return editStat( formStat, 'synthese' );
+    formStat['bt-impSynthese'].addEventListener('click', function(e) {
+		e.preventDefault();
+		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), true ), 'Coûts Kilomètriques' );
     });
 
 	window.addEventListener("hashchange", activeLink, false);
 
   headerNav[0].click();
   document.querySelector('main').style.removeProperty('display');
+
+ 	dateRef = new Date();
+ 	dateRef.setMonth( dateRef.getMonth() - 1 );
+	document.getElementById('input-mois-km').value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('-');
+	monthPickerFactory.createMonthPicker( document.getElementById('input-mois-km') );
 
 	return;
 });
