@@ -12,7 +12,8 @@
  * @date revision   01/08/2015 Affichage de la card du véhicule
  * @date revision   25/08/2015 Transfere la gestion de la googlemap dans dormOr.js
  * @date revision   13/09/2015 Gere la totalité de evenement load de window.
- * @date revision   24/09/2015 Redirige les boutons d'édition pour generer le PDF grace à)jsPdf
+ * @date revision   24/09/2015 Redirige les boutons d'édition pour generer le PDF grace à jsPdf
+ * @date revision   30/09/2015 relevés KM
  *
  * Appel  ajax:
  * - ./php/getVehicule.php
@@ -165,7 +166,9 @@ window.addEventListener('load', function() {
 			
 			return formOr.lieuOR.focus();
 		},
-		dateRef = new Date();
+		dateRef = new Date(),
+		formKm = document.forms['releve-km'],
+		inputMois = formKm.moisReleve;
 
 	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
 
@@ -196,6 +199,8 @@ window.addEventListener('load', function() {
 		false
 	);
 	
+	headerNav[0].click();
+	document.querySelector('main').style.removeProperty('display');
 	loadVehicules( );
 
 	/* Attache un datePicker aus champs date */
@@ -217,6 +222,9 @@ window.addEventListener('load', function() {
 		}
 	});
 
+	/**
+	 * Formulaire de saisie des OR
+	 */
 	formStat.addEventListener('submit', afficheStat);
 	
     formStat['bt-impDetail'].addEventListener('click', function(e) {
@@ -229,15 +237,18 @@ window.addEventListener('load', function() {
 		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), true ), 'Coûts Kilomètriques' );
     });
 
+	 
 	window.addEventListener("hashchange", activeLink, false);
 
-  headerNav[0].click();
-  document.querySelector('main').style.removeProperty('display');
-
+	/**
+	 * Releve KM
+	 */
+	formKm.addEventListener('submit', afficheReleveKm);
+	 
  	dateRef = new Date();
  	dateRef.setMonth( dateRef.getMonth() - 1 );
-	document.getElementById('input-mois-km').value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('-');
-	monthPickerFactory.createMonthPicker( document.getElementById('input-mois-km') );
+	inputMois.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
+	monthPickerFactory.createMonthPicker( inputMois );
 
 	return;
 });

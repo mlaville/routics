@@ -5,12 +5,13 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       03/05/2015
- * @version    0.5
- * @revision   $0$
+ * @version    0.6
+ * @revision   $4$
  *
  * @date revision   01/08/2015 Affichage de la card du véhicle : vehicule-card
  * @date revision   08/09/2015 Revision de la mise en page css (flex-box)
  * @date revision   08/09/2015 Integration de la page Stat
+ * @date revision   30/09/2015 Releves KM
  *
  * Gestion des ordres de réparation
  * 
@@ -301,8 +302,11 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</div>
   </section>
 	<section id="content-km"  class="blocReponse">
-		<input type="text" id="input-mois-km" name="km" >
-
+		<form name="releve-km">
+			<label>mois</label>
+			<input type="text" name="moisReleve" >
+			<button class="btn btn-primary" name="calculKm" type="submit">Calculer</button>
+		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 		<table summary="Relevé Kilomètrique" id="table-km" >
 			<thead>
@@ -342,9 +346,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHCJvUwGSsJk4PuEoaUB6EYJ2ahIeqzn4&callback=initMap">
     </script>
 
-
-
-<!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> -->
+	<!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> -->
 	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.debug.js"></script>
 	
 	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
@@ -354,5 +356,6 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script type="text/javascript" src="./js/formOr.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/statOr.js"></script>
+	<script type="text/javascript" src="./js/releveKm.js"></script>
   </body>
 </html>

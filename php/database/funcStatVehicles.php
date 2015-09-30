@@ -101,4 +101,28 @@ function statVehicle($dbConn, $tabParam) {
 	
 	return $response;
 }
+
+function loadKmMensuel($dbConn, $mois) {
+
+	$reqSelectKmMensuel = "SELECT"
+		. " Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MIN( BeginDate ) AS DateDebut, MAX( EndDate ) AS DateDebut,"
+		. " MAX( KmEnd ) - MIN( KmBegin ) AS Distance"
+		. " FROM t_km_parcourt"
+		. " WHERE KmBegin < KmEnd"
+		. " AND DATE_Format( BeginDate, '%m%Y' ) = ?"
+		. " GROUP BY VehicleTransicsId";
+	
+	$stmt = $dbConn->prepare( $reqSelectKmMensuel );
+	$rep = array( "success"=>$stmt->execute( array( $mois ) ) );
+	
+	if( $rep["success"] ) {
+		$rep["result"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		$err = $stmt->errorInfo();
+		$rep["error"] = array( "reason"=>$err[2] );
+	}
+
+	return $rep;
+}
+
 ?>

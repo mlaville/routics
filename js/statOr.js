@@ -13,7 +13,7 @@
  *
  * Appel  ajax:
  * - ../php/getStatVehicles.php
- * - ./php/pdfStatVehicle.php
+ * - ./php/pdfStatVehicle.php -- obsolete
  *
  *
  * A Faire
@@ -85,7 +85,6 @@ function listStatVehicule( unTab, rupt ) {
 					var tdTot = tr.appendChild( document.createElement('td') );
 					tdTot = tr.appendChild( document.createElement('td') );
 					
-//					tdTot.setAttribute("colspan", "2");
 					tdTot.textContent = lg.NbVehicule + ' Véhicules';
 					ajoutCell();
 				}
@@ -137,7 +136,6 @@ function afficheStat(event){
 	f["calculStat"].disabled = true;
 	
 	$.post("./php/getStatVehicles.php", param,
-//	$.post( document.body.dataset.stat, param,
 		function(data){
 			listStatVehicule( data.result, param.rupture );
 			f["calculStat"].disabled = false;
@@ -146,12 +144,3 @@ function afficheStat(event){
 	return false;
 }
 
-function editStat(f, typeEdit){
-
-		return domFenetrePdf( './php/pdfStatVehicle.php'
-					+ '?dateInf=' + f["dateInf"].value
-					+ '&dateSup=' + f["dateSup"].value 
-					+ '&typeVehicule=' + ( ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' )
-					+ '&typeEdit=' + typeEdit,
-				'Statistiques' );
-}

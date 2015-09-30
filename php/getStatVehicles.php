@@ -2,6 +2,14 @@
 /**
  * getStatVehicles.php
  *
+ * @auteur     marc laville
+ * @Copyleft 2015
+ * @date       30/09/2015
+ * @version    0.2
+ * @revision   $0$
+ *
+ * 
+ * Construit la reponse pour les stat véhicule ou les releves KM
  */
 include 'ident.inc.php';
 include './soap/configSoap.inc.php';
@@ -11,7 +19,11 @@ include './database/funcStatVehicles.php';
 
 $response = identSoap( $login );
 if( $response["success"] ){
-	$response = statVehicle($dbFlotte, $_POST);
+	if( isset($_POST['mois']) ) {
+		$response = loadKmMensuel($dbFlotte, $_POST['mois']);
+	} else {
+		$response = statVehicle($dbFlotte, $_POST);
+	}
 }
 
 /* Prints out the response object */
