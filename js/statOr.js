@@ -53,14 +53,14 @@ function listStatVehicule( unTab, rupt ) {
 					return label;
 				},
 				ajoutCell = function( lib, classArray ) {
-					var cellule = document.createElement('td');
+					var cellule = ligne.insertCell(-1);
 					
 					cellule.textContent = lib || '';
 					if(classArray) {
 						classArray.forEach( function( item ) { return cellule.classList.add(item); } );
 					}
 						
-					return tr.appendChild( cellule );
+					return cellule;
 				};
 				
 			if( lg.VehicleID != null ) {

@@ -2,18 +2,26 @@
 /**
  * funcStatVehicles.php
  * 
- * @auteur     marc laville
- * @Copyleft 2013-14
+ * @auteur     marc laville - polinux
+ * @Copyleft 2015
  * @date       28/09/2015
  * @version    0.1
  * @revision   $0$
  *
- * @date revision   
+ * @date revision   05/10/2015 Cmmentaires
+ *
+ * Tables
+ * - t_vehicle
+ * - t_km_parcourt
+ * - t_or
  *
  * Calcul des statistiques de cout kilometrique
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
+ */
+/**
+ * Stat des Coût concernant les Ordres de Réparation
  */
 function statVehicle($dbConn, $tabParam) {
 	$typeVehicule = isset( $tabParam["typeVehicule"] ) ? $tabParam["typeVehicule"] : '';
@@ -41,7 +49,7 @@ function statVehicle($dbConn, $tabParam) {
 		. " WHERE or_date_annule IS NULL"
 		. " AND or_date BETWEEN ? AND ?"
 		. " GROUP BY or_idVehicle"
-		. " )OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID"
+		. " ) OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID"
 		. " GROUP BY {rupture}, VehicleID"
 		. " WITH ROLLUP) stat";
 
@@ -102,10 +110,13 @@ function statVehicle($dbConn, $tabParam) {
 	return $response;
 }
 
+/*
+ * Calcul du releve kilometrique mensuel
+ */
 function loadKmMensuel($dbConn, $mois) {
 
 	$reqSelectKmMensuel = "SELECT"
-		. " Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MIN( BeginDate ) AS DateDebut, MAX( EndDate ) AS DateDebut,"
+		. " Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MIN( BeginDate ) AS DateDebut, MAX( EndDate ) AS DateFin,"
 		. " MAX( KmEnd ) - MIN( KmBegin ) AS Distance"
 		. " FROM t_km_parcourt"
 		. " WHERE KmBegin < KmEnd"

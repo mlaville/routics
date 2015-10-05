@@ -9,9 +9,7 @@
  *
  * Gestion des ordres de réparation
  * 
- *
- * A Faire
- * - gerer les requetes ajax sans JQuery
+ * @date revision  05/10/2015 Gère la table des releve km
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -38,9 +36,10 @@
 	background-color: #CDB4C8;
 }
  
-li .numParc {
-	display: inline-block;
-	text-align: right;
+li .numParc,
+td .numParc {
+    display: inline-block;
+    text-align: right;
 }
  
 #leftcolumn input[type="radio"],
