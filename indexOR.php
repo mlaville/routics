@@ -71,6 +71,12 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<a href="#content-km">Relevé KM</a>
 		</li>
 		<li>
+			<a href="#content-autoroute">Autoroute</a>
+		</li>
+		<li>
+			<a href="#content-recap">Récapitulatif</a>
+		</li>
+		<li>
 			<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
 			<a class="btn btn-primary" href="./php/deconnexion.php">Déconnexion</a>
 		</li>
@@ -309,6 +315,35 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 		<table summary="Relevé Kilomètrique" id="table-km" >
+			<thead>
+				<tr>
+					<th>Véhicule</th>
+					<th>Parc</th>
+					<th>Date début</th>
+					<th>km début</th>
+					<th>Date fin</th>
+					<th>km fin</th>
+					<th>Km Parcourus</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td class="rounded-foot-left" colspan="4"><em></em></td>
+					<td></td>
+					<td class="rounded-foot-right">&nbsp;</td>
+				</tr>
+			</tfoot>
+			<tbody></tbody>
+		</table>
+		</div>
+	</section>
+	<section id="content-autoroute"  class="blocReponse">
+		<form name="upload">
+		  <input type="file" name="fileElem" accept=".csv" onchange="handleFiles(this.files)">
+		  <a  class="btn btn-primary" href="#" id="fileSelect">Sélectionner un Fichier ...</a>
+		<form>
+		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
+		<table summary="Relevé Kilomètrique" id="table-autoroute" >
 			<thead>
 				<tr>
 					<th>Véhicule</th>

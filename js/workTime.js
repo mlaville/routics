@@ -816,13 +816,16 @@ window.addEventListener('load', function() {
 		dateRef = ( dateParts.length == 2 ) ? new Date( parseInt(dateParts[1]), parseInt( dateParts[0] - 1 ), parseInt(1) ) : new Date(),
 		dragItems = document.querySelectorAll('header div[draggable=true]');
 
-		// Gere le dnd des type d'arret de travail
+		/**
+		 * Gere le dnd des couleur (fond de ligne et catactere)
+		 */
 	for( var i = dragItems.length ; i > 0 ; i-- ) {
 		dragItems[i-1].addEventListener('dragstart', function (event) {
 		// store the ID of the element, and collect it on the drop later on
 		event.dataTransfer.setData('Text', this.dataset.couleur);
 	  });
 	}
+	
 
 	mvcConducteur.loadModele(dateRef);
 	document.getElementById('span-mois').textContent = mvcConducteur.dateTitre();
@@ -838,13 +841,12 @@ window.addEventListener('load', function() {
 	 * Gere les éditions
 	 */
 	document.getElementById('btn_impRecap').addEventListener('click', function() {
-//		return document.body.appendChild( domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ) ), 'Récapitulatif Mensuel d\'Activité' );
 		return domFenetrePdf( pdfRecapMensuel( document.getElementById('table-recap') ), 'Récapitulatif Mensuel d\'Activité' );
 	});
 	document.getElementById('btn_impHeuresDues').addEventListener('click', function() {
-//		return document.body.appendChild( domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ) ), 'Tableau des Heures Dûes' );
 		return domFenetrePdf( pdfHeuresDues( document.getElementById('table-hd') ), 'Tableau des Heures Dûes' );
 	});
+	
 	document.getElementById('cb-codeOptiGest').addEventListener('change', mvcConducteur.switchEditCodeOptigest);
 	
 	document.getElementById("rd_nav_releve").addEventListener('change', function( e ) {

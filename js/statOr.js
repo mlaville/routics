@@ -40,13 +40,13 @@ function listStatVehicule( unTab, rupt ) {
 		},
 		
 		ajoutLigne = function( lg ) {
-			var tr = document.createElement('tr'),
+			var ligne = tbody.insertRow(-1),
 				expendCheck = function() {
 					var label = document.createElement('label'),
 						chk = label.appendChild( document.createElement('input') );
 					
 					chk.setAttribute('type', 'checkbox');
-					chk.addEventListener('change', expendSousTotal(tr));
+					chk.addEventListener('change', expendSousTotal(ligne));
 					
 					label.appendChild(document.createElement('div'));
 					
@@ -64,16 +64,16 @@ function listStatVehicule( unTab, rupt ) {
 				};
 				
 			if( lg.VehicleID != null ) {
-				tr.classList.add("masque");
+				ligne.classList.add("masque");
 				ajoutCell();
 				ajoutCell(lg.VehicleID);
 				ajoutCell(lg.LicensePlate);
 				ajoutCell( rupt == 'marque' ? lg.Filter : lg.ChassisNumber);
 			} else {
 				/* Ligne de Rupture */
-				tr.classList.add("sousTotal");
+				ligne.classList.add("sousTotal");
 				if( lg.Rupture != null ) {
-					tr.appendChild( document.createElement('td') )
+					ligne.appendChild( document.createElement('td') )
 						/* Creation du lien pour gèrer l'expansion */
 						.appendChild( expendCheck() );
 					
@@ -82,10 +82,12 @@ function listStatVehicule( unTab, rupt ) {
 					ajoutCell(Math.round( 1000 * lg.NbVehicule/lgTot.NbVehicule ) / 10, [ "nombre", "pourcent" ]);
 				} else {
 					/* Derniere ligne */
-					var tdTot = tr.appendChild( document.createElement('td') );
-					tdTot = tr.appendChild( document.createElement('td') );
+					var tdTot = ligne.appendChild( document.createElement('td') );
 					
-					tdTot.textContent = lg.NbVehicule + ' Véhicules';
+//					tdTot = ligne.appendChild( document.createElement('td') );
+					
+//					tdTot.textContent = lg.NbVehicule + ' Véhicules';
+					ajoutCell(lg.NbVehicule + ' Véhicules');
 					ajoutCell();
 				}
 				ajoutCell('');
@@ -104,12 +106,12 @@ function listStatVehicule( unTab, rupt ) {
 			if( lg.VehicleID == null ) {
 				ajoutCell( Math.round( 1000 * lg.TotCout/lgTot.TotCout ) / 10, [ 'nombre', 'pourcent' ] );
 			} else {
-				tr.lastChild.setAttribute("colspan", "2");
+				ligne.lastChild.setAttribute("colspan", "2");
 			}
 			
 			ajoutCell( lg.CoutKm, [ 'nombre' ] );
 			
-			return tbody.appendChild(tr)
+			return ligne;
 		};
 	
 	// retire tous les enfants d'un élément
