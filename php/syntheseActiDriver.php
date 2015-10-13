@@ -29,9 +29,9 @@ $response = identSoap( $login );
 if( $response["success"] ) {
 	date_default_timezone_set ( 'Europe/Paris' );
 
-	$idTransicsDrivers = isset( $_POST['idDriver'] ) ? $_POST['idDriver'] : '22';
-	$dateInf =  isset( $_POST['dateInf'] ) ? $_POST['dateInf'] : '2013-10-01';
-	$dateSup =  isset( $_POST['dateSup'] ) ? $_POST['dateSup'] : '2013-10-09';
+	$idTransicsDrivers = isset( $_POST['idDriver'] ) ? $_POST['idDriver'] : '59';
+	$dateInf =  isset( $_POST['dateInf'] ) ? $_POST['dateInf'] : '2015-09-01';
+	$dateSup =  isset( $_POST['dateSup'] ) ? $_POST['dateSup'] : '2015-09-30';
 
 	$response["retour"] = getActiDriverPeriode( $wsdl, $login, $idTransicsDrivers, date_create($dateInf), date_create($dateSup) );
 }

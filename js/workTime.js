@@ -540,18 +540,7 @@ var mvcConducteur = (function ( document ) {
 				};
 			
 			modele.forEach(traiteConducteur);
-/*			
-			for( var i = 0 ; i < nbConducteur ; i++ ) {
 
-				tabTrConduct[modele[i].PersonTransicsID] = tbodyRecap.appendChild( calcTrRecapConduct( modele[i] ) );
-				cibleDrop( tbodyRecap.lastChild );
-				
-				if( modele[i].recapTpsService != undefined ) {
-//					tabHrDuConduct[modele[i].PersonTransicsID] = 
-						document.getElementById('tbody_hrDues').appendChild( calcTrHrDuesConduct( modele[i] ) );
-				}
-			}
-*/			
 			return;
 		};
 		/**
@@ -675,7 +664,7 @@ var mvcConducteur = (function ( document ) {
 			}
 			return trConduct;
 		},
-		calLigneHrDuesOld: function( trConduct ) {
+/*		calLigneHrDuesOld: function( trConduct ) {
 			var	idTransics = trConduct.dataset.idTransics,
 				tds = trConduct.querySelectorAll('td'),
 				soldeHrPrec1 = parseFloat( tds[1].firstChild.value ),
@@ -731,7 +720,7 @@ var mvcConducteur = (function ( document ) {
 				});
 			}
 			return trConduct;
-		},
+		},*/
 		calLigne: function(e) { 
 			return mvcConducteur.calLigneConduct( e.target.parentNode.parentNode ); 
 		},
@@ -810,9 +799,9 @@ var mvcConducteur = (function ( document ) {
 
 window.addEventListener('load', function() {
 	/* Chargement de la liste des conducteur */
-	var s = window.location.search,
-		tab = ( s.length ) ? s.split('=') : [],
-		dateParts = ( tab.length > 1 ) ? tab[1].split("-") : [],
+	var search = window.location.search,
+		tab = ( search.length ) ? search.split('=') : [],
+		dateParts = ( tab.length > 1 ) ? tab[1].toIntArray() : [],
 		dateRef = ( dateParts.length == 2 ) ? new Date( parseInt(dateParts[1]), parseInt( dateParts[0] - 1 ), parseInt(1) ) : new Date(),
 		dragItems = document.querySelectorAll('header div[draggable=true]');
 
