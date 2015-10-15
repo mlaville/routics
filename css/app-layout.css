@@ -28,7 +28,7 @@ main>div,
 main>section {
   border: 2px solid silver;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 main>section {
  display: none;

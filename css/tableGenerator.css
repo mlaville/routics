@@ -125,3 +125,11 @@ td ul, td li {
 .CSSTableGenerator th:last-child{
 	border-width:0px 0px 1px 1px;
 }
+
+input:checked + table {
+	border:0px solid red;
+}
+
+input:cheched+table tr:not(.sousTotal) {
+	display: none;
+}
