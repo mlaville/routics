@@ -73,6 +73,7 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 		eltTBody = eltTable.querySelector('tbody'),
 		eltTrHead = eltTable.querySelector('thead tr'),
 		eltProgress = formAutoroute.querySelector('progress'),
+		cmptLigne = formAutoroute.cmptLigne,
 		reader = new FileReader(),
 		readCsv = function( ) {
 			var tabLigne = reader.result.split('\n'),
@@ -87,9 +88,8 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 					tabChamps.forEach( function(it) { return ligne.insertCell(-1).textContent = it; } );
 					
 					eltProgress.value = eltProgress.value + 1;
+					cmptLigne.value++;
 				},
-//				ligneDate = tabLigne.shift(), // 
-//				ligneEntete = tabLigne.shift(),
 				tabTitre;
 			
 			// Recupere la date sur la 1ere ligne
@@ -98,10 +98,13 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 			// Recupere les titres sur la 2eme ligne
 			tabTitre = tabLigne.shift().split(';');
 			tabTitre.shift();
+			eltTrHead.innerHTML = '';
 			tabTitre.forEach( function(it) { return eltTrHead.insertCell(-1).textContent = it; } );
 			
+			cmptLigne.value = 0;
 			eltProgress.value = 0;
-			eltProgress.max = tabTitre.length;
+			eltProgress.max = tabLigne.length;
+			
 			
 			eltTBody.innerHTML = '';
 			// traite les lignes restantes
