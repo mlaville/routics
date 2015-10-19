@@ -36,7 +36,6 @@ function pdfStat( uneTable, bSynthese ) {
 		doc = new jsPDF('l'),
 		eltTr = uneTable.querySelector('thead tr'),
 		listCell = eltTr.querySelectorAll('th'),
-		nbJour = listCell.length,
 		listTr = uneTable.querySelectorAll('tbody tr'),
 		nbLg = listTr.length,
 		impair = true,
@@ -93,7 +92,7 @@ function pdfStat( uneTable, bSynthese ) {
 			};
 			
 			doc.setFontSize(12);
-			doc.text(72, 18, 'du 01/08/2015 au 31/08/2015');
+			doc.text(72, 18, uneTable.querySelector('caption').textContent);
 
 			doc.setFont("helvetica");
 			doc.setFontType("bold");

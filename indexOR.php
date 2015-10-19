@@ -286,6 +286,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</div>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 		<table summary="Récatituletif des ORs" id="table-stat" >
+			<caption></caption>
 			<thead>
 				<tr>
 					<th></th>
@@ -343,10 +344,11 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		  <button name="fileSelect" class="btn btn-primary">Sélectionner un Fichier</button>
 		  <button name="save" class="btn btn-primary" disabled>Enregistrer les données</button>
 		  <progress></progress>
-		<form>
+		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
-		<label><input type="checkbox" name="detail" /> détail</label>
-		<table summary="Relevé Autoroute" id="table-autoroute" >
+		<label for="detailAutoroute">détail</label>
+		<input type="checkbox" id="detailAutoroute" />
+		<table summary="Relevé Autoroute" id="table-autoroute">
 		  <caption>Relevé Autoroute</caption>
 			<thead>
 				<tr></tr>

@@ -73,6 +73,7 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 		eltTBody = eltTable.querySelector('tbody'),
 		eltTrHead = eltTable.querySelector('thead tr'),
 		eltProgress = formAutoroute.querySelector('progress'),
+		cmptLigne = formAutoroute.cmptLigne,
 		reader = new FileReader(),
 		readCsv = function( ) {
 			var tabLigne = reader.result.split('\n'),
@@ -86,7 +87,6 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 						ligne.classList.add('sousTotal')
 					};
 //					[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach( function(id) { return ligne.insertCell(-1).textContent = tabChamps[id]; } );
-//					tabChamps.forEach( function(it) { return ligne.insertCell(-1).textContent = it; } );
 					tabChamps.forEach( function(it) { 
 						return fragLigne.appendChild( document.createElement('td') ).textContent = it;
 					});
@@ -95,8 +95,6 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 					
 					return ligne.appendChild(fragLigne)
 				},
-//				ligneDate = tabLigne.shift(), // 
-//				ligneEntete = tabLigne.shift(),
 				tabTitre;
 			
 			// Recupere la date sur la 1ere ligne
@@ -105,10 +103,12 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 			// Recupere les titres sur la 2eme ligne
 			tabTitre = tabLigne.shift().split(';');
 			tabTitre.shift();
+			eltTrHead.innerHTML = '';
 			tabTitre.forEach( function(it) { return eltTrHead.insertCell(-1).textContent = it; } );
 			
 			eltProgress.value = 0;
-			eltProgress.max = tabTitre.length;
+			eltProgress.max = tabLigne.length;
+			
 			
 			eltTBody.innerHTML = '';
 			// traite les lignes restantes
