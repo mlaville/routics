@@ -4,14 +4,15 @@
  * @auteur     marc laville
  * @Copyleft 2013-2015
  * @date       23/08/2013
- * @version    1.0.1
- * @revision   $0$
+ * @version    1.1
+ * @revision   $4$
  *
  * Gére la saisie du login utilisateur
  *
  * @date revision   29/08/2015 Teste la connexion Transics et récupère la version
  * @date revision   30/08/2015 Supprime la dependance à Zepto pour l'envoi des requetes Ajax
- * @date revision   14/09/2015 Bip à la connexion transcis
+ * @date revision   14/09/2015 Bip à la connexion Transics
+ * @date revision   20/12/2015 Test le connexion Transics par fetch
  *
  * Appel  ajax:
  * - ./php/soapBuildVersion.php
@@ -137,8 +138,11 @@ window.addEventListener('load', function() {
 	
 	formSignup.app.value = docCookies.getItem( 'module' ) || 'TT';
 
-	requete('./php/soapBuildVersion.php', 'GET', testConnexion, document.getElementById('transics-loader') )
-		.send();
+    fetch( new Request('./php/soapBuildVersion.php') ).then(function(response) {
+      return response.json().then(testConnexion);
+    }).catch(function (error) {  
+		alert('Request failed', error);  
+	});
 
 	return;
 });

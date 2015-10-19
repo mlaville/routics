@@ -76,17 +76,24 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 		reader = new FileReader(),
 		readCsv = function( ) {
 			var tabLigne = reader.result.split('\n'),
+				frag = document.createDocumentFragment(),
 				traiteLigne = function(item) {
 					var tabChamps = item.split(';'),
+						fragLigne = document.createDocumentFragment(),
 						ligne = eltTBody.insertRow(-1);
 						
 					if( tabChamps.shift().length > 0 ) {
 						ligne.classList.add('sousTotal')
 					};
 //					[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach( function(id) { return ligne.insertCell(-1).textContent = tabChamps[id]; } );
-					tabChamps.forEach( function(it) { return ligne.insertCell(-1).textContent = it; } );
+//					tabChamps.forEach( function(it) { return ligne.insertCell(-1).textContent = it; } );
+					tabChamps.forEach( function(it) { 
+						return fragLigne.appendChild( document.createElement('td') ).textContent = it;
+					});
 					
 					eltProgress.value = eltProgress.value + 1;
+					
+					return ligne.appendChild(fragLigne)
 				},
 //				ligneDate = tabLigne.shift(), // 
 //				ligneEntete = tabLigne.shift(),
@@ -110,11 +117,11 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 			return formAutoroute.fileSelect.disabled = false;
 		},
 		handleFiles = function () {
+			
 			formAutoroute.fileSelect.disabled = true;
-			
-		  sendFile( fileElement.files[0] );
-			
-		  return reader.readAsText( fileElement.files[0] );
+			sendFile( fileElement.files[0] );
+
+			return reader.readAsText( fileElement.files[0] );
 		};
 		
 	reader.addEventListener('load', readCsv);
