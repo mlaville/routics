@@ -126,10 +126,6 @@ td ul, td li {
 	border-width:0px 0px 1px 1px;
 }
 
-input:checked + table {
-	border:0px solid red;
-}
-
-input:cheched+table tr:not(.sousTotal) {
+input:checked+table tbody tr:not(.sousTotal) {
 	display: none;
 }
