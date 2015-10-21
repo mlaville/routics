@@ -131,6 +131,7 @@ function loadKmMensuel($dbConn, $mois) {
 	} else {
 		$err = $stmt->errorInfo();
 		$rep["error"] = array( "reason"=>$err[2] );
+		$rep["reqSelectKmMensuel"] = $reqSelectKmMensuel;
 	}
 
 	return $rep;

@@ -12,6 +12,7 @@
  * @date revision   01/08/2015 Affichage de la card du véhicule
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  * @date revision   14/09/2015 Remplace les liens de la table des OR par des boutons
+ * @date revision   21/10/2015 passage de la table des OR en paramêtre
  *
  * Appel  ajax:
  * - ../php/crudOR.php
@@ -47,7 +48,7 @@
 	};
 };
 
-var ctrlFormVehicule = (function (formVehicule) {
+var ctrlFormVehicule = (function (formVehicule, tableOR) {
 
 	var	afficheOr = function( unOr ) {
 			if(unOr == null){
@@ -109,77 +110,80 @@ var ctrlFormVehicule = (function (formVehicule) {
 					listOrVehicule( formVehicule["num-parc"].value );
 			}, "json");
 		},
-		afficheListOr = function ( unTab, htmlTable ) {
+		afficheListOr = function ( unTab ) {
+			var tbody = tableOR.getElementsByTagName('tbody')[0],
+				tfoot = tableOR.getElementsByTagName('tfoot')[0],
+				tot = 0,
+				/**
+				  * Ajout d'une ligne au tableau des ORs
+				  */
+				addOr = function( unOr ) {
+					var trOr = tbody.appendChild( document.createElement('tr') ),
+						tdAction = document.createElement('td'),
+						btEdit = tdAction.appendChild( document.createElement('button') ),
+						btSup = tdAction.appendChild( document.createElement('button') ),
 
-				var tbody = htmlTable.getElementsByTagName('tbody')[0],
-					tfoot = htmlTable.getElementsByTagName('tfoot')[0],
-					tot = 0,
-					addOr = function( unOr ) {
-						var trOr = tbody.appendChild( document.createElement('tr') ),
-							tdAction = document.createElement('td'),
-							btEdit = tdAction.appendChild( document.createElement('button') ),
-							btSup = tdAction.appendChild( document.createElement('button') ),
-
-							deleteOr = function( e ) {
-								var tds = trOr.getElementsByTagName('td');
-								
-								if( confirm( "Supprimer l'Ordre de Réparation ?\n\n" + tds[5].textContent ) ){
-								/* Recherche l'Id de la ligne */
-									supprimeOr( tds[0].textContent );
-								}
-								return;
-							},
-							editOr = function( e ) {
-								var tds = trOr.getElementsByTagName('td');
-								
-								return afficheOr( {"IdOR" : tds[0].textContent,
-										"or_date" : tds[1].textContent,
-										"or_km" : tds[4].textContent,
-										"or_prestataire" : tds[2].textContent,
-										"or_numFacture" : tds[3].textContent,
-										"or_description" : tds[5].textContent,
-										"or_montant" : tds[6].textContent
-								} );
-							},
-							addTd = function( lib ) {
-								 return trOr.appendChild( document.createElement('td') ).textContent = lib;
-							};
-						
-						btEdit.addEventListener('click', editOr);
-						btSup.addEventListener( 'click', deleteOr );
+						deleteOr = function( e ) {
+							var tds = trOr.getElementsByTagName('td');
+							
+							if( confirm( "Supprimer l'Ordre de Réparation ?\n\n" + tds[5].textContent ) ){
+							/* Recherche l'Id de la ligne */
+								supprimeOr( tds[0].textContent );
+							}
+							return;
+						},
+						editOr = function( e ) {
+							var tds = trOr.getElementsByTagName('td');
+							
+							return afficheOr( {"IdOR" : tds[0].textContent,
+									"or_date" : tds[1].textContent,
+									"or_km" : tds[4].textContent,
+									"or_prestataire" : tds[2].textContent,
+									"or_numFacture" : tds[3].textContent,
+									"or_description" : tds[5].textContent,
+									"or_montant" : tds[6].textContent
+							} );
+						},
+						addTd = function( lib ) {
+							 return trOr.appendChild( document.createElement('td') ).textContent = lib;
+						};
 					
-						[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
+					btEdit.addEventListener('click', editOr);
+					btSup.addEventListener( 'click', deleteOr );
+				
+					[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
 
-						trOr.appendChild( tdAction );
-						
-						tot += unOr.or_montant * 100;
-					};
+					trOr.appendChild( tdAction );
 					
-				// retire tous les enfants d'un élément
-				while (tbody.firstChild) {
-				  tbody.removeChild(tbody.firstChild);
+					tot += unOr.or_montant * 100;
 				};
 				
-				unTab.forEach(addOr);
+			// retire tous les enfants d'un élément
+			while (tbody.firstChild) {
+			  tbody.removeChild(tbody.firstChild);
+			};
+			
+			unTab.forEach(addOr);
 
-				trfoot = tfoot.getElementsByTagName('tr')[0];
-				trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? tot / 100 : '';
-				
-				formVehicule.orNb.textContent = unTab.length;
-				if( tot > 0 ){
-					formVehicule.orMt.textContent = (tot / 100).toFixed(2);
-					formVehicule.coutKm.textContent = ( tot / formVehicule['km-vehicule'].value / 100 ).toFixed(7);
-				} else {
-					formVehicule.orMt.textContent = '';
-					formVehicule.coutKm.textContent = '';
-				}
-				return;
-			},
+			trfoot = tfoot.getElementsByTagName('tr')[0];
+			trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? tot / 100 : '';
+			
+			formVehicule.orNb.textContent = unTab.length;
+			if( tot > 0 ){
+				formVehicule.orMt.textContent = (tot / 100).toFixed(2);
+				formVehicule.coutKm.textContent = ( tot / formVehicule['km-vehicule'].value / 100 ).toFixed(7);
+			} else {
+				formVehicule.orMt.textContent = '';
+				formVehicule.coutKm.textContent = '';
+			}
+			return;
+		},
 	
 		listOrVehicule = function( unNumParc ) {
 			$.post("./php/crudOR.php", { cmd: 'load', idVehicule: unNumParc },
 				function(data){
-					afficheListOr( data.result, document.getElementById('table-or') );
+					afficheListOr( data.result );
+//					afficheListOr( data.result, document.getElementById('table-or') );
 			}, "json");
 			
 			return;
@@ -274,5 +278,5 @@ var ctrlFormVehicule = (function (formVehicule) {
 	
 	return { afficheVehicle: afficheVehicle };
 	
-})(document.forms["form-or"]);
+})( document.forms["form-or"], document.getElementById('table-or') );
 

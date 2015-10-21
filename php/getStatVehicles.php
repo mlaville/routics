@@ -7,7 +7,6 @@
  * @date       30/09/2015
  * @version    0.2
  * @revision   $0$
- *
  * 
  * Construit la reponse pour les stat véhicule ou les releves KM
  */

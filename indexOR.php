@@ -67,13 +67,13 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		<li>
 			<a href="#content-stat">Statistiques</a>
 		</li>
-		<li style="display: none">
+		<li>
 			<a href="#content-km">Relevé KM</a>
 		</li>
-		<li style="display: none">
+		<li>
 			<a href="#content-autoroute">Autoroute</a>
 		</li>
-		<li style="display: none">
+		<li>
 			<a href="#content-recap">Récapitulatif</a>
 		</li>
 		<li>
@@ -369,7 +369,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		<form name="recapitulatif">
 			<label>mois</label>
 			<input type="text" name="moisRecapitulatif" >
-			<button class="btn btn-primary" name="calculKm" type="submit">Calculer</button>
+			<button class="btn btn-primary" name="calculRecap" type="submit">Calculer</button>
 		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 

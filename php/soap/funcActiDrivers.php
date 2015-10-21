@@ -116,7 +116,7 @@ function getActiDriverPeriode( $unWsdl, $login, $idTransicsDrivers, $dateInf, $d
 		'soap_version'=>SOAP_1_2, 
 		'exceptions'=>true, 
 		'trace'=>1, 
-		'cache_wsdl'=>WSDL_CACHE_NONE 
+		'cache_wsdl'=>WSDL_CACHE_BOTH 
 	); 
 	try {
 		$clientSoap = new SoapClient($unWsdl, $options);
@@ -142,4 +142,39 @@ function getActiDriverPeriode( $unWsdl, $login, $idTransicsDrivers, $dateInf, $d
 	
 	return $tabActi;
 }
+
+/**
+ * Consommation
+ */
+function soapGetConsumptionReport( $soapClient, $login, $idTransicsDrivers, $mois ){
+
+	/* effectue la sélection */
+	$Drivers = new stdClass();
+	$Drivers->IdentifierType = 'TRANSICS_ID';
+	$Drivers->Id = $idTransicsDrivers;
+	
+	$DateTimeRange = new stdClass();
+	$DateTimeRange->StartDate = $uneDateInf;
+	$DateTimeRange->EndDate = $uneDateSup;
+
+	/* Create selection object */
+	$ConsumptionReportSelection = new stdClass();
+	$ConsumptionReportSelection->DateTimeRangeSelection = $DateTimeRange;
+
+	$ConsumptionReportSelection->Drivers = array($Drivers);
+	
+	/* Create global sender object */
+	$sender = new stdClass();
+	$sender->Login = $login;
+	$sender->ConsumptionReportSelection = $ConsumptionReportSelection );
+	
+	/* Call the webservice */
+	$get_ConsumptionReport = $soapClient->Get_ConsumptionReport($sender);
+	
+	return array( 
+		'executiontime'=>$get_ConsumptionReport->Get_Vehicles_V7Result->Executiontime,
+		'result'=>$get_ConsumptionReport->Get_Vehicles_V7Result->Vehicles->InterfaceVehicleResult_V7
+	);
+}
+
 ?>

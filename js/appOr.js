@@ -14,6 +14,7 @@
  * @date revision   13/09/2015 Gere la totalité de evenement load de window.
  * @date revision   24/09/2015 Redirige les boutons d'édition pour generer le PDF grace à jsPdf
  * @date revision   30/09/2015 relevés KM
+ * @date revision   21/10/2015 Délègue l'initiation liée aux relevés km au controleur ctrlReleveKm ()
  *
  * Appel  ajax:
  * - ./php/getVehicule.php
@@ -166,9 +167,7 @@ window.addEventListener('load', function() {
 			
 			return formOr.lieuOR.focus();
 		},
-		dateRef = new Date(),
-		formKm = document.forms['releve-km'],
-		inputMois = formKm.moisReleve;
+		dateRef = new Date();
 
 	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
 
@@ -236,19 +235,10 @@ window.addEventListener('load', function() {
 		e.preventDefault();
 		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), true ), 'Coûts Kilomètriques' );
     });
-
 	 
+	ctrlReleveKm( document.forms['releve-km'], document.getElementById('table-km') );
+
 	window.addEventListener("hashchange", activeLink, false);
-
-	/**
-	 * Releve KM
-	 */
-	formKm.addEventListener('submit', afficheReleveKm);
-	 
- 	dateRef = new Date();
- 	dateRef.setMonth( dateRef.getMonth() - 1 );
-	inputMois.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
-	monthPickerFactory.createMonthPicker( inputMois );
 
 	return;
 });
