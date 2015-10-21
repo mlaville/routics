@@ -343,10 +343,9 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		  <input type="file" name="fileElement" accept=".csv" />
 		  <button name="fileSelect" class="btn btn-primary">Sélectionner un Fichier</button>
 		  <button name="save" class="btn btn-primary" disabled>Enregistrer les données</button>
-		  <progress></progress>
 		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
-		<label for="detailAutoroute">détail</label>
+		<label for="detailAutoroute">masquer le détail</label>
 		<input type="checkbox" id="detailAutoroute" />
 		<table summary="Relevé Autoroute" id="table-autoroute">
 		  <caption>Relevé Autoroute</caption>

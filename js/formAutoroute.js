@@ -70,19 +70,20 @@ function sendFile(file) {
 
 var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 	var fileElement = formAutoroute.fileElement,
-		eltTBody = eltTable.querySelector('tbody'),
 		eltTrHead = eltTable.querySelector('thead tr'),
-		eltProgress = formAutoroute.querySelector('progress'),
-		cmptLigne = formAutoroute.cmptLigne,
 		reader = new FileReader(),
 		readCsv = function( ) {
 			var tabLigne = reader.result.split('\n'),
-				frag = document.createDocumentFragment(),
+				eltTBody = eltTable.querySelector('tbody'),
+				fragTCorps = document.createDocumentFragment(),
 				traiteLigne = function(item) {
 					var tabChamps = item.split(';'),
 						fragLigne = document.createDocumentFragment(),
-						ligne = eltTBody.insertRow(-1);
-						
+						ligne = document.createElement('tr');
+					/*
+					 * Test le premier champ : 
+					 *  s'il est non vide, il s'agit d'une ligne sous-total.
+					 */
 					if( tabChamps.shift().length > 0 ) {
 						ligne.classList.add('sousTotal')
 					};
@@ -91,9 +92,7 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 						return fragLigne.appendChild( document.createElement('td') ).textContent = it;
 					});
 					
-					eltProgress.value = eltProgress.value + 1;
-					
-					return ligne.appendChild(fragLigne)
+					return fragTCorps.appendChild(ligne).appendChild(fragLigne)
 				},
 				tabTitre;
 			
@@ -105,16 +104,14 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 			tabTitre.shift();
 			eltTrHead.innerHTML = '';
 			tabTitre.forEach( function(it) { return eltTrHead.insertCell(-1).textContent = it; } );
-			
-			eltProgress.value = 0;
-			eltProgress.max = tabLigne.length;
-			
-			
+
 			eltTBody.innerHTML = '';
 			// traite les lignes restantes
 			tabLigne.forEach(traiteLigne);
 			
-			return formAutoroute.fileSelect.disabled = false;
+			formAutoroute.fileSelect.disabled = false;
+			
+			return eltTBody.appendChild(fragTCorps);
 		},
 		handleFiles = function () {
 			
