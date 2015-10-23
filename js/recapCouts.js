@@ -1,14 +1,14 @@
 /**
- * releveKm.js
+ * recapCouts.js
  * 
  * @auteur     marc laville
  * @Copyleft 2015
- * @date       13/09/2015
+ * @date       20/10/2015
  * @version    0.5
  * @revision   $0$
  *
- * Affichage des relevés KM
- * 
+ * Affichage du récapitulatif des couts de la flotte
+ *
  * @date revision   
  *
  * Appel  ajax:
@@ -21,11 +21,11 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-ctrlReleveKm = function( formReleve, tableKm ) {
-	var btCalculKm = formReleve.calculKm,
+ctrlRecapCouts = function( formRecap, tableResult ) {
+	var btCalcul = formRecap.calculResult,
 		xhrKm = new XMLHttpRequest(),
-		listReleveKm = function( unArray ) {
-			var tbody = tableKm.getElementsByTagName('tbody')[0],
+		listResult = function( unArray ) {
+			var tbody = tableResult.getElementsByTagName('tbody')[0],
 			/*
 			 * {"Vehicle":"68","VehicleTransicsId":"95","KmDebut":"569439","KmFin":"570042","DateDebut":"2015-08-03 03:50:00","DateFin":"2015-08-05 07:55:00","Distance":"603"}
 			 */
@@ -51,18 +51,22 @@ ctrlReleveKm = function( formReleve, tableKm ) {
 					spanTransics.textContent = lg.VehicleTransicsId;
 					spanTransics.classList.add('idTransics');
 
-					ajoutCell( ); // immat
-					
-					ajoutCell(lg.DateDebut);
-					ajoutCell(lg.KmDebut, [ 'td-km', 'nombre' ]);
-					ajoutCell(lg.DateFin);
-					ajoutCell(lg.KmFin, [ 'td-km', 'nombre' ]);
-					ajoutCell(lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ]);
+					ajoutCell( ); // Type
+					ajoutCell( ); // Chauffeur
+					ajoutCell( ); // CA
+					ajoutCell( lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ] );
+					ajoutCell( ); // Terme Km
+					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaillés
+					ajoutCell( ); // CA Jour
+					ajoutCell( ); // Autoroute
+					ajoutCell( ); // Gasoil
+					ajoutCell( (lg.CoutOR / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // Cout Entretien
+					ajoutCell(  ); // Total Cout
 					
 					return ligne;
 				};
 				
-			btCalculKm.disabled = true;
+			btCalcul.disabled = true;
 		
 			// retire tous les enfants d'un élément
 			while (tbody.firstChild) {
@@ -70,11 +74,11 @@ ctrlReleveKm = function( formReleve, tableKm ) {
 			};
 			unArray.forEach(ajoutLigne);
 			
-			btCalculKm.disabled = false;
+			btCalcul.disabled = false;
 			
 			return;
 		},
-		afficheReleveKm = function (event){
+		afficheRecap = function (event){
 
 			var f = event.target,
 				arrMois = f.moisRef.value.split('/'),
@@ -84,7 +88,7 @@ ctrlReleveKm = function( formReleve, tableKm ) {
 			event.preventDefault();
 			
 			formData.append( 'mois', arrMois[1] + ( '0' + arrMois[0] ).slice(-2) );
-			formData.append( 'typeVehicule',  ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' );
+//			formData.append( 'typeVehicule',  ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' );
 
 /*			
 			fetch( new Request( './php/getStatVehicles.php', { method: "POST", body: formData } ) ).then(function(response) {
@@ -104,7 +108,7 @@ ctrlReleveKm = function( formReleve, tableKm ) {
 		traiteReponse = function(data) {
 			var jsonData = JSON.parse(data);
 			
-			return listReleveKm( jsonData.result );
+			return listResult( jsonData.result );
 		};
 	
 	xhrKm.onreadystatechange = function (aEvt) {
@@ -118,11 +122,11 @@ ctrlReleveKm = function( formReleve, tableKm ) {
 	};
 	
  	dateRef.setMonth( dateRef.getMonth() - 1 );
-	monthPickerFactory.createMonthPicker( formReleve.moisRef );
-	formReleve.moisRef.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
+	monthPickerFactory.createMonthPicker( formRecap.moisRef );
+	formRecap.moisRef.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
 		
-	formReleve.addEventListener('submit', afficheReleveKm);
-	btCalculKm.disabled = false;
+	formRecap.addEventListener('submit', afficheRecap);
+	btCalcul.disabled = false;
 
 	return this;
 }

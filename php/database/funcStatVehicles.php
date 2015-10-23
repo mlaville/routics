@@ -120,11 +120,46 @@ function loadKmMensuel($dbConn, $mois) {
 		. " MAX( KmEnd ) - MIN( KmBegin ) AS Distance"
 		. " FROM t_km_parcourt"
 		. " WHERE KmBegin < KmEnd"
-		. " AND DATE_Format( BeginDate, '%m%Y' ) = ?"
+		. " AND DATE_Format( BeginDate, '%Y%m' ) = ?"
 		. " GROUP BY VehicleTransicsId";
 	
 	$stmt = $dbConn->prepare( $reqSelectKmMensuel );
 	$rep = array( "success"=>$stmt->execute( array( $mois ) ) );
+	
+	if( $rep["success"] ) {
+		$rep["result"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		$err = $stmt->errorInfo();
+		$rep["error"] = array( "reason"=>$err[2] );
+		$rep["reqSelectKmMensuel"] = $reqSelectKmMensuel;
+	}
+
+	return $rep;
+}
+
+/*
+ * Calcul du cout kilometrique mensuel
+ */
+function loadCoutKmMensuel($dbConn, $mois) {
+
+	$reqSelectCoutKmMensuel = "SELECT"
+		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR"
+		. " FROM ("
+		. " SELECT"
+		. " Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance, COUNT( DISTINCT DATE(BeginDate) ) AS NbJours"
+		. " FROM t_km_parcourt WHERE KmBegin < KmEnd AND DATE_Format( BeginDate, '%Y%m' ) = ?"
+		. " GROUP BY VehicleTransicsId"
+		. " ) vehicule"
+		. " LEFT JOIN ("
+		. " SELECT or_TransicsVehicleId, or_idVehicle, SUM( or_montant ) AS CoutOR, COUNT( * ) AS NbOR"
+		. " FROM t_or"
+		. " WHERE or_date_annule IS NULL"
+		. " AND DATE_Format( or_date, '%Y%m' ) = ?"
+		. " GROUP BY or_idVehicle"
+		. " ) OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID";
+	
+	$stmt = $dbConn->prepare( $reqSelectCoutKmMensuel );
+	$rep = array( "success"=>$stmt->execute( array( $mois, $mois ) ) );
 	
 	if( $rep["success"] ) {
 		$rep["result"] = $stmt->fetchAll(PDO::FETCH_ASSOC);

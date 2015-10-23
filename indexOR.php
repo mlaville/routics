@@ -311,7 +311,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<section id="content-km"  class="blocReponse">
 		<form name="releve-km">
 			<label>mois</label>
-			<input type="text" name="moisReleve" >
+			<input type="text" name="moisRef" >
 			<button class="btn btn-primary" name="calculKm" type="submit">Calculer</button>
 		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
@@ -367,8 +367,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<section id="content-recap" class="blocReponse">
 		<form name="recapitulatif">
 			<label>mois</label>
-			<input type="text" name="moisRecapitulatif" >
-			<button class="btn btn-primary" name="calculRecap" type="submit">Calculer</button>
+			<input type="text" name="moisRef" >
+			<button class="btn btn-primary" name="calculResult" type="submit">Calculer</button>
 		</form>
 		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
 
@@ -428,5 +428,6 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script type="text/javascript" src="./js/statOr.js"></script>
 	<script type="text/javascript" src="./js/releveKm.js"></script>
 	<script type="text/javascript" src="./js/formAutoroute.js"></script>
+	<script type="text/javascript" src="./js/recapCouts.js"></script>
   </body>
 </html>

@@ -237,6 +237,7 @@ window.addEventListener('load', function() {
     });
 	 
 	ctrlReleveKm( document.forms['releve-km'], document.getElementById('table-km') );
+	ctrlRecapCouts( document.forms['recapitulatif'], document.getElementById('table-recapitulatif') );
 
 	window.addEventListener("hashchange", activeLink, false);
 

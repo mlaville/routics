@@ -19,7 +19,11 @@ include './database/funcStatVehicles.php';
 $response = identSoap( $login );
 if( $response["success"] ){
 	if( isset($_POST['mois']) ) {
-		$response = loadKmMensuel($dbFlotte, $_POST['mois']);
+		if( isset($_POST['typeVehicule']) ) {
+			$response = loadKmMensuel($dbFlotte, $_POST['mois']);
+		} else {
+			$response = loadCoutKmMensuel($dbFlotte, $_POST['mois']);
+		}
 	} else {
 		$response = statVehicle($dbFlotte, $_POST);
 	}
