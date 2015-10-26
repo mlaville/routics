@@ -1,7 +1,20 @@
 <?php
+/**
+ * configSoap.inc.php
+ * 
+ * @auteur     marc laville - polinux
+ * @Copyleft 2015
+ * @date       26/10/2015
+ * @version    0.2
+ * @revision   $0$
+ * 
+ *  Configuration des accès Soap
+ *
+ */
 /* Settings */
+$wsdl = "https://iwsfleet.tx-connect.com/IWS/Service.asmx?WSDL";
 //$wsdl = "http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL";
-$wsdl = "../wsdl/transics.wsdl";
+//$wsdl = "../wsdl/transics.wsdl";
 
 // Définit le fuseau horaire par défaut à utiliser. Disponible depuis PHP 5.1
 date_default_timezone_set('Europe/Paris');

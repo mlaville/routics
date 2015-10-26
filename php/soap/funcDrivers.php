@@ -64,7 +64,7 @@ function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 	$sender->DriverSelection = $DriverSelection;
 
 	/* Call the webservice */
-	return $clientSoap->Get_Drivers_V5($sender);
+	return $clientSoap->Get_Drivers_V6($sender);
 }
 
 /*
@@ -82,12 +82,12 @@ function listDrivers( $unWsdl, $login ){
 	$retour = array( 'error'=>null, 'result'=>null );
 
 	$resultDrivers = soapGetDrivers( $unWsdl, $login );
-	$erreurs = $resultDrivers->Get_Drivers_V5Result->Errors;
+	$erreurs = $resultDrivers->Get_Drivers_V6Result->Errors;
 
 	$retour['succes'] = !isset($erreurs->Error);
 
 	if( $retour['succes'] ) {
-		$result = $resultDrivers->Get_Drivers_V5Result->Persons->InterfacePersonResult_V5;
+		$result = $resultDrivers->Get_Drivers_V6Result->Persons->InterfacePersonResult_V6;
 		usort( $result, "cmp" );
 		$retour['result'] = $result;
 	} else {

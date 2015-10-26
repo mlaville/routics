@@ -23,7 +23,7 @@
  */
 error_reporting(E_ERROR);
 
-include 'configSoap.inc.php';
+include 'soap/configSoap.inc.php';
 include 'soap/funcDrivers.php';
 
 include 'connect.inc.php';

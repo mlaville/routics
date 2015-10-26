@@ -16,7 +16,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 include 'ident.inc.php';
-include 'configSoap.inc.php';
+include 'soap/configSoap.inc.php';
 
 include 'connect.inc.php';
 

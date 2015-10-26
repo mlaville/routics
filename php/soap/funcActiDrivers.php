@@ -166,7 +166,7 @@ function soapGetConsumptionReport( $soapClient, $login, $idTransicsDrivers, $moi
 	/* Create global sender object */
 	$sender = new stdClass();
 	$sender->Login = $login;
-	$sender->ConsumptionReportSelection = $ConsumptionReportSelection );
+	$sender->ConsumptionReportSelection = $ConsumptionReportSelection;
 	
 	/* Call the webservice */
 	$get_ConsumptionReport = $soapClient->Get_ConsumptionReport($sender);
