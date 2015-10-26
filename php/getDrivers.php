@@ -39,6 +39,7 @@ function soapSenderGetServiceTimesTachoDetail( $login, $idTransics, $dateDeb, $d
 	$DateTimeRangeSelection = new stdClass();
 	$DateTimeRangeSelection->StartDate = $dateDeb;
 	$DateTimeRangeSelection->EndDate = $dateFin;
+	$DateTimeRangeSelection->DateTypeSelection = 'STARTED';
 
 	/* Create selection object */
 	$ServiceTimesSelection = new stdClass( );
@@ -60,19 +61,19 @@ function tServiceTachyDriver($client, $login, $idDriver, $dateDeb, $dateFin) {
 	$resultTT = null;
 	set_time_limit ( 360 );
 	try {
-		$resultTT = $client->Get_ServiceTimesTachoDetail($sender);
+		$resultTT = $client->Get_ServiceTimesTachoDetail_V5($sender);
 	} catch (Exception $e) {
 		$retour['error'] = array('reason'=>$e->getMessage());
 	}
 	
 	if( !is_null($resultTT) ) {
 
-		$erreurs = $resultTT->Get_ServiceTimesTachoDetailResult->Errors;
+		$erreurs = $resultTT->Get_ServiceTimesTachoDetail_V5Result->Errors;
 
 		$retour['succes'] = !isset($erreurs->Error);
 		if( $retour['succes'] ) {
-			$ServiceTimes = $resultTT->Get_ServiceTimesTachoDetailResult->ServiceTimes;
-			$result =( isset( $ServiceTimes->ServiceTimeTachoDetail ) ) ? $ServiceTimes->ServiceTimeTachoDetail : array();
+			$ServiceTimes = $resultTT->Get_ServiceTimesTachoDetail_V5Result->ServiceTimes;
+			$result =( isset( $ServiceTimes->ServiceTimeTachoDetail_V5 ) ) ? $ServiceTimes->ServiceTimeTachoDetail_V5 : array();
 			$ttMois = array();
 			$today = date("Y-m-d"); 
 			
