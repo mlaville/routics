@@ -149,10 +149,11 @@ function getServiceTachyDriver( $clientSoap, $sender, $dateRef ) {
 
 	$sender->ServiceTimesSelection->DateTimeRangeSelection->StartDate =	 $dateRef . "T00:00:00";
 	$sender->ServiceTimesSelection->DateTimeRangeSelection->EndDate =	 $dateRef . "T23:59:59";
+	$sender->ServiceTimesSelection->DateTimeRangeSelection->DateTypeSelection = 'STARTED';
 //print_r($sender);
 	set_time_limit ( 120 );
 	try {
-		$resultTT = $clientSoap->Get_ServiceTimesTachoDetail($sender);
+		$resultTT = $clientSoap->Get_ServiceTimesTachoDetail_V5($sender);
 	} catch (Exception $e) {
 		$resultTT = null;
 //	    echo 'Exception reçue : ',  $e->getMessage(), "\n";
@@ -160,10 +161,10 @@ function getServiceTachyDriver( $clientSoap, $sender, $dateRef ) {
 	}
 
 	if( !is_null($resultTT) ) {
-		$erreurs = $resultTT->Get_ServiceTimesTachoDetailResult->Errors;
+		$erreurs = $resultTT->Get_ServiceTimesTachoDetail_V5Result->Errors;
 		
 		if( !isset($erreurs->Error) ) {
-			$ServiceTimes = $resultTT->Get_ServiceTimesTachoDetailResult->ServiceTimes;
+			$ServiceTimes = $resultTT->Get_ServiceTimesTachoDetail_V5Result->ServiceTimes;
 			$retour = (isset( $ServiceTimes->ServiceTimeTachoDetail )) ? tServiceMois($ServiceTimes->ServiceTimeTachoDetail) : array();
 		} else {
 	//		$ServiceTimes = null;

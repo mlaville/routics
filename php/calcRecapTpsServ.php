@@ -14,7 +14,7 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
-include 'soap/funcDrivers.php';
+include 'soap/soapGetDrivers.php';
 
 include 'database/crudRecap.php';
 include 'database/funcDrivers.php';
@@ -25,13 +25,15 @@ function recapTmsService( $wsdl, $login, $dbFlotte, $mois ) {
 	
 	$retour = array( 'error'=>null, 'result'=>null );
 
-	$resultDrivers = soapGetDrivers( $wsdl, $login );
-	$erreurs = $resultDrivers->Get_Drivers_V5Result->Errors;
+	$resultDrivers = listDrivers( $wsdl, $login );
+//	$erreurs = $resultDrivers->Get_Drivers_V5Result->Errors;
 
-	$retour['succes'] = !isset($erreurs->Error);
+//print_r( json_encode($resultDrivers) );
+
+	$retour['succes'] = is_null( $resultDrivers['error'] );
 
 	if( $retour['succes'] ) {
-		$result = $resultDrivers->Get_Drivers_V5Result->Persons->InterfacePersonResult_V5;
+		$result = $resultDrivers['result'];
 		usort( $result, "cmp" );
 
 		$recap = chargeRecap( $dbFlotte, $mois );
@@ -68,7 +70,7 @@ function recapTmsService( $wsdl, $login, $dbFlotte, $mois ) {
 			$retour['error'] = $recap["error"];
 		}
 	} else {
-		$retour['error'] = $erreurs->Error;
+		$retour['error'] = $resultDrivers['error'];
 	}
 	return $retour;
 }

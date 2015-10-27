@@ -3,18 +3,13 @@
  * getDrivers.php
  * 
  * @auteur     marc laville
- * @Copyleft 2013-14
- * @date       26/06/2013
- * @version    0.6
- * @revision   $6$
+ * @Copyleft 2015
+ * @date       26/10/2015
+ * @version    0.7
+ * @revision   $0$
  *
- * @date revision   01/10/2013 Gestion du flag flagTmpsService
- * @date revision   23/10/2013 Instancie 1 seul client SOAP pour accès aux données tachy
- * @date revision   31/10/2013 'try catch' autour le l'appel au webservice
- * @date revision   03/02/2014 Les fonctions d'accès à la base de données sont regroupées dans database/funcDrivers.php
- * @date revision   18/02/2014 Contrôle l'intervales de date dans les plages horaires renvoyées par Transcics (tServiceTachyDriver)
-  * @date revision 07/06/2014 Calcul la colonne réseve à partir de la table des heures dues (t_heure_du_hdu)
-*
+ * @date revision 
+ *
  * Charge les données d'affichage du planning Conducteur
  * ou pour une simple liste de Conducteurs
  *
@@ -24,40 +19,21 @@
 error_reporting(E_ERROR);
 
 include 'soap/configSoap.inc.php';
-include 'soap/funcDrivers.php';
+include 'soap/soapGetDrivers.php';
 
 include 'connect.inc.php';
 include 'database/funcDrivers.php';
 include 'database/crudRecap.php';
 
-function soapSenderGetServiceTimesTachoDetail( $login, $idTransics, $dateDeb, $dateFin ){
-
-	$Identifier = new stdClass();
-	$Identifier->IdentifierType = "TRANSICS_ID";
-	$Identifier->Id = $idTransics;
+function tServiceTachyDriver($client, $sender, $dateDeb, $dateFin) {
 	
-	$DateTimeRangeSelection = new stdClass();
+	$retour = array( 'error'=>null, 'debug'=>array() );
+//	$sender = soapSenderGetServiceTimesTachoDetail($login, $idDriver, $dateDeb, $dateFin);
+	$DateTimeRangeSelection = $sender->ServiceTimesSelection->DateTimeRangeSelection;
+
 	$DateTimeRangeSelection->StartDate = $dateDeb;
 	$DateTimeRangeSelection->EndDate = $dateFin;
-	$DateTimeRangeSelection->DateTypeSelection = 'STARTED';
 
-	/* Create selection object */
-	$ServiceTimesSelection = new stdClass( );
-	$ServiceTimesSelection->Drivers = array( $Identifier );
-	$ServiceTimesSelection->DateTimeRangeSelection = $DateTimeRangeSelection;
-
-	/* Create global sender object */
-	$sender = new stdClass();
-	$sender->Login = $login;
-	$sender->ServiceTimesSelection = $ServiceTimesSelection;
-	
-	return $sender;
-}
-
-function tServiceTachyDriver($client, $login, $idDriver, $dateDeb, $dateFin) {
-	$retour = array( 'error'=>null, 'debug'=>array() );
-	$sender = soapSenderGetServiceTimesTachoDetail($login, $idDriver, $dateDeb, $dateFin);
-	
 	$resultTT = null;
 	set_time_limit ( 360 );
 	try {
@@ -106,11 +82,12 @@ function tServiceTachyDriver($client, $login, $idDriver, $dateDeb, $dateFin) {
 	}
 	return $retour;
 }
+
 /*
  * flag pour remonté de temps tachy
  */
 $flagTmpsService = ( isset($_POST['flagTmpsService']) ) ? ( $_POST['flagTmpsService'] == 1 ) : true ;
-$mois = ( isset($_POST['mois']) ) ? $_POST['mois'] : '2014-05' /* date('Y-m')*/ ;
+$mois = ( isset($_POST['mois']) ) ? $_POST['mois'] : '2015-09' /* date('Y-m')*/ ;
 
 $arrMois = explode( '-', $mois);
 $dtMois = mktime( 0, 0, 0, $arrMois[1], 1, $arrMois[0] ); 
@@ -122,10 +99,14 @@ $retour = array( 'error'=>null, 'result'=>null );
 
 set_time_limit ( 60 );
 $resultDrivers = listDrivers( $wsdl, $login );
+//$resultDrivers = array( 'dateDeb' => $dateDeb, 'dateFin' => $dateFin);
+
+// print_r( json_encode($resultDrivers) );
+
 if( $resultDrivers['succes'] ) {
 
 	$result = $resultDrivers['result'];
-
+	
 	$ret = loadQuotaDriver( $dbFlotte, 190 );
 	$quotaDrivers = $ret['result'];
 	
@@ -137,32 +118,55 @@ if( $resultDrivers['succes'] ) {
 	$ret = chargeReserve( $dbFlotte );
 	$reserveDriver = $ret["success"] ? $ret['result'] : $ret["error"];
 
+
 	/* Create Soap client */
 	$clientSoap = new SoapClient($wsdl);
+	
+	$sender = new stdClass();
+	$sender->Login = $login;
 
+	$Drivers = new stdClass();
+	$Drivers->IdentifierType = 'TRANSICS_ID';
+//	$Drivers->Id = $unIdTransics;
+
+	$DateTimeRangeSelection = new stdClass();
+	$DateTimeRangeSelection->DateTypeSelection = 'STARTED';
+	
+	$ServiceTimesSelection = new stdClass();
+	$ServiceTimesSelection->DateTimeRangeSelection = $DateTimeRangeSelection;
+	
+	$sender->ServiceTimesSelection = $ServiceTimesSelection;
+	
 	foreach( $result as &$driver ) {
 		if(!$driver->Inactive) {
 			$driverTransicsID = intval( $driver->PersonTransicsID );
-			
-			if($flagTmpsService == true) {
-				set_time_limit ( 60 );
-				$driver->tt = tServiceTachyDriver( $clientSoap, $login, $driver->PersonTransicsID, $dateDeb, $dateFin );
+			$ServiceTimesSelection->Drivers = array( $Drivers );
+
+			$Drivers->Id = $driverTransicsID;
+
+			if($flagTmpsService) {
+				$driver->tt = tServiceTachyDriver( $clientSoap, $sender, $dateDeb, $dateFin );
 			}
+			
+//			$driver->resultTT = $resultTT;
+			
 			if( isset( $quotaDrivers[ $driver->PersonTransicsID ] ) ) {
 				$driver->tempsMaxi = intval( $quotaDrivers[$driver->PersonTransicsID]['maxTmpsServise'] );
-				$driver->reserve_old = intval( $quotaDrivers[$driver->PersonTransicsID]['reserve'] );
+//				$driver->reserve_old = intval( $quotaDrivers[$driver->PersonTransicsID]['reserve'] );
 			} else {
 				$driver->tempsMaxi = 190;
-				$driver->reserve = 0;
+//				$driver->reserve = 0;
 			}
 			$driver->arretsTravail = isset( $atDriver[ $driverTransicsID ] ) ? $atDriver[ $driverTransicsID ] : array();
 			$driver->reserve = isset( $reserveDriver[ $driverTransicsID ] ) ? $reserveDriver[ $driverTransicsID ] : 0;
 		}
 	}
+
 	
 	$retour['result'] = $result;
-	$retour['reserveDriver'] = $reserveDriver;
-	
+	$retour['succes'] = true;	
+//	$retour['atDriver'] = $atDriver;	
+//	$quotaDrivers['quotaDrivers'] = true;	
 } else {
 	$retour['error'] = $erreurs->Error;
 }
@@ -170,4 +174,5 @@ if( $resultDrivers['succes'] ) {
 /* Prints out the response object */
 header("Content-Type: application/json");
 echo htmlspecialchars_decode( json_encode( $retour ), ENT_QUOTES );
+
 ?>

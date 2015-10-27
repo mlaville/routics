@@ -12,9 +12,9 @@
  *
  */
 /* Settings */
-//$wsdl = "https://iwsfleet.tx-connect.com/IWS/Service.asmx?WSDL";
+$wsdl = "https://iwsfleet.tx-connect.com/IWS/Service.asmx?WSDL";
 //$wsdl = "http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL";
-$wsdl = "../wsdl/transics-2.wsdl";
+//$wsdl = "../wsdl/transics-2.wsdl";
 
 // Définit le fuseau horaire par défaut à utiliser. Disponible depuis PHP 5.1
 date_default_timezone_set('Europe/Paris');

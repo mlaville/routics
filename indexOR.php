@@ -67,13 +67,13 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		<li>
 			<a href="#content-stat">Statistiques</a>
 		</li>
-		<li style="display: none;">
+		<li>
 			<a href="#content-km">Relevé KM</a>
 		</li>
-		<li style="display: none;">
+		<li>
 			<a href="#content-autoroute">Autoroute</a>
 		</li>
-		<li style="display: none;">
+		<li>
 			<a href="#content-recap">Récapitulatif</a>
 		</li>
 		<li>

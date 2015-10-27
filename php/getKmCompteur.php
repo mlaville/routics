@@ -8,14 +8,14 @@
  * @version    0.9
  * @revision   $0
  *
- * Remontée des km compteur
+ * RemontÃ©e des km compteur
  *
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
 include 'ident.inc.php';
-include './soap/configSoap.inc.php';
+include 'soap/configSoap.inc.php';
 include 'fonctionSoap.inc.php';
 
 $response = identSoap( $login );
