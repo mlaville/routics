@@ -5,8 +5,13 @@
   * @auteur     marc laville
  * @Copyleft 2015
  * @date       01/08/2015
- * @version    0.1
+ * @version    0.1.1
  * @revision   $0$
+ *
+ * @date revision 01/11/2015 remonte le trailor
+ *
+ * -A faire :
+ * remonter le conducteur
  *
  * Fonctions d'acces aux données TRACTEUR par les Webservice
  *
@@ -27,7 +32,7 @@ if( $response["success"] ) {
 	$idTransics = isset( $_POST['idVehicule'] ) ? $_POST['idVehicule'] : '187';
 	
 	if( $typeVehicule == 0 ) {
-		$resultVehicle = soapGetVehicleV7( new SoapClient($wsdl), $login, $idTransics );
+		$resultVehicle = soapGetVehicle( new SoapClient($wsdl), $login, $idTransics );
 
 		$vehicleInfo = $resultVehicle["result"];
 		if( is_array($vehicleInfo) ) {
@@ -40,6 +45,8 @@ if( $response["success"] ) {
 		$response["transport"] = $vehicleInfo->AutoFilter;
 		$response["Category"] = $vehicleInfo->Category;
 		$response["position"] = $vehicleInfo->Position;
+		$response["Trailer"] = isset($vehicleInfo->Trailer) ? $vehicleInfo->Trailer : null;
+//		$response["Driver"] = $vehicleInfo->Driver;
 		$response["DateInit"] = null;
 	} else {
 		$resultVehicle = soapGetTrailerV4( new SoapClient($wsdl), $login, $idTransics );
@@ -58,14 +65,13 @@ if( $response["success"] ) {
 			$resultVehicleInfo = $stmt->fetch( );
 			$response["CurrentKms"] = $resultVehicleInfo['KmParcourus'];
 			$response["DateInit"] =  $resultVehicleInfo['DateInit'];
-//			$response["marque"] = $resultVehicleInfo['ChassisNumber'];
 			$response["marque"] = $vehicleInfo->TechnicalInfo->ChassisNumber;
 			$response["dateModif"] = $vehicleInfo->Modified;
 
 			$response["transport"] =  $resultVehicleInfo['Filter'];
 			$response["Category"] = null;
 			$response["vehicleInfo"] = $vehicleInfo;
-		$response["position"] = $vehicleInfo->Position;
+			$response["position"] = $vehicleInfo->Position;
 		} else {
 			// gerer l'erreur
 		}

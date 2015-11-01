@@ -197,6 +197,7 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 				outputDateInfo = formVehicule.dateInfoVehicule,
 				divLocalite = formVehicule.querySelector('.localite'),
 				divDestination = formVehicule.querySelector('.destination'),
+				divRemorque = formVehicule.querySelector('.remorque'),
 				// Traite une chaine de la forme : 0.3km N De Besain
 				formatPosition = function (str) {
 					var reg = /([0-9]*)\.([0-9]*)km\s[N|E|O|S|\s]*De\s(\b.*\b)/ig,
@@ -232,6 +233,8 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						posVehicule.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
 						divLocalite.innerHTML = formatPosition(position.DistanceFromLargeCity);
 						divDestination.innerHTML = formatPosition( position.DistanceFromPointOfInterest.toLowerCase() );
+						
+						divRemorque.innerHTML = data.Trailer ? data.Trailer.FormattedName + '<br/>' + data.Trailer.Filter : '';
 
 						outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( dateModif ) : '';
 						outputDateInfo.style.color = ( dateModif.diff() > 48 * 3600 * 1000) ? 'red' : 'black';

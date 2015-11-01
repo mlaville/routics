@@ -152,6 +152,25 @@ fieldset>div {
   background-image: url(../img/citerne.png);
 }
 
+div.tracteur,
+div.remorque {
+  background-position: left top;
+  background-repeat: no-repeat;
+  padding-left: 112px;
+}
+
+div.tracteur  {
+  background-image: url(../img/tracteur.png);
+}
+div.remorque  {
+  background-image: url(../img/citerne.png);
+}
+div.tracteur:empty,
+div.remorque:empty {
+  display: none;
+}
+
+
 #vehicule-card {
 	float:left;
 }

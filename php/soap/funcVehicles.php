@@ -5,9 +5,11 @@
   * @auteur     marc laville
  * @Copyleft 2015
  * @date       12/04/2015
- * @version    0.1
- * @revision   $0$
+ * @version    0.1.1
+ * @revision   $1$
  *
+ * @date revision 01/11/2015 renomme soapGetVehicle_V7 en soapGetVehicle
+ * 
  * Fonctions d'acces aux données TRACTEUR par les Webservices
  *
  * Licensed under the GPL license:
@@ -47,7 +49,7 @@ function soapGetVehicles( $unWsdl, $login, $uneDate ){
 	return soapGetVehiclesV7( new SoapClient($unWsdl), $login, $uneDate );
 }
 
-function soapGetVehicleV7( $soapClient, $login, $idTransics ){
+function soapGetVehicle( $soapClient, $login, $idTransics ){
 
 	/* effectue la sélection */
 	$IdentifierVehicle = new stdClass();
@@ -62,9 +64,11 @@ function soapGetVehicleV7( $soapClient, $login, $idTransics ){
 	/* Call the webservice */
 	$get_Vehicles_V7 = $soapClient->Get_Vehicles_V7($sender);
 	
+	$result_V7 = $get_Vehicles_V7->Get_Vehicles_V7Result;
+	
 	return array( 
-		'executiontime'=>$get_Vehicles_V7->Get_Vehicles_V7Result->Executiontime,
-		'result'=>$get_Vehicles_V7->Get_Vehicles_V7Result->Vehicles->InterfaceVehicleResult_V7
+		'executiontime'=>$result_V7->Executiontime,
+		'result'=>$result_V7->Vehicles->InterfaceVehicleResult_V7
 	);
 }
 

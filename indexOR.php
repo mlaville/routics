@@ -141,6 +141,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 								<div id="indication">
 									<div class="localite"></div>
 									<div class="destination"></div>
+									<div class="tracteur"></div>
+									<div class="remorque"></div>
 								</div>
 							</div>
 							<figcaption><output style="color: black;" name="dateInfoVehicule">Données collectées le 8 septembre 2015 à 8h28</output></figcaption>
