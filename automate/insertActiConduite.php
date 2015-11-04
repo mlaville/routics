@@ -7,6 +7,8 @@
  * @date       24/04/2015
  * @version    0.1.0
  * 
+ * @date revision 03/11/2015 Modification de l'adresse de service web.
+ *
  * Lecture des activite de conduite via les WebServices Transics et enregistrement dans la base de données
  *
  * A faire :

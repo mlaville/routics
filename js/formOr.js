@@ -13,6 +13,7 @@
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  * @date revision   14/09/2015 Remplace les liens de la table des OR par des boutons
  * @date revision   21/10/2015 passage de la table des OR en paramêtre
+ * @date revision   04/11/2015 Rapport consommation du jour
  *
  * Appel  ajax:
  * - ../php/crudOR.php
@@ -183,7 +184,6 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 			$.post("./php/crudOR.php", { cmd: 'load', idVehicule: unNumParc },
 				function(data){
 					afficheListOr( data.result );
-//					afficheListOr( data.result, document.getElementById('table-or') );
 			}, "json");
 			
 			return;
@@ -193,11 +193,12 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 			var	formVehicule = document.forms['form-or'],
 				champMarque = formVehicule.marque,
 				outputKmVehicule = formVehicule['km-vehicule'],
-				figcaption = outputKmVehicule.parentNode.lastElementChild,
+				labelKm = outputKmVehicule.nextElementSibling,
 				outputDateInfo = formVehicule.dateInfoVehicule,
 				divLocalite = formVehicule.querySelector('.localite'),
 				divDestination = formVehicule.querySelector('.destination'),
 				divRemorque = formVehicule.querySelector('.remorque'),
+				divPilote = formVehicule.querySelector('.pilote'),
 				// Traite une chaine de la forme : 0.3km N De Besain
 				formatPosition = function (str) {
 					var reg = /([0-9]*)\.([0-9]*)km\s[N|E|O|S|\s]*De\s(\b.*\b)/ig,
@@ -218,15 +219,30 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 				 }
 				*/
 				showDetailVehicle = function(data){
-					if(data.success) {
 						var marque = data.marque,
 							position = data.position,
-							dateModif = Date.fromISO(data.dateModif);
+							dateModif = Date.fromISO(data.dateModif),
+							dummy;
 							
 						champMarque.textContent = marque;
 						champMarque.className = marque.toLowerCase();
 						
 						formVehicule.transport.textContent = [ data.transport, data.Category ].join(' / ');
+						
+						
+						if( data.conso.ConsumptionReportItems ){
+								dummy = data.conso.ConsumptionReportItems.ConsumptionReportItem;
+								
+								formVehicule.kmJour.textContent = dummy.Distance.toString().lpad( '0', 5 );
+								formVehicule.consoJour.textContent = dummy.Consumption_Total;
+								
+								formVehicule.consoJour.previousElementSibling.value = dummy.Consumption_Idle;
+								formVehicule.consoJour.previousElementSibling.max = dummy.Consumption_Total;
+								
+								formVehicule.moyenneJour.textContent = dummy.Consumption_Total_Avg.toFixed(2);
+								
+								formVehicule.moyenneJour.previousElementSibling.value = dummy.Consumption_Total_Avg;
+						}
 						
 						outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 						
@@ -235,6 +251,7 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						divDestination.innerHTML = formatPosition( position.DistanceFromPointOfInterest.toLowerCase() );
 						
 						divRemorque.innerHTML = data.Trailer ? data.Trailer.FormattedName + '<br/>' + data.Trailer.Filter : '';
+						divPilote.innerHTML = data.Driver ? data.Driver.FormattedName.toLowerCase() : '';
 
 						outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( dateModif ) : '';
 						outputDateInfo.style.color = ( dateModif.diff() > 48 * 3600 * 1000) ? 'red' : 'black';
@@ -243,9 +260,8 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						
 						// Affichage des saisie d'OR
 						listOrVehicule( formVehicule['num-parc'].value );
-					}
 					
-					return data.success;
+					return;
 				};
 				
 			// Affichage du logo dans la legende du fieldset
@@ -256,7 +272,7 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 			document.getElementById('num-parc').value = numParc;
 			formVehicule.immat.textContent = immat;
 //			outputKmVehicule.textContent = kmVehicule;
-			figcaption.textContent = ( document.forms["form_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
+			labelKm.textContent = ( document.forms["form_nav"].typeElement[0].checked ) ? 'compteur' : 'parcourus';
 
 			// Vide le formulaire de saisie
 			afficheOr( null );
@@ -266,7 +282,12 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 		
 			$.post( document.body.dataset.detail_vehicule, //	$.post("./php/getDetailVehicule.php",
 				{ "typeVehicule": AppOr.typeVehicule, "idVehicule": idTransics },
-				showDetailVehicle,
+				function(dataDetail) {
+					if(dataDetail.success) {
+						showDetailVehicle(dataDetail);
+					}
+					return dataDetail.success;
+				},
 				"json"
 			);
 

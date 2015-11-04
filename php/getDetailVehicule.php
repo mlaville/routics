@@ -2,16 +2,18 @@
 /**
  * getDetailVehicule.php
  *
-  * @auteur     marc laville
+ * @auteur     marc laville
  * @Copyleft 2015
  * @date       01/08/2015
  * @version    0.1.1
  * @revision   $0$
  *
  * @date revision 01/11/2015 remonte le trailor
+ * @date revision 01/11/2015 remonte le pilote
+ * @date revision 04/11/2015 Rapport consommation du jour
  *
  * -A faire :
- * remonter le conducteur
+ * 
  *
  * Fonctions d'acces aux données TRACTEUR par les Webservice
  *
@@ -21,6 +23,7 @@
 include 'ident.inc.php';
 include './soap/configSoap.inc.php';
 include './soap/funcVehicles.php';
+include './soap/funcDrivers.php';
 
 include 'connect.inc.php';
 
@@ -46,7 +49,16 @@ if( $response["success"] ) {
 		$response["Category"] = $vehicleInfo->Category;
 		$response["position"] = $vehicleInfo->Position;
 		$response["Trailer"] = isset($vehicleInfo->Trailer) ? $vehicleInfo->Trailer : null;
-//		$response["Driver"] = $vehicleInfo->Driver;
+
+		if(isset($vehicleInfo->Driver)) {
+			$response["Driver"] = $vehicleInfo->Driver;
+
+			$response["conso"] = consumptionReport( $wsdl, $login, $vehicleInfo->Driver->TransicsID )->Get_ConsumptionReportResult;
+		} else {
+			$response["Driver"] = null;
+		}
+		
+		
 		$response["DateInit"] = null;
 	} else {
 		$resultVehicle = soapGetTrailerV4( new SoapClient($wsdl), $login, $idTransics );

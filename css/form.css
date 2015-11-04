@@ -10,6 +10,8 @@
  * Formulaire véhicule
  *
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
+ * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
+ * @date revision   04/11/2015 Rapport consommation du jour
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -100,8 +102,7 @@ fieldset>div {
   box-shadow: 3px 6px 3px 0 #eee inset, 3px 6px 3px 0 #eee;
   display: inline-block;
   height: 160px;
-  margin: 12px 16px 12px 0;
-  padding: 5%;
+  padding: 12%;
   text-align: center;
   width: 160px;
 }
@@ -121,7 +122,7 @@ fieldset>div {
   font-size: 1.9em;
   font-weight: bold;
   letter-spacing: 4px;
-  margin-top: 36px;
+  margin-top: 16px;
   padding: 0 4px;
   text-align: right;
 }
@@ -152,19 +153,27 @@ fieldset>div {
   background-image: url(../img/citerne.png);
 }
 
+div.pilote,
 div.tracteur,
 div.remorque {
   background-position: left top;
   background-repeat: no-repeat;
   padding-left: 112px;
+  font-size: .9em;
+  height: 32px;
 }
 
+div.pilote  {
+  background-image: url(../img/volant.png);
+  text-transform: capitalize;
+}
 div.tracteur  {
   background-image: url(../img/tracteur.png);
 }
 div.remorque  {
   background-image: url(../img/citerne.png);
 }
+div.pilote:empty,
 div.tracteur:empty,
 div.remorque:empty {
   display: none;
@@ -392,8 +401,6 @@ legend {
   background: linear-gradient(to bottom, rgba(85,85,85,0.38) 0%, rgba(85,85,85,1) 15%, rgba(85,85,85,1) 100%);
   border: medium none;
   border-radius: 150px / 50px;
-}
-#fs_visu {
   opacity: 0;
 }
 .popup {

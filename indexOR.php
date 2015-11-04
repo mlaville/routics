@@ -12,6 +12,7 @@
  * @date revision   08/09/2015 Revision de la mise en page css (flex-box)
  * @date revision   08/09/2015 Integration de la page Stat
  * @date revision   30/09/2015 Releves KM
+ * @date revision   04/11/2015 Rapport consommation du jour
  *
  * Gestion des ordres de réparation
  * 
@@ -133,6 +134,13 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 							 <div class="cadran">
 								<output name="km-vehicule" class="km"></output>
 								<label>compteur</label>
+								<fieldset class="releveJour">
+									<output name="kmJour" class="km">km</output>
+									<meter min="0" max="120.47" high="5" value="6"></meter>
+									<output name="consoJour">cj</output>L
+  									<meter min="0" max="60" low="0" high="30" optimum="25"></meter>
+									<output name="moyenneJour">mj</output>L/100km
+								</fieldset>
 							</div>
 						</figure>
 						<figure id="position">
@@ -141,11 +149,12 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 								<div id="indication">
 									<div class="localite"></div>
 									<div class="destination"></div>
+									<div class="pilote"></div>
 									<div class="tracteur"></div>
 									<div class="remorque"></div>
 								</div>
 							</div>
-							<figcaption><output style="color: black;" name="dateInfoVehicule">Données collectées le 8 septembre 2015 à 8h28</output></figcaption>
+							<figcaption><output style="color: black;" name="dateInfoVehicule">Données collectées le ...</output></figcaption>
 						</figure>
 					</div>
 				</fieldset>

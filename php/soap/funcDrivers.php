@@ -33,7 +33,7 @@ function soapGetDrivers( $unWsdl, $login, $unIdTransics = null ){
 		'soap_version'=>SOAP_1_2, 
 		'exceptions'=>true, 
 		'trace'=>1, 
-		'cache_wsdl'=> WSDL_CACHE_NONE 
+		'cache_wsdl'=> WSDL_CACHE_BOTH 
 	); 
 	try {
 		$clientSoap = new SoapClient($unWsdl, $options);
@@ -248,5 +248,59 @@ function tServiceTachyDrivers($clientSoap, $login, $dateDeb, $dateFin, $tabDrive
 	}
 	
 	return $serviceTachyDrivers;
+}
+
+// Rapport de consommation pour le jour
+function consumptionReport( $unWsdl, $login, $unIdTransics = null ){
+	
+	/* Create Soap client */
+	$context = stream_context_create( array(
+         'http' => array(
+           'protocol_version'=> '1.0' ,
+           'header'=> 'Content-Type: text/xml;' ,
+         ),
+    ));
+
+	$options = array( 
+		'stream_context' => $context,
+		'soap_version'=>SOAP_1_2, 
+		'exceptions'=>true, 
+		'trace'=>1, 
+		'cache_wsdl'=> WSDL_CACHE_BOTH 
+	); 
+	try {
+		$clientSoap = new SoapClient($unWsdl, $options);
+	} catch (Exception $e) {
+		echo 'Exception reçue : ',  $e->getMessage(), "\n";
+	}
+	
+	if( !isset($clientSoap) ){
+		echo 'Exception clientSoap\n';
+	}
+	
+	/* Create selection object */
+	$ConsumptionReportSelection = new stdClass();
+
+	$aujoudhui = new DateTime();
+
+	$DateTimeRangeSelection = new stdClass();
+	$DateTimeRangeSelection->StartDate = $aujoudhui->format('Y-m-d') . 'T00:00:00';
+	$DateTimeRangeSelection->EndDate = $aujoudhui->format('Y-m-d') . 'T23:00:00';
+
+	$Driver = new stdClass();
+	$Driver->IdentifierType = 'TRANSICS_ID';
+	$Driver->Id = $unIdTransics;
+
+	$ConsumptionReportSelection->Drivers = array($Driver);
+	$ConsumptionReportSelection->DateTimeRangeSelection = $DateTimeRangeSelection;
+	$ConsumptionReportSelection->SummaryLevel = 'Day';
+	
+	/* Create global sender object */
+	$sender = new stdClass();
+	$sender->Login = $login;
+	$sender->ConsumptionReportSelection = $ConsumptionReportSelection;
+
+	/* Call the webservice */
+	return $clientSoap->Get_ConsumptionReport($sender);
 }
 ?>
