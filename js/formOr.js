@@ -24,6 +24,7 @@
  *
  * A Faire
  * - gerer les requetes ajax sans JQuery
+ * - mise à zéro des données de consommation
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -230,9 +231,10 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						formVehicule.transport.textContent = [ data.transport, data.Category ].join(' / ');
 						
 						
-						if( data.conso.ConsumptionReportItems ){
-								dummy = data.conso.ConsumptionReportItems.ConsumptionReportItem;
-								
+						if( data.conso ){
+							var dummy = data.conso.ConsumptionReportItems.ConsumptionReportItem;
+							
+							if(dummy) {
 								formVehicule.kmJour.textContent = dummy.Distance.toString().lpad( '0', 5 );
 								formVehicule.consoJour.textContent = dummy.Consumption_Total;
 								
@@ -242,7 +244,7 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 								formVehicule.moyenneJour.textContent = dummy.Consumption_Total_Avg.toFixed(2);
 								
 								formVehicule.moyenneJour.previousElementSibling.value = dummy.Consumption_Total_Avg;
-						}
+							}}
 						
 						outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 						

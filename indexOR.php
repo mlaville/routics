@@ -433,12 +433,12 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
 	<script type="text/javascript" src="http://lib.polinux.fr/js/month-picker/monthPicker.js"></script>
 	<script type="text/javascript" src="./js/pdfStatOr.js"></script>
-	<script type="text/javascript" src="./js/appOr.js"></script>
 	<script type="text/javascript" src="./js/formOr.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/statOr.js"></script>
 	<script type="text/javascript" src="./js/releveKm.js"></script>
 	<script type="text/javascript" src="./js/formAutoroute.js"></script>
 	<script type="text/javascript" src="./js/recapCouts.js"></script>
+	<script type="text/javascript" src="./js/appOr.js"></script>
   </body>
 </html>

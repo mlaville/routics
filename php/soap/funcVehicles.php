@@ -37,7 +37,7 @@ function soapGetVehiclesV7( $soapClient, $login, $uneDate ){
 	
 	/* Call the webservice */
 	$get_Vehicles_V7 = $soapClient->Get_Vehicles_V7($sender);
-	
+
 	return array( 
 		'executiontime'=>$get_Vehicles_V7->Get_Vehicles_V7Result->Executiontime,
 		'result'=>$get_Vehicles_V7->Get_Vehicles_V7Result->Vehicles->InterfaceVehicleResult_V7
