@@ -390,13 +390,19 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<th>Num Parc</th>
 					<th>Type</th>
 					<th>Chauffeur(s)</th>
-					<th>CA</th>
+					<th>CA
+						<form name="uploadCA" enctype="multipart/form-data" method="post" >
+							<input type="file" name="fileElement" accept=".xml" />
+							<button name="fileSelect" class="btn btn-primary">Sélectionner un Fichier</button>
+						</form>
+					</th>
 					<th>Km Parcourus</th>
 					<th>Terme Km</th>
 					<th>J. Travaillés</th>
 					<th>CA Jour</th>
-					<th>Autoroute</th>
+					<th>Autoroute<button id="chargeAutoroute">charge</button></th>
 					<th>gasoil</th>
+					<th>Coûts Pneumatique<input type="text" id="coefPneumatique" /></th>
 					<th>Coûts Entretien</th>
 					<th>Total coûts</th>
 				</tr>
@@ -437,6 +443,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/statOr.js"></script>
 	<script type="text/javascript" src="./js/releveKm.js"></script>
+<!-- 	<script type="text/javascript" src="./js/formCaMensuel.js"></script> -->
 	<script type="text/javascript" src="./js/formAutoroute.js"></script>
 	<script type="text/javascript" src="./js/recapCouts.js"></script>
 	<script type="text/javascript" src="./js/appOr.js"></script>

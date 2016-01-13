@@ -186,6 +186,9 @@ header+div {
 button.imprimer {
 	background-image: url(../img/PDF.png);
 }
+#btnHrNuit {
+	background-image: url(../img/night.png);
+}
 button.editer {
 	background-image: url(../img/b_edit.png);
 }

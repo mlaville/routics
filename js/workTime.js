@@ -128,7 +128,7 @@ var mvcConducteur = (function ( document ) {
 			return trConduct;
 		},
 		enregistreRecap = function( event, tbody ) {
-		//--------------------
+		//-------------
 			var trs = tbody.querySelectorAll('tr'),
 				nbTr = trs.length,
 				tabValeur = [], // Parametre POST
@@ -173,8 +173,8 @@ var mvcConducteur = (function ( document ) {
 			return;
 		},
 		/**
-		  * validation des heures dues
-		  */
+		 * validation des heures dues
+		 */
 		enregistreHeureDues = function( event, tbody ) {
 		//--------------------------
 			var trs = tbody.querySelectorAll('tr'),
@@ -429,8 +429,8 @@ var mvcConducteur = (function ( document ) {
 						);
 					}
 					return tr_conduct;
-				};
-
+				},
+				
 				calcTrRecapConduct = function( conduct ) {
 					var tr_conduct = document.createElement('tr'),
 						td_conduct = tr_conduct.appendChild( document.createElement('td') ),
@@ -664,63 +664,6 @@ var mvcConducteur = (function ( document ) {
 			}
 			return trConduct;
 		},
-/*		calLigneHrDuesOld: function( trConduct ) {
-			var	idTransics = trConduct.dataset.idTransics,
-				tds = trConduct.querySelectorAll('td'),
-				soldeHrPrec1 = parseFloat( tds[1].firstChild.value ),
-				soldeHrPrec2 = parseFloat( tds[1].firstChild.nextSibling.value ),
-				pxHr1 = Number( tds[3].firstChild.value ),
-				pxHr2 = Number( tds[3].firstChild.nextSibling.value );
-				duEntreprise1 = parseFloat( tds[4].firstChild.value ),
-				duEntreprise2 = parseFloat( tds[4].firstChild.nextSibling.value ),
-				ajust = Number( tds[5].firstChild.nextSibling.value ),
-				hrSolde = 0;
-			
-			if( trConduct.style.display != 'none' ) {
-				// Colonnes solde mois précèdent 			
-				tds[2].firstChild.value = isNaN(soldeHrPrec1 * pxHr1) ? 0 : (soldeHrPrec1 * pxHr1).toFixed(2);
-				tds[2].firstChild.nextSibling.value = isNaN(soldeHrPrec2 * pxHr2) ? 0 : (soldeHrPrec2 * pxHr2).toFixed(2);
-
-				tds[6].firstChild.value = (tds[4].firstChild.value * pxHr1).toFixed(2);
-				tds[6].firstChild.nextSibling.value = ( ( duEntreprise2 + ajust ) * pxHr2).toFixed(2);
-				
-				// total
-				tds[7].firstChild.value = isNaN(soldeHrPrec1 + duEntreprise1) ? 0 : (soldeHrPrec1 + duEntreprise1).toFixed(2);
-				tds[7].firstChild.nextSibling.value = isNaN(soldeHrPrec2 + duEntreprise2 + ajust) ? 0 : (soldeHrPrec2 + duEntreprise2 + ajust).toFixed(2);
-
-				tds[8].firstChild.value = ( Number( tds[7].firstChild.value ) * pxHr1 ).toFixed(2);
-				tds[8].firstChild.nextSibling.value = ( Number( tds[7].firstChild.nextSibling.value ) * pxHr2).toFixed(2);
-				
-				tds[10].firstChild.value = (tds[9].firstChild.value * pxHr1).toFixed(2);
-				tds[10].firstChild.nextSibling.value = (tds[9].firstChild.nextSibling.value * pxHr2).toFixed(2);
-				
-				tds[15].firstChild.value = (tds[8].firstChild.value
-											- tds[10].firstChild.value 
-											- Number( tds[11].firstChild.value ) 
-											- Number( tds[12].firstChild.value )
-											- Number( tds[13].firstChild.value )
-										).toFixed(2);
-				tds[15].firstChild.nextSibling.value = (tds[8].firstChild.nextSibling.value 
-														- tds[10].firstChild.nextSibling.value 
-														- Number( tds[11].firstChild.nextSibling.value )
-														- Number( tds[12].firstChild.nextSibling.value )
-														- Number( tds[13].firstChild.nextSibling.value )
-														).toFixed(2);
-				
-				tds[14].firstChild.value = ( tds[15].firstChild.value / pxHr1 ).toFixed(2);
-				tds[14].firstChild.nextSibling.value = (tds[15].firstChild.nextSibling.value / pxHr2).toFixed(2);
-				
-				tds[16].firstChild.value = ( Number( tds[11].firstChild.nextSibling.value ) + Number( tds[12].firstChild.nextSibling.value ) ).toFixed(2);
-				
-				[ tds[1].firstChild, 
-				  tds[1].firstChild.nextSibling, 
-				  tds[14].firstChild, 
-				  tds[14].firstChild.nextSibling ].forEach(
-					function( elt ) { return elt.className = ( elt.value == 0 ) ? 'color-gris' : 'color-red';
-				});
-			}
-			return trConduct;
-		},*/
 		calLigne: function(e) { 
 			return mvcConducteur.calLigneConduct( e.target.parentNode.parentNode ); 
 		},

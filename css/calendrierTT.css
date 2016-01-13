@@ -8,6 +8,7 @@
  * @revision   $0$
  *
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
+ * @date revision   15/12/2015  tableau des heures de nuit
  *
  * Affichage du planning 
  * 
@@ -233,4 +234,18 @@ td.rouge {
 
 .vert {
     background-color: green;
+}
+
+#table-hrNuit .contenuFenetre {
+	overflow: scroll;
+}
+#table-hrNuit td:first-child {
+	text-transform: capitalize;
+	font-weight: bold;
+}
+#table-hrNuit td:last-child {
+	text-align: center;
+	font-weight: bold;
+	padding-left: 6px;
+	padding-right: 6px;
 }

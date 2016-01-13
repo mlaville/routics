@@ -138,15 +138,25 @@ function loadKmMensuel($dbConn, $mois) {
 }
 
 /*
+ * Selection du CA mensuel
+ */
+function loadCaMensuel($dbConn, $mois) {
+//	SELECT `num_parc_cam`,`montant_cam` FROM `t_ca_mensuel` WHERE `mois_cam`= '201512' 
+}
+
+/*
  * Calcul du cout kilometrique mensuel
  */
 function loadCoutKmMensuel($dbConn, $mois) {
 
 	$reqSelectCoutKmMensuel = "SELECT"
-		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR"
+ 		. " Vehicle, parc.VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam"
+ 		. " FROM (SELECT"
+		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate"
 		. " FROM ("
 		. " SELECT"
-		. " Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance, COUNT( DISTINCT DATE(BeginDate) ) AS NbJours"
+		. " Vehicle, VehicleTransicsId,"
+		. " MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance, COUNT( DISTINCT DATE(BeginDate) ) AS NbJours, BeginDate"
 		. " FROM t_km_parcourt WHERE KmBegin < KmEnd AND DATE_Format( BeginDate, '%Y%m' ) = ?"
 		. " GROUP BY VehicleTransicsId"
 		. " ) vehicule"
@@ -156,7 +166,9 @@ function loadCoutKmMensuel($dbConn, $mois) {
 		. " WHERE or_date_annule IS NULL"
 		. " AND DATE_Format( or_date, '%Y%m' ) = ?"
 		. " GROUP BY or_idVehicle"
-		. " ) OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID";
+		. " ) OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID"
+		. " ) parc "
+		. " LEFT JOIN t_ca_mensuel ON num_parc_cam = Vehicle AND mois_cam = DATE_Format( BeginDate, '%Y%m' )";
 	
 	$stmt = $dbConn->prepare( $reqSelectCoutKmMensuel );
 	$rep = array( "success"=>$stmt->execute( array( $mois, $mois ) ) );
@@ -167,6 +179,30 @@ function loadCoutKmMensuel($dbConn, $mois) {
 		$err = $stmt->errorInfo();
 		$rep["error"] = array( "reason"=>$err[2] );
 		$rep["reqSelectKmMensuel"] = $reqSelectKmMensuel;
+	}
+
+	return $rep;
+}
+/*
+ * Calcul du cout kilometrique mensuel
+ */
+function loadConsoMensuel($dbConn, $mois) {
+
+	$reqSelectConsoMensuel = "SELECT"
+		. " DriverTransicsId, VehicleTransicsId, VehicleID, VehicleImmat, cms_date,"
+		. " SUM(Distance) AS KmParcourus, SUM(Consumption_Total) AS TotalConso, SUM( Duration_Driving ) AS DureeConduite"
+		. " FROM t_report_consom_csm"
+		. " WHERE DATE_FORMAT(cms_date,'%Y%m')=?"
+		. " GROUP BY VehicleTransicsId, DriverTransicsId";
+	
+	$stmt = $dbConn->prepare( $reqSelectConsoMensuel );
+	$rep = array( "success"=>$stmt->execute( array( $mois ) ) );
+	
+	if( $rep["success"] ) {
+		$rep["result"] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	} else {
+		$err = $stmt->errorInfo();
+		$rep["error"] = array( "reason"=>$err[2] );
 	}
 
 	return $rep;

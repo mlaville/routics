@@ -421,9 +421,14 @@ legend {
   z-index: 10;
 }
 
+#form-or fieldset fieldset.releveJour{
+	display:none;
+}
+
 #form-or fieldset fieldset{
 	display:inline;
 }
+
 
 #form-or li { 
 	padding:4px 0;

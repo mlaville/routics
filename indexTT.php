@@ -75,6 +75,9 @@ $dataUrlImg = $param->dataUrlImg;
 				<button class="imprimer" id="btnImprime"></button>
 			</li>
 			<li>
+				<button id='btnHrNuit'></button>
+			</li>
+			<li>
 				<label for="input-mois">Mois</label>
 				<input type="text" id="input-mois" readonly />
 			</li>
@@ -147,6 +150,20 @@ $dataUrlImg = $param->dataUrlImg;
 				<button class='inserer' value="ajout" name="ajout" type="button">ajouter ...</button>
 			</th>
 		</tr>
+	</tfoot>
+    <tbody></tbody>
+</table>
+<table id="table-hrNuit" style="display:none">
+	<thead>
+		<tr>
+            <th>
+				<button class="imprimer"></button>
+			</th>
+			<th>Jan</th><th>Fév</th><th>Mar</th><th>Avr</th><th>Mai</th><th>Juin</th><th>Jui</th><th>Aou</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Déc</th>
+            <th>Total</th>
+		</tr>
+	</thead>
+	<tfoot>
 	</tfoot>
     <tbody></tbody>
 </table>

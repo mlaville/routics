@@ -2,7 +2,7 @@
  * tt.js
  * 
  * @auteur     marc laville
- * @Copyleft 2013-14
+ * @Copyleft 2013-2016
  * @date       26/06/2013
  * @version    1.0
  * @revision   $0$
@@ -15,6 +15,9 @@
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
  * @date revision   05/05/2015  Prise en compte des données custom
  * @date revision   27/07/2015  Passage du parametre zone pour la requete des jours fériés
+ * @date revision   15/12/2015  Affichage des heures de nuit
+ * @date revision   18/12/2015  Correction heure nuit -> jour
+ * @date revision   02/01/2016  Reecriture estFerie
  *
  * Affichage du planning client
  * 
@@ -39,42 +42,21 @@ var	tabJourOuvres = [],
 	nbJourRestant = 0;
  
 function estFerie( uneDate ) {
-	var estFerie = false;
+	var jourMonth = [ uneDate.getMonth(), uneDate.getDate() ],
+		estJourMois = function( tab ) { return tab[0] == jourMonth[0] && tab[1] == jourMonth[1]; },
+		estFerie = [[0,1], [4, 1], [4, 5], [6, 14], [7,15], [10, 1], [10,11], [11,25]].some(estJourMois),
+		estPaqAscPent = function( dt ) {
+			var datePaques = Date.easterDay( dt.getFullYear() ),
+				ctrlJour = function( i ) {
+					datePaques.setDate(datePaques.getDate() + i);
+					
+					return datePaques.getMonth() == jourMonth[0] && datePaques.getDate() == jourMonth[1]
+				};
+			
+			return [1, 38, 11].some(ctrlJour);
+		};
 
-	if( ( uneDate.getMonth() == 0 && uneDate.getDate() == 1 )
-		|| ( uneDate.getMonth() == 4 && uneDate.getDate() == 1 )
-		|| ( uneDate.getMonth() == 4 && uneDate.getDate() == 8 )
-		|| ( uneDate.getMonth() == 6 && uneDate.getDate() == 14 )
-		|| ( uneDate.getMonth() == 7 && uneDate.getDate() == 15 )
-		|| ( uneDate.getMonth() == 10 && uneDate.getDate() == 1 )
-		|| ( uneDate.getMonth() == 10 && uneDate.getDate() == 11 )
-		|| ( uneDate.getMonth() == 11 && uneDate.getDate() == 25 )
-		
-//		|| ( uneDate.getDay() == 0 )
-	) {
-		estFerie = true;
-	} else {
-		var datePaques = Date.easterDay( uneDate.getFullYear() );
-        
-        // Lundi de Paques
-        datePaques.setDate(datePaques.getDate() + 1);  
-        estFerie = datePaques.getMonth() == uneDate.getMonth() && datePaques.getDate() == uneDate.getDate();
-        
-        if( !estFerie ) {
-			// ascension
-			datePaques.setDate(datePaques.getDate() + 38);  
-			estFerie = datePaques.getMonth() == uneDate.getMonth() && datePaques.getDate() == uneDate.getDate();
-
-			if( !estFerie ) {
-				// pentecote
-				datePaques.setDate(datePaques.getDate() + 11);  
-				estFerie = datePaques.getMonth() == uneDate.getMonth() && datePaques.getDate() == uneDate.getDate();
-			}
-        }
-        
-	}
-	
-	return estFerie;
+	return estFerie || estPaqAscPent( uneDate );
 }
 
 
@@ -295,8 +277,27 @@ function ligneTT( dataConduct, tabOuvres ) {
 		cumulJourAT = 0,
 		td = trConducteur.appendChild( document.createElement('td') ),
 		cumul_ttMois = 0, cumul_actiMois = 0, ul, span_cumul, input,
-		quota_secondes = dataConduct.tempsMaxi * 3600; // Maxi tt par conducteur en seconde -> heure
+		quota_secondes = dataConduct.tempsMaxi * 3600, // Maxi tt par conducteur en seconde -> heure
+		
+		bodyHrNuit = document.getElementById('table-hrNuit').querySelector('tbody'),
+		ajoutLigneHrNuit = function(dataConduct) {
+			var ligneHrNuit = function(data){
+				var i, row = document.createElement('tr'),
+					cell = row.insertCell();
+					
+				cell.dataset.idtransics = data.PersonTransicsID;
+				cell.textContent = data.FormattedName.toLowerCase();
+				
+				for(i = 1 ; i < 15 ; i++) {
+					row.insertCell();
+				}
+				return row;
+			};
+			
+			return bodyHrNuit.appendChild(ligneHrNuit(dataConduct));
+		};
 	
+	ajoutLigneHrNuit(dataConduct);
 	// Colonne Conducteur 
 	td.appendChild( document.createElement('div') ).textContent = dataConduct.FormattedName.toLowerCase();
 	td.appendChild( document.createElement('span') ).textContent = dataConduct.PersonExternalCode;
@@ -445,8 +446,8 @@ function ligneTT( dataConduct, tabOuvres ) {
 	});
 	
 	// Affichage du reste
-	td = trConducteur.appendChild( document.createElement('td') );
-	
+//	td = trConducteur.appendChild( document.createElement('td') );
+	td = trConducteur.insertCell();
 	/* Affichage du cumul Activité */
 	td = trConducteur.appendChild( document.createElement('td') );
 	td.classList.add( 'cumul-odb' );
@@ -664,8 +665,8 @@ function chargeOdb( strMois, trConduct, synchronise ) {
 function chargeTt( uneDate, unTableau ) {
 
 //	jqxhr = $.post("./php/getDrivers.php", param,
-//	 jqxhr = $.post("./data/getDrivers.json", param,
 	var	param = { mois: [ uneDate.getFullYear(), uneDate.getMonth() + 1 ].join('-') },
+//		jqxhr = $.post("./data/getDrivers.json",
 		jqxhr = $.post( document.body.dataset.drivers, 
 			param,
 			function(data){
@@ -736,6 +737,56 @@ window.addEventListener('load', function() {
 		
 		return;
 	});
+	document.getElementById('btnHrNuit').addEventListener( 'click', function() {
+		var eltTable = document.getElementById('table-hrNuit'),
+			listTr = eltTable.querySelectorAll('tbody tr'),
+			nbConduct = listTr.length,
+			traiteLigneConduct = function( eltTr, data ){
+				var listCell = eltTr.querySelectorAll('td'),
+					idConduct = listCell[0].dataset.idtransics,
+					dataConduct = data[idConduct],
+					cell,
+					dummy, j, totalHr,
+					totalJour;
+					
+				if(dataConduct != undefined) {
+					totalHr = 0;
+					
+					for( j = 1 ; j < 13 ; j++ ) {
+						cell = listCell[j];
+						dummy = dataConduct[('0' + j).slice(-2)];
+						
+						if(dummy != undefined) {
+//							cell.textContent = dummy.Duree;
+//							totalHr += +dummy.DureeSec;
+							cell.textContent = dummy.nbJours;
+							totalHr += +dummy.nbJours;
+						}
+					}
+					listCell[13].textContent = totalHr;
+				}
+			};
+		
+		$.get("./php/getHeuresNuit.php", function(data){
+			var i;
+			
+			for( i = 0 ; i < nbConduct ; i++ ) {
+				traiteLigneConduct( listTr[i], data );
+			}
+		})
+		
+		winManager.domFenetre( 'Récapitulatif des Heures de Nuit', eltTable, null, { x:136, y:120, width:624, height: 460 }, true );
+		
+		eltTable.style.display = 'block';
+		eltTable.parentNode.style.overflow = 'scroll';
+		
+		return;
+	});
+	document.getElementById('table-hrNuit').querySelector('th .imprimer').addEventListener( 'click', function() {
+		alert('imprimer');
+		return;
+	});
+
 	/*
 	 * Affichage du pdf planning
 	 */

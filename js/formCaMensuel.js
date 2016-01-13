@@ -1,20 +1,20 @@
 /**
- * formAutoroute.js
+ * formCaMensuel.js
  * 
  * @auteur     marc laville
  * @Copyleft 2015
- * @date       15/10/2015
+ * @date       28/12/2015
  * @version    0.1
  * @revision   $0$
  *
- * Traitement du fichier autoroute
+ * Traitement du fichier ca mensuel
  * 
  * @date revision   
  *
  * Appel  ajax:
- * - ./php/uploadCsv
+ * - ./php/uploadXmlCA.php
  *
- * Note : les appels getVehicule et getTrailers sont parametrés par le dataset de document.body
+
  *
  * A Faire
  * - gèrer la progression de l'upload
@@ -51,24 +51,7 @@ function FileUpload(img, file) {
   reader.readAsBinaryString(file);
 }*/
 
-function sendFile(file) {
-	var uri = "./php/uploadCsvAutoroute.php";
-	var xhr = new XMLHttpRequest();
-	var fd = new FormData();
-	
-	xhr.open("POST", uri, true);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			// Handle response.
-			alert(xhr.responseText); // handle response.
-		}
-	};
-	fd.append('myFile', file);
-	// Initiate a multipart/form-data upload
-	xhr.send(fd);
-}
-
-var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
+var ctrlFormAutoroute = (function ( formCaMensuel, eltTable ) {
 	var fileElement = formAutoroute.fileElement,
 		eltTrHead = eltTable.querySelector('thead tr'),
 		reader = new FileReader(),
@@ -112,6 +95,22 @@ var ctrlFormAutoroute = (function ( formAutoroute, eltTable ) {
 			formAutoroute.fileSelect.disabled = false;
 			
 			return eltTBody.appendChild(fragTCorps);
+		},
+		sendFile = function (file) {
+			var uri = "./php/uploadXmlCA.php",
+				xhr = new XMLHttpRequest(),
+				fd = new FormData();
+			
+			xhr.open("POST", uri, true);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					// Handle response.
+					alert(xhr.responseText); // handle response.
+				}
+			};
+			fd.append('myFile', file);
+			// Initiate a multipart/form-data upload
+			xhr.send(fd);
 		},
 		handleFiles = function () {
 			

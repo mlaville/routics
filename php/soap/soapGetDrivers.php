@@ -87,3 +87,16 @@ function listDrivers( $unWsdl, $login ){
 	return $retour;
 }
 
+function arrayDrivers( $unWsdl, $login ){
+	$listDrivers = listDrivers( $unWsdl, $login );
+	$retour = array();
+	
+	foreach( $listDrivers["result"] as &$driver ) {
+		if(isset($driver->PersonTransicsID)) {
+			$retour[$driver->PersonTransicsID] = $driver;
+		}
+	}
+	
+	return $retour;
+}
+
