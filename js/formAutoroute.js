@@ -60,10 +60,11 @@ function sendFile(file) {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			// Handle response.
-			alert(xhr.responseText); // handle response.
+			// A faire : beep ou autre signal OK
+//			alert(xhr.responseText); // handle response.
 		}
 	};
-	fd.append('myFile', file);
+	fd.append('fileAutoroute', file);
 	// Initiate a multipart/form-data upload
 	xhr.send(fd);
 }

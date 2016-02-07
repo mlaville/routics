@@ -169,8 +169,9 @@ window.addEventListener('load', function() {
 		},
 		dateRef = new Date();
 
-	posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
-
+	if(posVehicule) {
+		posVehicule.marker = new google.maps.Marker( { position: new google.maps.LatLng(47.021750000, 5.71455), map: posVehicule.carte  } );
+	}
 	document.forms["form_nav"].addEventListener('change', function(e) {
 		return switchVehicle( this.typeElement );
 	});
@@ -236,8 +237,10 @@ window.addEventListener('load', function() {
 		return domFenetrePdf( pdfStat( document.getElementById('table-stat'), true ), 'Coûts Kilomètriques' );
     });
 	 
-	ctrlReleveKm( document.forms['releve-km'], document.getElementById('table-km') );
-	ctrlRecapCouts( document.forms['recapitulatif'], document.forms['uploadCA'], document.getElementById('table-recapitulatif') );
+	ctrlRecapCouts( document.forms['recapitulatif'], 
+					document.forms['uploadCA'], 
+					document.getElementById('coefPneumatique'), 
+					document.getElementById('table-recapitulatif') );
 
 	window.addEventListener("hashchange", activeLink, false);
 

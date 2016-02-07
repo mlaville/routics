@@ -10,6 +10,8 @@
  * Affichage du récapitulatif des couts de la flotte
  *
  * @date revision 10/01/2016 Ajout de l'immatriculation
+ * @date revision 23/01/2016 Gestion des upload ca et autoroute
+ * @date revision 03/02/2016 Calcul des totaux par ligne
  *
  * Appel  ajax:
  * - ../php/getStatVehicles.php
@@ -21,7 +23,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
+ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	var btCalcul = formRecap.calculResult,
 		moisRef = function() {
 			var arrMois = formRecap.moisRef.value.split('/');
@@ -30,6 +32,31 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 		},
 		fileElement = formCA.fileElement,
 		xhrRecapCout = new XMLHttpRequest(),
+		recalcLigne = function( trTract, coef ) {
+			var listTd = trTract.getElementsByTagName('td'),
+				kmParcourt = Number(listTd[5].textContent);
+				coutPneu = (coef > 0) ? coef * kmParcourt : 0,
+				tot = /* Number(listTd[9].textContent) + */ coutPneu + Number(listTd[13].textContent);
+			
+			listTd[8].textContent = ( listTd[4].firstChild.value / listTd[7].textContent).toFixed(2);
+			listTd[11].textContent = ( 100 * listTd[10].firstChild.value / kmParcourt ).toFixed(2);
+			listTd[12].textContent = (coutPneu > 0) ? coutPneu.toFixed(2) : '';
+			listTd[14].textContent = tot.toFixed(2);
+			
+			return;
+		},
+		recalcTbody = function( ) {
+			var coef = 1 * inputCoef.value,
+				collecTr = tableResult.querySelectorAll('tbody tr'),
+				idTr = collecTr.length;
+				
+			while(idTr > 0){
+				idTr--;
+				recalcLigne( collecTr[idTr], coef );
+			}
+			
+			return;
+		},
 		listResult = function( objParc ) {
 			var tbody = tableResult.getElementsByTagName('tbody')[0],
 			/*
@@ -44,19 +71,33 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 							var cellule = ligne.insertCell(-1);
 							
 							cellule.textContent = lib || '';
-							if(classArray) {
-								classArray.forEach( function( item ) { return cellule.classList.add(item); } );
-							}
+							( classArray || [] ).forEach( function( item ) { return cellule.classList.add(item); } );
+//							( classArray || [] ).forEach( item => cellule.classList.add(item); );
 								
+							return cellule;
+						},
+						ajoutCellInput = function( lib ) {
+							var cellule = ligne.insertCell(-1),
+								input = cellule.appendChild( document.createElement('input') );
+								
+							input.setAttribute( 'type', 'text' )
+							input.value = lib || '';
+							
+							input.addEventListener('change', function(e) { return recalcLigne(ligne); });
+							
 							return cellule;
 						},
 						cellParc = ligne.insertCell(-1),
 						spanParc = cellParc.appendChild( document.createElement('span') ),
-						spanImmat = cellParc.appendChild( document.createElement('span') ),
-						spanTransics = cellParc.appendChild( document.createElement('span') ),
+						cellImmat = ligne.insertCell(-1),
+						spanImmat = cellImmat.appendChild( document.createElement('span') ),
+						spanTransics = cellImmat.appendChild( document.createElement('span') ),
 						conso = lg.conso,
+						viewConco = function( detailConso ) {
+							return '<div><span class="idTransics">' + detailConso.DriverTransicsId + '</span>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
+						}
 						totConso = conso.reduce(function(valeurPrecedente, valeurCourante){
-							valeurPrecedente.listConduct += ('<p><span>' + valeurCourante.DriverTransicsId + '<span>' + valeurCourante.driverName + '</p>');
+							valeurPrecedente.listConduct += viewConco(valeurCourante);
 							valeurPrecedente.gasoil += +valeurCourante.TotalConso;
 						  return valeurPrecedente;
 						}, { listConduct : '', gasoil : 0 });
@@ -69,22 +110,22 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 					spanTransics.classList.add('idTransics');
 
 					ajoutCell( lg.Category ); // Type
-					(ajoutCell( )).innerHTML = totConso.listConduct; // Chauffeur
-					ajoutCell( Math.round(lg.montant_cam) ); // CA
+					(ajoutCell( '', [ 'conducteur' ] )).innerHTML = totConso.listConduct; // Chauffeur
+					ajoutCellInput( (lg.montant_cam / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // CA
 					ajoutCell( lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ] );
-					ajoutCell( ); // Terme Km
+					ajoutCell( ( lg.montant_cam / 100 / (lg.KmFin - lg.KmDebut) ).toFixed(5) ); // Terme Km
 					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaillés
-					ajoutCell( ); // CA Jour
-					ajoutCell( ); // Autoroute
-					ajoutCell( totConso.gasoil ); // Gasoil
-					ajoutCell( ); // Pneumatiques
+					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // CA Jour
+					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
+					ajoutCellInput( totConso.gasoil.toFixed(1), [ 'nombre' ] ); // Gasoil
+					ajoutCell( '', [ 'nombre' ] ); // Conso 100km
+					ajoutCell( '', [ 'nombre' ] ); // Pneumatiques
 					ajoutCell( (lg.CoutOR / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // Cout Entretien
-					ajoutCell(  ); // Total Cout
+					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // Total Cout
 					
 					return ligne;
 				};
 				
-			btCalcul.disabled = true;
 		
 			// retire tous les enfants d'un élément
 			while (tbody.firstChild) {
@@ -93,48 +134,17 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 			
 			(Object.keys(objParc)).forEach( function(item) { return ajoutLigne( objParc[item] ) });
 			
+			recalcTbody();
+			
 			btCalcul.disabled = false;
+			document.getElementById('ajax-loader').style.display = 'none';
 			
 			return;
 		},
-		chargeCa = function (event){
-			alert('charge ca')
-		},
-		sendFileCA = function (file) {
-			var uri = "./php/uploadXmlCA.php",
-				xhr = new XMLHttpRequest(),
-				fd = new FormData();
-			
-			xhr.open("POST", uri, true);
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && xhr.status == 200) {
-					// Handle response.
-					alert(xhr.responseText); // handle response.
-					formCA.fileSelect.disabled = false;
-				}
-			};
-			fd.append('mois', moisRef());
-			fd.append('myFile', file);
-			// Initiate a multipart/form-data upload
-			xhr.send(fd);
-		},
-		handleFileCa = function () {
-			
-			formCA.fileSelect.disabled = true;
-			return sendFileCA( fileElement.files[0] );
-		},
-		afficheRecap = function (event){
-
-			var /*f = event.target,
-				arrMois = f.moisRef.value.split('/'),*/
-				formData = new FormData();
-				
-			event.stopPropagation();
-			event.preventDefault();
+		calcRecap = function (){
+			var formData = new FormData();
 			
 			formData.append( 'mois', moisRef() );
-//			formData.append( 'mois', arrMois[1] + ( '0' + arrMois[0] ).slice(-2) );
-//			formData.append( 'typeVehicule',  ( AppOr.typeVehicule == 0 ) ? 'tracteur' : 'remorque' );
 
 /*			
 			fetch( new Request( './php/getStatVehicles.php', { method: "POST", body: formData } ) ).then(function(response) {
@@ -145,10 +155,46 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 				alert('Request failed', error);  
 			});
 */
+			document.getElementById('ajax-loader').style.display = 'inline-block';
+			btCalcul.disabled = true;
+
 			xhrRecapCout.open("POST", "./php/getStatVehicles.php", true);
 			xhrRecapCout.send(formData);
 			
 			return false;
+		},
+		sendFileCA = function (file) {
+			var uri = "./php/uploadXmlCA.php",
+				xhr = new XMLHttpRequest(),
+				fd = new FormData();
+			
+			xhr.open("POST", uri, true);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					// Handle response.
+					formCA.fileSelect.disabled = false;
+					calcRecap();
+				}
+			};
+			fd.append('mois', moisRef());
+			fd.append('fileCA', file);
+			// Initiate a multipart/form-data upload
+			xhr.send(fd);
+		},
+		handleFileCa = function () {
+			
+			formCA.fileSelect.disabled = true;
+			return sendFileCA( fileElement.files[0] );
+		},
+		afficheRecap = function (event){
+			event.stopPropagation();
+			event.preventDefault();
+			
+			return calcRecap();
+			
+		},
+		calculLigne = function (event){
+			
 		},
 		dateRef = new Date(),
 		traiteReponse = function(data) {
@@ -183,6 +229,7 @@ ctrlRecapCouts = function( formRecap, formCA, tableResult ) {
 		return fileElement.click();
 	}, false);
 
+	inputCoef.addEventListener('change', recalcTbody )
 
 	return this;
 }

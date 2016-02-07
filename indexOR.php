@@ -53,6 +53,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     <link rel="stylesheet" href="./css/table.css">
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/tableGenerator.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/marques.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="./css/ajaxLoader.css" />
 	
   </head>
 <body data-vehicule="<?php echo $ajaxVehicule; ?>" data-trailers="<?php echo $ajaxTrailers; ?>" data-detail_vehicule="<?php echo $ajaxDetailVehicule; ?>" data-km_compteur="<?php echo $ajaxKmCompteur; ?>">
@@ -62,21 +63,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<h2>Gestion des Ordres de Réparation</h2>
 	<nav>
 		<ul>
-		<li>
-			<a href="#content">Saisie OR</a>
-		</li>
-		<li>
-			<a href="#content-stat">Statistiques</a>
-		</li>
-		<li>
-			<a href="#content-km">Relevé KM</a>
-		</li>
-		<li>
-			<a href="#content-autoroute">Autoroute</a>
-		</li>
-		<li>
-			<a href="#content-recap">Récapitulatif</a>
-		</li>
+		<li><a href="#content">Saisie OR</a></li>
+		<li><a href="#content-stat">Statistiques</a></li>
+		<li><a href="#content-autoroute">Autoroute</a></li>
+		<li><a href="#content-recap">Récapitulatif</a></li>
 		<li>
 			<?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?>
 			<a class="btn btn-primary" href="./php/deconnexion.php">Déconnexion</a>
@@ -110,7 +100,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<section id="content">
 		<div class="box">
 			<form id="form-or" name="form-or">
-<!-- 				<h1>Saisie des Ordres de Réparation</h1> -->
+
 				<fieldset id="fs_visu">
 
 					<legend>
@@ -319,13 +309,13 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		</table>
 		</div>
   </section>
-	<section id="content-km"  class="blocReponse">
+	<section id="content-km"  class="blocReponse" style="display: none">
 		<form name="releve-km">
 			<label>mois</label>
 			<input type="text" name="moisRef" >
 			<button class="btn btn-primary" name="calculKm" type="submit">Calculer</button>
 		</form>
-		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
+		<div id="PreviewTableClassDiv2" class="CSSTableGenerator">		
 		<table summary="Relevé Kilomètrique" id="table-km" >
 			<thead>
 				<tr>
@@ -353,9 +343,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		<form name="uploadAutoroute">
 		  <input type="file" name="fileElement" accept=".csv" />
 		  <button name="fileSelect" class="btn btn-primary">Sélectionner un Fichier</button>
-		  <button name="save" class="btn btn-primary" disabled>Enregistrer les données</button>
 		</form>
-		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
+		<div id="PreviewTableClassDiv3" class="CSSTableGenerator">		
 		<label for="detailAutoroute">masquer le détail</label>
 		<input type="checkbox" id="detailAutoroute" />
 		<table summary="Relevé Autoroute" id="table-autoroute">
@@ -380,29 +369,32 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 			<label>mois</label>
 			<input type="text" name="moisRef" >
 			<button class="btn btn-primary" name="calculResult" type="submit">Calculer</button>
+			<div id="ajax-loader"></div>
 		</form>
-		<div id="PreviewTableClassDiv" class="CSSTableGenerator">		
+		<div class="CSSTableGenerator">		
 
 		<table summary="Recapitulatif" id="table-recapitulatif" >
-		  <caption>Recapitulatif Tracteurs</caption>
+		  <caption>Récapitulatif Tracteurs</caption>
 			<thead>
 				<tr>
 					<th>Num Parc</th>
+					<th>Immat.</th>
 					<th>Type</th>
 					<th>Chauffeur(s)</th>
 					<th>CA
 						<form name="uploadCA" enctype="multipart/form-data" method="post" >
 							<input type="file" name="fileElement" accept=".xml" />
-							<button name="fileSelect" class="btn btn-primary">Sélectionner un Fichier</button>
+							<button name="fileSelect" class="btn btn-primary btn-uploadCA"></button>
 						</form>
 					</th>
-					<th>Km Parcourus</th>
+					<th>Km<br/>Parcourus</th>
 					<th>Terme Km</th>
-					<th>J. Travaillés</th>
+					<th>Jours<br/>Travaillés</th>
 					<th>CA Jour</th>
-					<th>Autoroute<button id="chargeAutoroute">charge</button></th>
+					<th>Autoroute<button id="chargeAutoroute" class="btn btn-primary">charge</button></th>
 					<th>gasoil</th>
-					<th>Coûts Pneumatique<input type="text" id="coefPneumatique" /></th>
+					<th>conso./100km</th>
+					<th>Coûts<br/>Pneumatique<input type="text" id="coefPneumatique" /></th>
 					<th>Coûts Entretien</th>
 					<th>Total coûts</th>
 				</tr>
@@ -442,8 +434,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	<script type="text/javascript" src="./js/formOr.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/statOr.js"></script>
-	<script type="text/javascript" src="./js/releveKm.js"></script>
-<!-- 	<script type="text/javascript" src="./js/formCaMensuel.js"></script> -->
+<!--	<script type="text/javascript" src="./js/releveKm.js"></script>
+ 	<script type="text/javascript" src="./js/formCaMensuel.js"></script> -->
 	<script type="text/javascript" src="./js/formAutoroute.js"></script>
 	<script type="text/javascript" src="./js/recapCouts.js"></script>
 	<script type="text/javascript" src="./js/appOr.js"></script>

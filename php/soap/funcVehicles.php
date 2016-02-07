@@ -131,5 +131,4 @@ function soapGetTrailerV4( $soapClient, $login, $idTransics ){
 	);
 }
 
-
 ?>

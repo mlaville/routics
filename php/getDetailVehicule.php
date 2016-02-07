@@ -28,16 +28,19 @@ include './soap/funcDrivers.php';
 include 'connect.inc.php';
 
 $response = identSoap( $login );
+$response["_REQUEST"] = $_REQUEST;
 
 if( $response["success"] ) {
 
-	$typeVehicule = isset( $_POST['typeVehicule'] ) ? intval( $_POST['typeVehicule'] ) : 0;
-	$idTransics = isset( $_POST['idVehicule'] ) ? $_POST['idVehicule'] : '187';
+	$typeVehicule = isset( $_REQUEST['typeVehicule'] ) ? intval( $_REQUEST['typeVehicule'] ) : 0;
+	$idTransics = isset( $_REQUEST['idVehicule'] ) ? $_REQUEST['idVehicule'] : '187';
 	
 	if( $typeVehicule == 0 ) {
-		$resultVehicle = soapGetVehicle( new SoapClient($wsdl), $login, $idTransics );
+
+	$resultVehicle = soapGetVehicle( new SoapClient($wsdl), $login, $idTransics );
 
 		$vehicleInfo = $resultVehicle["result"];
+
 		if( is_array($vehicleInfo) ) {
 			$vehicleInfo = array_pop($vehicleInfo);
 		}

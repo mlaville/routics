@@ -1,63 +1,35 @@
 <?php
-/*
- * getKmCompteur.php
- * 
- * @auteur     marc laville
- * @Copyleft 2013-14
- * @date       08/01/2014
- * @version    0.9
- * @revision   $0
- *
- * Remontée des km compteur
- *
- *
- * Licensed under the GPL license:
- *   http://www.opensource.org/licenses/mit-license.php
- */
 include 'ident.inc.php';
-include 'soap/configSoap.inc.php';
-include 'fonctionSoap.inc.php';
 
-$response = identSoap( $login );
+include 'connect.inc.php';
 
-if( $response["success"] ) {
-	date_default_timezone_set('Europe/Paris'); 
-	$idTransics = isset( $_POST['idVehicule'] ) ? $_POST['idVehicule'] : '76';
-	$dateOr =  isset( $_POST['dateOr'] ) ? $_POST['dateOr'] : '30/12/2013';
+$response = identSoap( null );
 
-	$tabDateOr =  explode( '/', $dateOr );
-	$resultKm = null;
-	$jourRef = $tabDateOr[0];
-	
-	 set_time_limit(120);
-	 while( $resultKm == null ) {
-	
-		$dateRef = date( DateTime::W3C, mktime( 12, 0, 0, $tabDateOr[1], $jourRef, $tabDateOr[2] ) ); 
-		$resultInfo_On_Date = soapVehicleInfo_On_Date($wsdl, $login, $dateRef, $idTransics );
-		
-		$vehicleInfo = $resultInfo_On_Date->Get_VehicleInfo_On_DateResult->VehicleInfos;
-		$response["vehicleInfo"] = $vehicleInfo;
-		
-		if( isset( $vehicleInfo->VehicleInfoOnDateItem) ) {;
-			$vehicleInfoOnDateItem = $vehicleInfo->VehicleInfoOnDateItem;
-		
-			if( is_array($vehicleInfoOnDateItem) ) {
-				$vehicleInfoOnDateItem = array_pop($vehicleInfoOnDateItem);
-			}
-
-			$resultKm = isset( $vehicleInfoOnDateItem->kmsEnd ) ? $vehicleInfoOnDateItem->kmsEnd : $vehicleInfoOnDateItem->KmsBegin;
-			$response["dateRef"] = $dateRef;
-		}
-		
-		$jourRef--;
-		
-//		$dateMaxi->add(new DateInterval('P1D'));
-
+if( $response['success'] ) {
+	$reqSql = // "SELECT DATE_FORMAT( MIN( BeginDate ) , '%d/%m/%Y' ) AS DateInit, SUM( KmEnd - KmBegin ) AS KmParcourus FROM t_km_parcourt WHERE Trailer = ?";
+		" SELECT EndDate, KmEnd AS km FROM t_km_parcourt WHERE VehicleTransicsId = ? AND EndDate < ? ORDER BY KmEnd desc LIMIT 1";
+	// requete 
+	if( isset( $_POST['dateOr'] ) ) {
+//		$stmt = $dbFlotte->prepare( $reqSql . " AND EndDate < ?" );
+		$stmt = $dbFlotte->prepare( $reqSql );
+		$dateOr = implode( '', array_reverse( explode( '/', $_POST['dateOr'] ) ) );
+		$response["success"] = $stmt->execute( array( $_POST['idVehicule'], $dateOr ) );
+	} else {
+		$stmt = $dbFlotte->prepare( $reqSql );
+		$response["success"] = $stmt->execute( array( $_POST['idVehicule'] ) );
 	}
-	$response["km"] = $resultKm;
+
+	if( $response["success"] ) {
+		/* Fetch all of the values of the first column */
+		$result = $stmt->fetch( );
+		$response["result"] = $result;
+		$response["km"] = $result["km"];
+	} else {
+		$tabErreur = $dbConnect->errorInfo();
+		$response["erreur"] = $tabErreur[2];
+	}
 }
 
-/* Prints out the response object */
 header("Content-Type: application/json");
-echo htmlspecialchars_decode( json_encode( $response ), ENT_QUOTES );
+echo htmlspecialchars_decode( json_encode($response), ENT_QUOTES );
 ?>

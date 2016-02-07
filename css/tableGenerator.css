@@ -1,3 +1,17 @@
+/**
+ * tableGenerator.css
+ * 
+ * @auteur     marc laville
+ * @Copyleft 2016
+ * @date       03/02/2016
+ * @version    0.1
+ * @revision   $0$
+ *
+ * Style de table
+ *
+ * Licensed under the GPL license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
 .CSSTableGenerator {
 	margin:0 12px;
 	padding:0;
@@ -20,7 +34,7 @@ border-collapse: collapse;}
 	border:1px solid #aaa;
 	border-width:0px 1px 1px 0px;
 	padding:2px 8px;
-	font-size:10px;
+	font-size:12px;
 	font-family:Arial;
 	font-weight:normal;
 	color:#000000;
@@ -85,15 +99,22 @@ border-collapse: collapse;}
 	font-size:.9em;
 	padding:0 4px;
 }
+.td-conso:after {
+	content:'l';
+	font-size:.9em;
+	padding:0 4px;
+}
+.td-conso:empty:after ,
 .td-euro:empty:after {
 	display:none;
 }
 
-.td-euro + td + td:after {
+.td-euro-km:after {
 	content:'€/km';
 	font-size:.9em;
 	padding:0 4px;
 }
+
 .td-euro+td:empty:after {
 	display:none;
 }
@@ -128,4 +149,16 @@ td ul, td li {
 
 input:checked+table tbody tr:not(.sousTotal) {
 	display: none;
+}
+
+#table-recapitulatif tbody tr td:nth-child(1) {
+	width:160px;
+}
+
+#table-recapitulatif  td input {
+	width:64px;
+}
+
+#table-recapitulatif .conducteur div{
+	width: 160px;
 }

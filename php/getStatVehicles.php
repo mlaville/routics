@@ -3,13 +3,14 @@
  * getStatVehicles.php
  *
  * @auteur     marc laville
- * @Copyleft 2015
- * @date       30/09/2015
- * @version    0.3
+ * @Copyleft 2015-2016
+ * @date       23/01/2016
+ * @version    0.5
  * @revision   $1$
  * 
  * @date revision 26/12/2015 Ajout de consommations
  * @date revision 10/01/2016 Ajout de l'immatriculation
+ * @date revision 23/01/2016 Calcul des couts mensuels
  *
  * Construit la reponse pour les stat véhicule ou les releves KM
  */
@@ -26,28 +27,37 @@ function calculStat( $mois, $dbFlotte, $listDrivers, $getVehicles ) {
 	$tabVehicule = array();		
 	$coutKmMensuel = loadCoutKmMensuel($dbFlotte, $mois);
 	
-	foreach ($coutKmMensuel['result'] as &$vehicule) {
-		$vehicule['conso'] = array();
-		$tabVehicule[$vehicule['VehicleTransicsId']] = $vehicule;
-	}
-
-	$conso = loadConsoMensuel($dbFlotte, $mois);
-	foreach ($conso['result'] as $consoVehicule) {
-		$consoVehicule['driverName'] = $listDrivers[$consoVehicule['DriverTransicsId']]->FormattedName;
-		$tabVehicule[$consoVehicule['VehicleTransicsId']]['conso'][] = $consoVehicule;
-	}
-
-	foreach ($getVehicles['result'] as &$vehicule) {
-		$idTransics = $vehicule->VehicleTransicsID;
-		$immat = $vehicule->LicensePlate;
-		if( array_key_exists($idTransics, $tabVehicule) ) {
-			$tabVehicule[$idTransics]['immat'] = $immat;
-			$tabVehicule[$idTransics]['VehicleExternalCode'] = $vehicule->VehicleExternalCode;
-			$tabVehicule[$idTransics]['marque'] = $vehicule->TechnicalInfo->ChassisNumber;
-			$tabVehicule[$idTransics]['Category'] = $vehicule->Category . ' - ' . $vehicule->AutoFilter;
+	if($coutKmMensuel['success']) {
+		foreach ($coutKmMensuel['result'] as &$vehicule) {
+			$vehicule['conso'] = array();
+			$tabVehicule[$vehicule['VehicleTransicsId']] = $vehicule;
 		}
-	}
 
+		$conso = loadConsoMensuel($dbFlotte, $mois);
+		foreach ($conso['result'] as $consoVehicule) {
+			if( isset($listDrivers[$consoVehicule['DriverTransicsId']]) ) {
+				$consoVehicule['driverName'] = $listDrivers[$consoVehicule['DriverTransicsId']]->FormattedName;
+			} else {
+				// A faire : gerer l'erreur
+//				echo 'Erreur sur driver ' . $consoVehicule['DriverTransicsId'];				
+			}
+			$tabVehicule[$consoVehicule['VehicleTransicsId']]['conso'][] = $consoVehicule;
+		}
+
+		foreach ($getVehicles['result'] as &$vehicule) {
+			$idTransics = $vehicule->VehicleTransicsID;
+			$immat = $vehicule->LicensePlate;
+			if( array_key_exists($idTransics, $tabVehicule) ) {
+				$tabVehicule[$idTransics]['immat'] = $immat;
+				$tabVehicule[$idTransics]['VehicleExternalCode'] = $vehicule->VehicleExternalCode;
+				$tabVehicule[$idTransics]['marque'] = $vehicule->TechnicalInfo->ChassisNumber;
+				$tabVehicule[$idTransics]['Category'] = $vehicule->Category . ' - ' . $vehicule->AutoFilter;
+			}
+		}
+	} else {
+		echo json_encode($coutKmMensuel['error']);
+	}
+	
 	return $tabVehicule;
 }
 
@@ -68,7 +78,6 @@ if( $response["success"] ){
 						arrayDrivers( $wsdl, $login ),
 						$getVehicles
 					);
-//			$response['getVehicles'] = $getVehicles;
 		}
 	} else {
 		$response = statVehicle($dbFlotte, $_POST);

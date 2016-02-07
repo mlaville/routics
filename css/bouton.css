@@ -120,6 +120,14 @@ input.btn-block[type="submit"], input.btn-block[type="reset"], input.btn-block[t
 	height:34px;
 }
 
+.btn-uploadCA {
+	background-image:url("../img/uploadCA.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	padding-left : 32px;
+	height : 48px;
+}
+
 .btn:disabled {
 	opacity: .5;
 }

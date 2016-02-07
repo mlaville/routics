@@ -4,7 +4,7 @@
  */
  
 function createCAMois( $dbConn, $mois, $tabValues ) {
-	$reqInsertCAMois = "INSERT INTO t_ca_mensuel"
+	$reqInsertCAMois = "INSERT INTO t_ca_mensuel_cam"
 		. " ( mois_cam, num_parc_cam, montant_cam, nb_jour_cam, km_cam, date_import_cam, user_import_cam )"
 		. " VALUES ( ?, ?, ?, ?, ?, NOW(), ? )";
 	$stmt = $dbConn->prepare( $reqInsertCAMois );

@@ -15,12 +15,12 @@ $response = identSoap( $login );
 
 if( $response["success"] ){
 
-	if(isset($_FILES['myFile'])) {
+	if(isset($_FILES['fileCA'])) {
 		$result = array( );
 		
-		$filePath = "../uploads/" . $_FILES['myFile']['name'];
+		$filePath = "../uploads/" . $_FILES['fileCA']['name'];
 		// Example:
-		move_uploaded_file($_FILES['myFile']['tmp_name'], $filePath);
+		move_uploaded_file($_FILES['fileCA']['tmp_name'], $filePath);
 		
 		$xmlstring = file_get_contents( $filePath );
 		$xml = simplexml_load_string( $xmlstring );

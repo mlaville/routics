@@ -4,14 +4,15 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       12/09/2015
- * @version    0.5
- * @revision   $0$
+ * @version    0.5.5
+ * @revision   $4$
  *
  * Formulaire véhicule
  *
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  * @date revision   04/11/2015 Rapport consommation du jour
+ * @date revision   23/01/2016 Modif sur l'affichage des numeros de parc
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -65,16 +66,16 @@ fieldset>div {
 }
 
 .numParc {
-	background-color: #fefefe;
+	background-color: #FEFEFE;
 	border-radius: 8px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset,
-		0 1px rgba(255, 255, 255, 0.2);
-	color: #9e0f09;
-	font-family: 'Arial Black', Arial;
-   font-weight: bolder;
-	width: 42px;
-	padding: 0 2px;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3) inset, 0px 1px rgba(255, 255, 255, 0.2);
+	color: #9E0F09;
+	font-family: "Arial Black",Arial;
+	font-weight: bolder;
+	width: 36px;
+	padding: 2px 4px;
 }
+
 .idTransics {
   background-image: url("../img/transics-icon.png");
   background-position: left top;

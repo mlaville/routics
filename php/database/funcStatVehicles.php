@@ -8,12 +8,16 @@
  * @version    0.1
  * @revision   $0$
  *
- * @date revision   05/10/2015 Cmmentaires
+ * @date revision   05/10/2015 marc laville : Commentaires
+ * @date revision   24/01/2016 marc laville : Calcul des couts mensuels (loadCoutKmMensuel)
+ * @date revision   07/02/2016 marc laville : Recupere le nb de jour travaillés par mois (loadConsoMensuel)
  *
  * Tables
  * - t_vehicle
  * - t_km_parcourt
  * - t_or
+ * - t_autoroute_atr
+ * - t_ca_mensuel_cam
  *
  * Calcul des statistiques de cout kilometrique
  *
@@ -149,7 +153,9 @@ function loadCaMensuel($dbConn, $mois) {
  */
 function loadCoutKmMensuel($dbConn, $mois) {
 
-	$reqSelectCoutKmMensuel = "SELECT"
+	$reqSelectCoutKmMensuel = "SELECT Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam,"
+ 		. " SUM(art_montant) AS MontantAutoroute, SUM(art_km) AS KmAutoroute"
+ 		. " FROM (SELECT"
  		. " Vehicle, parc.VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam"
  		. " FROM (SELECT"
 		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate"
@@ -168,7 +174,10 @@ function loadCoutKmMensuel($dbConn, $mois) {
 		. " GROUP BY or_idVehicle"
 		. " ) OrdreReparation ON or_TransicsVehicleId = VehicleTransicsID"
 		. " ) parc "
-		. " LEFT JOIN t_ca_mensuel ON num_parc_cam = Vehicle AND mois_cam = DATE_Format( BeginDate, '%Y%m' )";
+		. " LEFT JOIN t_ca_mensuel_cam ON num_parc_cam = Vehicle AND mois_cam = DATE_Format( BeginDate, '%Y%m' )"
+		. " ) parc"
+		. " LEFT JOIN  t_autoroute_atr ON atr_numParc = Vehicle AND DATE_Format( atr_dtSortie, '%Y%m' ) = DATE_Format( BeginDate, '%Y%m' )"
+		. " GROUP BY VehicleTransicsId";
 	
 	$stmt = $dbConn->prepare( $reqSelectCoutKmMensuel );
 	$rep = array( "success"=>$stmt->execute( array( $mois, $mois ) ) );
@@ -178,7 +187,7 @@ function loadCoutKmMensuel($dbConn, $mois) {
 	} else {
 		$err = $stmt->errorInfo();
 		$rep["error"] = array( "reason"=>$err[2] );
-		$rep["reqSelectKmMensuel"] = $reqSelectKmMensuel;
+		$rep["reqSelectCoutKmMensuel"] = $reqSelectCoutKmMensuel;
 	}
 
 	return $rep;
@@ -190,7 +199,8 @@ function loadConsoMensuel($dbConn, $mois) {
 
 	$reqSelectConsoMensuel = "SELECT"
 		. " DriverTransicsId, VehicleTransicsId, VehicleID, VehicleImmat, cms_date,"
-		. " SUM(Distance) AS KmParcourus, SUM(Consumption_Total) AS TotalConso, SUM( Duration_Driving ) AS DureeConduite"
+		. " SUM(Distance) AS KmParcourus, SUM(Consumption_Total) AS TotalConso, SUM( Duration_Driving ) AS DureeConduite,"
+		. " COUNT( DISTINCT cms_date ) AS NbJours"
 		. " FROM t_report_consom_csm"
 		. " WHERE DATE_FORMAT(cms_date,'%Y%m')=?"
 		. " GROUP BY VehicleTransicsId, DriverTransicsId";

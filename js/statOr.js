@@ -107,7 +107,7 @@ function listStatVehicule( unTab, objParam ) {
 				ligne.lastChild.setAttribute("colspan", "2");
 			}
 			
-			ajoutCell( lg.CoutKm, [ 'nombre' ] );
+			ajoutCell( lg.CoutKm, [ 'nombre', 'td-euro-km' ] );
 			
 			return ligne;
 		};

@@ -230,9 +230,8 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						
 						formVehicule.transport.textContent = [ data.transport, data.Category ].join(' / ');
 						
-						
 						if( data.conso ){
-							var dummy = data.conso.ConsumptionReportItems.ConsumptionReportItem;
+							dummy = data.conso.ConsumptionReportItems.ConsumptionReportItem;
 							
 							if(dummy) {
 								formVehicule.kmJour.textContent = dummy.Distance.toString().lpad( '0', 5 );
@@ -248,13 +247,16 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 						
 						outputKmVehicule.textContent = data.CurrentKms.toString().lpad( '0', 7 );
 						
-						posVehicule.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
+						if(posVehicule) {
+							posVehicule.changePos( new google.maps.LatLng( +position.Latitude, +position.Longitude ) );
+						}
 						divLocalite.innerHTML = formatPosition(position.DistanceFromLargeCity);
 						divDestination.innerHTML = formatPosition( position.DistanceFromPointOfInterest.toLowerCase() );
-						
-						divRemorque.innerHTML = data.Trailer ? data.Trailer.FormattedName + '<br/>' + data.Trailer.Filter : '';
-						divPilote.innerHTML = data.Driver ? data.Driver.FormattedName.toLowerCase() : '';
-
+/**						
+						if(AppOr.typeVehicule == 0) {
+							divRemorque.innerHTML = data.Trailer ? data.Trailer.FormattedName + '<br/>' + data.Trailer.Filter : '';
+							divPilote.innerHTML = data.Driver ? data.Driver.FormattedName.toLowerCase() : '';
+						}*/
 						outputDateInfo.textContent = (data.dateModif) ? 'Données collectées le ' + formatDate( dateModif ) : '';
 						outputDateInfo.style.color = ( dateModif.diff() > 48 * 3600 * 1000) ? 'red' : 'black';
 						
