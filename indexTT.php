@@ -159,7 +159,7 @@ $dataUrlImg = $param->dataUrlImg;
             <th>
 				<button class="imprimer"></button>
 			</th>
-			<th>Jan</th><th>Fév</th><th>Mar</th><th>Avr</th><th>Mai</th><th>Juin</th><th>Jui</th><th>Aou</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Déc</th>
+			<th>Jan</th><th>Fév</th><th>Mars</th><th>Avr</th><th>Mai</th><th>Juin</th><th>Juil</th><th>Août</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Déc</th>
             <th>Total</th>
 		</tr>
 	</thead>

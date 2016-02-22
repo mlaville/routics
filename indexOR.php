@@ -13,6 +13,7 @@
  * @date revision   08/09/2015 Integration de la page Stat
  * @date revision   30/09/2015 Releves KM
  * @date revision   04/11/2015 Rapport consommation du jour
+ * @date revision   16/02/2016 Recapitulatif des couts mensuels
  *
  * Gestion des ordres de réparation
  * 
@@ -365,12 +366,15 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 	</section>
 
 	<section id="content-recap" class="blocReponse">
+<header>
 		<form name="recapitulatif">
 			<label>mois</label>
 			<input type="text" name="moisRef" >
 			<button class="btn btn-primary" name="calculResult" type="submit">Calculer</button>
 			<div id="ajax-loader"></div>
+			<button class="imprimer" id="btnImpCoutsMensuel"></button>
 		</form>
+</header>
 		<div class="CSSTableGenerator">		
 
 		<table summary="Recapitulatif" id="table-recapitulatif" >
@@ -437,6 +441,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 <!--	<script type="text/javascript" src="./js/releveKm.js"></script>
  	<script type="text/javascript" src="./js/formCaMensuel.js"></script> -->
 	<script type="text/javascript" src="./js/formAutoroute.js"></script>
+	<script type="text/javascript" src="./js/pdfCoutsMensuel.js"></script>
 	<script type="text/javascript" src="./js/recapCouts.js"></script>
 	<script type="text/javascript" src="./js/appOr.js"></script>
   </body>

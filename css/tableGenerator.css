@@ -160,5 +160,14 @@ input:checked+table tbody tr:not(.sousTotal) {
 }
 
 #table-recapitulatif .conducteur div{
-	width: 160px;
+	width: 220px;
+	border-bottom:1px solid #ccc;
+}
+#table-recapitulatif .conducteur div:last-child{
+	border: none;
+}
+#table-recapitulatif .conducteur div span{
+	float: right;
+	font-size: 1.2em;
+	font-weight: bold;
 }

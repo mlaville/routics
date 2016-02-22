@@ -7,7 +7,7 @@
  * @version    0.5
  * @revision   $0$
  *
- * Affichage du rÈcapitulatif des couts de la flotte
+ * Affichage du r√©capitulatif des couts de la flotte
  *
  * @date revision 10/01/2016 Ajout de l'immatriculation
  * @date revision 23/01/2016 Gestion des upload ca et autoroute
@@ -65,7 +65,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 				ajoutLigne = function( lg ) {
 					var ligne = tbody.insertRow(-1),
 						/**
-						 * Ajout une cellule ‡ partir d'un libellÈ et d'une liste de class
+						 * Ajout une cellule √† partir d'un libell√© et d'une liste de class
 						 */
 						ajoutCell = function( lib, classArray ) {
 							var cellule = ligne.insertCell(-1);
@@ -94,7 +94,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 						spanTransics = cellImmat.appendChild( document.createElement('span') ),
 						conso = lg.conso,
 						viewConco = function( detailConso ) {
-							return '<div><span class="idTransics">' + detailConso.DriverTransicsId + '</span>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
+							return `<span class="idTransics">` + detailConso.DriverTransicsId + '</span><div>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
 						}
 						totConso = conso.reduce(function(valeurPrecedente, valeurCourante){
 							valeurPrecedente.listConduct += viewConco(valeurCourante);
@@ -114,7 +114,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 					ajoutCellInput( (lg.montant_cam / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // CA
 					ajoutCell( lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ] );
 					ajoutCell( ( lg.montant_cam / 100 / (lg.KmFin - lg.KmDebut) ).toFixed(5) ); // Terme Km
-					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours TravaillÈs
+					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaill√©s
 					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // CA Jour
 					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
 					ajoutCellInput( totConso.gasoil.toFixed(1), [ 'nombre' ] ); // Gasoil
@@ -127,7 +127,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 				};
 				
 		
-			// retire tous les enfants d'un ÈlÈment
+			// retire tous les enfants d'un √©l√©ment
 			while (tbody.firstChild) {
 			  tbody.removeChild(tbody.firstChild);
 			};
@@ -229,7 +229,15 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 		return fileElement.click();
 	}, false);
 
-	inputCoef.addEventListener('change', recalcTbody )
+	inputCoef.addEventListener('change', recalcTbody );
+	
+	/*
+	 * Affichage du pdf R√©capitulatif des co√ªts
+	 */
+	document.getElementById('btnImpCoutsMensuel').addEventListener( 'click', function() {
+		return domFenetrePdf( pdfCoutsMensuel( document.getElementById('table-recapitulatif') ), 'R√©capitulatif des co√ªts' );
+	});
+
 
 	return this;
 }
