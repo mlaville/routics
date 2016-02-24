@@ -398,7 +398,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<th>Autoroute<button id="chargeAutoroute" class="btn btn-primary">charge</button></th>
 					<th>gasoil</th>
 					<th>conso./100km</th>
-					<th>Coûts<br/>Pneumatique<input type="text" id="coefPneumatique" /></th>
+					<th>Coûts<br/>Pneumatique<input type="text" value="0.01355" id="coefPneumatique" /></th>
 					<th>Coûts Entretien</th>
 					<th>Total coûts</th>
 				</tr>

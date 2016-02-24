@@ -12,12 +12,15 @@
  * @date revision 10/01/2016 Ajout de l'immatriculation
  * @date revision 23/01/2016 Gestion des upload ca et autoroute
  * @date revision 03/02/2016 Calcul des totaux par ligne
+ * @date revision 22/02/2016 Gere le bouton d'edition (btnImpCoutsMensuel)
+ * @date revision 24/02/2016 Gere les misesà jour des CA
  *
  * Appel  ajax:
- * - ../php/getStatVehicles.php
+ * - ./php/getStatVehicles.php
+ * - ./services/parc/updateCA
  *
  * A Faire
- * Mise en forme des dates
+ * - Mise en forme des dates
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -76,14 +79,42 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 								
 							return cellule;
 						},
-						ajoutCellInput = function( lib ) {
+						/**
+						 * Gere les mise à jour saisies dans la colonne CA
+						 */
+						caChange = function( txtInput, ligne ) {
+							var changeCA = {
+									numParc : ligne.querySelector('td .numParc').textContent,
+									montant : txtInput.value,
+									mois : moisRef()
+								},
+								procReponse = function( reponse ) {
+									 txtInput.value = reponse.montant;
+									 return txtInput.style.borderColor = 'green'
+								};
+							
+							txtInput.style.borderColor = 'red';
+							
+							fetch('./services/parc/updateCA', {
+								method: 'post',
+								body: JSON.stringify(changeCA)
+							}).then(function(response) { return response.json().then(procReponse); });
+							
+//							alert(JSON.stringify(changeCA))
+							
+						},
+						ajoutCellInput = function( lib, evtChange ) {
 							var cellule = ligne.insertCell(-1),
 								input = cellule.appendChild( document.createElement('input') );
 								
 							input.setAttribute( 'type', 'text' )
 							input.value = lib || '';
 							
-							input.addEventListener('change', function(e) { return recalcLigne(ligne); });
+							if( evtChange != undefined ) {
+								input.addEventListener('change', function(e) {
+									return evtChange( input, ligne ); 
+								});
+							}
 							
 							return cellule;
 						},
@@ -95,12 +126,13 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 						conso = lg.conso,
 						viewConco = function( detailConso ) {
 							return `<span class="idTransics">` + detailConso.DriverTransicsId + '</span><div>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
-						}
+						},
 						totConso = conso.reduce(function(valeurPrecedente, valeurCourante){
 							valeurPrecedente.listConduct += viewConco(valeurCourante);
 							valeurPrecedente.gasoil += +valeurCourante.TotalConso;
 						  return valeurPrecedente;
 						}, { listConduct : '', gasoil : 0 });
+						
 						
 					spanParc.textContent = lg.Vehicle;
 					spanParc.classList.add('numParc');
@@ -111,13 +143,14 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 
 					ajoutCell( lg.Category ); // Type
 					(ajoutCell( '', [ 'conducteur' ] )).innerHTML = totConso.listConduct; // Chauffeur
-					ajoutCellInput( (lg.montant_cam / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // CA
+					ajoutCellInput( (lg.montant_cam / 100).toFixed(2), caChange ); // CA
+
 					ajoutCell( lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ] );
 					ajoutCell( ( lg.montant_cam / 100 / (lg.KmFin - lg.KmDebut) ).toFixed(5) ); // Terme Km
 					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaillés
 					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // CA Jour
 					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
-					ajoutCellInput( totConso.gasoil.toFixed(1), [ 'nombre' ] ); // Gasoil
+					ajoutCellInput( totConso.gasoil.toFixed(1) ); // Gasoil
 					ajoutCell( '', [ 'nombre' ] ); // Conso 100km
 					ajoutCell( '', [ 'nombre' ] ); // Pneumatiques
 					ajoutCell( (lg.CoutOR / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // Cout Entretien
@@ -137,6 +170,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			recalcTbody();
 			
 			btCalcul.disabled = false;
+			document.getElementById('btnImpCoutsMensuel').disabled = false;
 			document.getElementById('ajax-loader').style.display = 'none';
 			
 			return;
@@ -182,8 +216,8 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			xhr.send(fd);
 		},
 		handleFileCa = function () {
-			
 			formCA.fileSelect.disabled = true;
+			
 			return sendFileCA( fileElement.files[0] );
 		},
 		afficheRecap = function (event){
@@ -191,7 +225,6 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			event.preventDefault();
 			
 			return calcRecap();
-			
 		},
 		calculLigne = function (event){
 			
@@ -234,6 +267,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	/*
 	 * Affichage du pdf Récapitulatif des coûts
 	 */
+	document.getElementById('btnImpCoutsMensuel').disabled = true;
 	document.getElementById('btnImpCoutsMensuel').addEventListener( 'click', function() {
 		return domFenetrePdf( pdfCoutsMensuel( document.getElementById('table-recapitulatif') ), 'Récapitulatif des coûts' );
 	});

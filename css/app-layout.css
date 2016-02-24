@@ -39,7 +39,9 @@ main>section {
 main>section:target {
  display: flex;
 }
-
+main>section header {
+	padding: 6px;
+}
 #leftcolumn {
   background: #d9edf8 none repeat scroll 0 0;
   flex: 0 1 auto;
