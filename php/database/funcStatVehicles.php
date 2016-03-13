@@ -11,6 +11,8 @@
  * @date revision   05/10/2015 marc laville : Commentaires
  * @date revision   24/01/2016 marc laville : Calcul des couts mensuels (loadCoutKmMensuel)
  * @date revision   07/02/2016 marc laville : Recupere le nb de jour travaillés par mois (loadConsoMensuel)
+ * @date revision   07/03/2016 marc laville : Recupere les codes conducteur à partir de la table t_km_parcourt 
+								lorsqu'il ne sont pas présent dans la table t_report_consom_csm
  *
  * Tables
  * - t_vehicle
@@ -154,16 +156,18 @@ function loadCaMensuel($dbConn, $mois) {
 function loadCoutKmMensuel($dbConn, $mois) {
 
 	$reqSelectCoutKmMensuel = "SELECT Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam,"
- 		. " SUM(art_montant) AS MontantAutoroute, SUM(art_km) AS KmAutoroute"
+ 		. " SUM(art_montant) AS MontantAutoroute, SUM(art_km) AS KmAutoroute, idTransicsDrivers"
  		. " FROM (SELECT"
- 		. " Vehicle, parc.VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam"
+ 		. " Vehicle, parc.VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, montant_cam, idTransicsDrivers"
  		. " FROM (SELECT"
-		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate"
+		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, idTransicsDrivers"
 		. " FROM ("
-		. " SELECT"
-		. " Vehicle, VehicleTransicsId,"
-		. " MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance, COUNT( DISTINCT DATE(BeginDate) ) AS NbJours, BeginDate"
-		. " FROM t_km_parcourt WHERE KmBegin < KmEnd AND DATE_Format( BeginDate, '%Y%m' ) = ?"
+		. " SELECT Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, sum(NbJours) AS NbJours, BeginDate,"
+		. " GROUP_CONCAT( CONCAT(DriverTransicsId, '-', NbJours) ) AS idTransicsDrivers"
+		. " FROM (SELECT Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance,"
+		. " COUNT( DISTINCT DATE(BeginDate) ) AS NbJours, BeginDate, DriverTransicsId"
+		. " FROM t_km_parcourt WHERE KmBegin < KmEnd AND DATE_Format( BeginDate, '%Y%m' ) = ?" 
+		. " GROUP BY VehicleTransicsId, DriverTransicsId) pass1"
 		. " GROUP BY VehicleTransicsId"
 		. " ) vehicule"
 		. " LEFT JOIN ("

@@ -18,6 +18,7 @@
  * @date revision   15/12/2015  Affichage des heures de nuit
  * @date revision   18/12/2015  Correction heure nuit -> jour
  * @date revision   02/01/2016  Reecriture estFerie
+ * @date revision   05/03/2016  Libellé du jour dansles entêtes de colonne
  *
  * Affichage du planning client
  * 
@@ -40,25 +41,6 @@ var	modeleTT = null;
 
 var	tabJourOuvres = [],
 	nbJourRestant = 0;
- 
-function estFerie( uneDate ) {
-	var jourMonth = [ uneDate.getMonth(), uneDate.getDate() ],
-		estJourMois = function( tab ) { return tab[0] == jourMonth[0] && tab[1] == jourMonth[1]; },
-		estFerie = [[0,1], [4, 1], [4, 5], [6, 14], [7,15], [10, 1], [10,11], [11,25]].some(estJourMois),
-		estPaqAscPent = function( dt ) {
-			var datePaques = Date.easterDay( dt.getFullYear() ),
-				ctrlJour = function( i ) {
-					datePaques.setDate(datePaques.getDate() + i);
-					
-					return datePaques.getMonth() == jourMonth[0] && datePaques.getDate() == jourMonth[1]
-				};
-			
-			return [1, 38, 11].some(ctrlJour);
-		};
-
-	return estFerie || estPaqAscPent( uneDate );
-}
-
 
 /* 
  * Remplie le Header de la table planning
@@ -70,11 +52,12 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 		monthRef = dateRef.getMonth(),
 		strMonth = [ dateRef.getFullYear(), monthRef + 1 ].join( '-' ),
 		libMois = Date.monthNames()[monthRef],
+		libJours = Date.dayNames(),
 		th1, th;
 	
 	tabJourOuvres = [];
 	
-	tr.innerHTML ='<th>' + libMois + ' ' + dateRef.getFullYear() + '</th>'
+	tr.innerHTML ='<th>' + libMois + '<br />' + dateRef.getFullYear() + '</th>'
 		+ '<th>cumul<br>Tachy</th><th>Maxi</th><th>Reste</th><th>cumul<br>OdB</th><th>Réserve</th>';
 	tr.parentNode.parentNode.setAttribute( 'data-mois', strMonth );
 	th1 = tr.getElementsByTagName('th')[1]; // 2ème élèment, pour les insertBefore
@@ -90,8 +73,8 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 		var jourMois = dateRef.getDate();
 		
 		th = tr.insertBefore( document.createElement('th'), th1 ),
+			divLib = th.appendChild( document.createElement('div') ),
 			divJour = th.appendChild( document.createElement('div') ),
-			divMois = th.appendChild( document.createElement('div') );
 		
 		th.classList.add("day");
 		th.dataset.jour = dateRef.getDay();
@@ -99,8 +82,9 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 			th.classList.add("vacances");
 		};
 		divJour.textContent = jourMois;
-		divMois.textContent = libMois;
-		if( estFerie( dateRef ) ) {
+		divLib.textContent = libJours[dateRef.getDay()];
+
+		if( dateRef.estFerie() ) {
 			th.classList.add("ferie");
 //			tabJourOuvres.push(0);
 			tabJourOuvres.push(null);
@@ -110,24 +94,27 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 	}
 	
 	nbJourOuvre = nbJourRestant = 0;
-	for( var i = 0 ; i < tabJourOuvres.length ; i++ ) {
-		if( Math.abs(tabJourOuvres[i]) > 0 && Math.abs(tabJourOuvres[i]) < 6) {
+	tabJourOuvres.forEach( function(item){
+		if( Math.abs(item) > 0 && Math.abs(item) < 6) {
 			nbJourOuvre++;
 		}
-		if( tabJourOuvres[i] > 0 && Math.abs(tabJourOuvres[i]) < 6) {
+		if( item > 0 && Math.abs(item) < 6) {
 			nbJourRestant++;
 		}
-	}
+	});
 	
-	th = th.nextSibling;
-	th.appendChild( document.createElement('small') ).textContent = ( nbJourOuvre - nbJourRestant ) + " jours";
+	[ nbJourOuvre - nbJourRestant, nbJourOuvre, nbJourRestant ].forEach( function(item){
+		th = th.nextSibling;
+		th.appendChild( document.createElement('small') ).textContent = item + " jours";
+	});
 	
+/*	
 	th = th.nextSibling;
 	th.appendChild( document.createElement('small') ).textContent = nbJourOuvre + " jours";
 	
 	th = th.nextSibling;
 	th.appendChild( document.createElement('small') ).textContent = nbJourRestant + " jours";
-	
+	*/
 	return tabJourOuvres;
 }
 
@@ -182,7 +169,7 @@ function afficheAT( event ) {
 					}
 					gereDepassement( td.parentNode );
 					
-					cibleDrop( td );
+//					cibleDrop( td );
 
 				} else {
 					alert(data.error.reason);
@@ -739,6 +726,7 @@ window.addEventListener('load', function() {
 	});
 	document.getElementById('btnHrNuit').addEventListener( 'click', function() {
 		var eltTable = document.getElementById('table-hrNuit'),
+			sectionHrNuits = eltTable.parentElement,
 			listTr = eltTable.querySelectorAll('tbody tr'),
 			nbConduct = listTr.length,
 			traiteLigneConduct = function( eltTr, data ){
@@ -775,14 +763,17 @@ window.addEventListener('load', function() {
 			}
 		})
 		
-		winManager.domFenetre( 'Récapitulatif des Heures de Nuit', eltTable, null, { x:136, y:120, width:624, height: 460 }, true );
+		winManager.domFenetre( 'Récapitulatif des Heures de Nuit', sectionHrNuits, null, { x:136, y:120, width:624, height: 460 }, true );
 		
-		eltTable.style.display = 'block';
-		eltTable.parentNode.style.overflow = 'scroll';
+		sectionHrNuits.style.display = 'block';
+		sectionHrNuits.parentNode.style.overflow = 'scroll';
 		
 		return;
 	});
-	document.getElementById('table-hrNuit').querySelector('th .imprimer').addEventListener( 'click', function() {
+	monthPickerFactory.createMonthPicker( document.forms['form-hrNuit'].moisRef );
+//	documentforms['form-hrNuit'].moisRef.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
+
+	document.getElementById('btnImpHrNuit').addEventListener( 'click', function() {
 		alert('imprimer');
 		return;
 	});

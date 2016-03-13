@@ -11,6 +11,8 @@
  * @date revision 26/12/2015 Ajout de consommations
  * @date revision 10/01/2016 Ajout de l'immatriculation
  * @date revision 23/01/2016 Calcul des couts mensuels
+ * @date revision 07/03/2016 marc laville : Recupere les codes conducteur à partir de la table t_km_parcourt 
+ *								lorsqu'il ne sont pas présent dans la table t_report_consom_csm
  *
  * Construit la reponse pour les stat véhicule ou les releves KM
  */
@@ -42,6 +44,23 @@ function calculStat( $mois, $dbFlotte, $listDrivers, $getVehicles ) {
 //				echo 'Erreur sur driver ' . $consoVehicule['DriverTransicsId'];				
 			}
 			$tabVehicule[$consoVehicule['VehicleTransicsId']]['conso'][] = $consoVehicule;
+		}
+
+	/*
+	 * Recupere les codes conducteur à partir de la table t_km_parcourt 
+	 *	lorsqu'il ne sont pas présent dans la table t_report_consom_csm
+	 */
+		foreach ($tabVehicule as &$detailVehicule) {
+			if( count($detailVehicule['conso']) == 0 ) {
+				foreach( explode(',', $detailVehicule['idTransicsDrivers']) as $idDriver) {
+					$tabDriver = explode( '-', $idDriver );
+					$detailVehicule['conso'][] = array(
+						'DriverTransicsId'=>$tabDriver[0],
+						'driverName'=>isset($listDrivers[$tabDriver[0]]) ? $listDrivers[$tabDriver[0]]->FormattedName : '???',
+						'NbJours'=>$tabDriver[1]
+					);				
+				}
+			}
 		}
 
 		foreach ($getVehicles['result'] as &$vehicule) {

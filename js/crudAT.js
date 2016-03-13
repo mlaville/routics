@@ -2,12 +2,12 @@
  * crudAT.js
  * 
  * @auteur     marc laville
- * @Copyleft 2013
+ * @Copyleft 2013-2016
  * @date       29/12/2013
  * @version    0.5
  * @revision   $0$
  *
- * @date revision   12/10/2013 Chargement asynchrone des temps OdB
+ * @date revision   08/03/2016 Debug affiche d'un type at dans le form
  *
  * Gestion des types d'arret de travail
  * 
@@ -42,7 +42,7 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 			var s = val % 60,
 				m = (( val - s ) / 60) % 60,
 				h = ( val - ( 60 * m ) - s ) / 3600,
-				tab = [ h, m, s ].map( function(item) { return ("0" + item).slice(-2) } );
+				tab = [ h, m, s ].map( function(item) { return ('0' + item).slice(-2) } );
 
 			tab.pop();
 
@@ -82,6 +82,7 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 				formAT.idTypeAt.value = elmt.IdTypeAt;
 				formAT.inputColor.value = elmt.tpa_couleur;
 				formAT.inputLibelle.value = elmt.tpa_libelle;
+				formAT.inputCode.value = elmt.tpa_code;
 
 				formAT.inputDuree.value = sec2time(elmt.tpa_duree * 60, ':');
 			}
@@ -115,7 +116,7 @@ var gridAT = (function ( eltTable, ulTypeAT ) {
 		/**
 		 * vueLigneAT() construction du node TR représentant l'item
 		 *
-		 * @param <Object> item : nb minute
+		 * @param <Object> item : 
 		 * @return <node> trVue
 		 */
 		vueLigneAT = function ( item ) {

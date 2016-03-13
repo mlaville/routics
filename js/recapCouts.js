@@ -13,39 +13,49 @@
  * @date revision 23/01/2016 Gestion des upload ca et autoroute
  * @date revision 03/02/2016 Calcul des totaux par ligne
  * @date revision 22/02/2016 Gere le bouton d'edition (btnImpCoutsMensuel)
- * @date revision 24/02/2016 Gere les misesà jour des CA
+ * @date revision 24/02/2016 Gere les mises à jour des CA
+ * @date revision 01/03/2016 use strict
  *
  * Appel  ajax:
  * - ./php/getStatVehicles.php
  * - ./services/parc/updateCA
  *
  * A Faire
- * - Mise en forme des dates
+ * - Ligne des totaux
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
 ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
+	'use strict';
+	
 	var btCalcul = formRecap.calculResult,
+		btnImpCoutsMensuel = document.getElementById('btnImpCoutsMensuel'),
 		moisRef = function() {
 			var arrMois = formRecap.moisRef.value.split('/');
+
+			return arrMois[1] + arrMois[0].lpad('0', 2);
+		},
+		libMoisRef = function() {
+			var arrMois = formRecap.moisRef.value.split('/'),
+				monthNames = Date.monthNames();
 			
-			return arrMois[1] + ( '0' + arrMois[0] ).slice(-2);
+			return [ monthNames[ arrMois[0] - 1 ], arrMois[1] ].join(' ');
 		},
 		fileElement = formCA.fileElement,
 		xhrRecapCout = new XMLHttpRequest(),
 		recalcLigne = function( trTract, coef ) {
 			var listTd = trTract.getElementsByTagName('td'),
-				kmParcourt = Number(listTd[5].textContent);
+				kmParcourt = Number(listTd[5].textContent),
 				coutPneu = (coef > 0) ? coef * kmParcourt : 0,
-				tot = /* Number(listTd[9].textContent) + */ coutPneu + Number(listTd[13].textContent);
+				tot = coutPneu + Number(listTd[13].textContent);
 			
 			listTd[8].textContent = ( listTd[4].firstChild.value / listTd[7].textContent).toFixed(2);
 			listTd[11].textContent = ( 100 * listTd[10].firstChild.value / kmParcourt ).toFixed(2);
-			listTd[12].textContent = (coutPneu > 0) ? coutPneu.toFixed(2) : '';
+			listTd[12].textContent = (coutPneu > 0) ? coutPneu.toFixed(2) : ''; // cout pneumatique
 			listTd[14].textContent = tot.toFixed(2);
-			
+
 			return;
 		},
 		recalcTbody = function( ) {
@@ -74,8 +84,8 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 							var cellule = ligne.insertCell(-1);
 							
 							cellule.textContent = lib || '';
-							( classArray || [] ).forEach( function( item ) { return cellule.classList.add(item); } );
-//							( classArray || [] ).forEach( item => cellule.classList.add(item); );
+//							( classArray || [] ).forEach( function( item ) { return cellule.classList.add(item); } );
+							( classArray || [] ).forEach( (item) => { return cellule.classList.add(item); } );
 								
 							return cellule;
 						},
@@ -91,17 +101,21 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 								procReponse = function( reponse ) {
 									 txtInput.value = reponse.montant;
 									 return txtInput.style.borderColor = 'green'
-								};
+								},
+								uri = './services/parc/updateCA',
+								xhrCA = new XMLHttpRequest();
+	
+							xhrCA.open("POST", uri, true);
+							xhrCA.onreadystatechange = function() {
+								if (xhrCA.readyState == 4 && xhrCA.status == 200) {
+									// Handle response.
+									procReponse(JSON.parse(xhrCA.responseText));
+								}
+							};
 							
 							txtInput.style.borderColor = 'red';
 							
-							fetch('./services/parc/updateCA', {
-								method: 'post',
-								body: JSON.stringify(changeCA)
-							}).then(function(response) { return response.json().then(procReponse); });
-							
-//							alert(JSON.stringify(changeCA))
-							
+							return xhrCA.send(JSON.stringify(changeCA));						
 						},
 						ajoutCellInput = function( lib, evtChange ) {
 							var cellule = ligne.insertCell(-1),
@@ -170,7 +184,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			recalcTbody();
 			
 			btCalcul.disabled = false;
-			document.getElementById('btnImpCoutsMensuel').disabled = false;
+			btnImpCoutsMensuel.disabled = false;
 			document.getElementById('ajax-loader').style.display = 'none';
 			
 			return;
@@ -267,9 +281,9 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	/*
 	 * Affichage du pdf Récapitulatif des coûts
 	 */
-	document.getElementById('btnImpCoutsMensuel').disabled = true;
-	document.getElementById('btnImpCoutsMensuel').addEventListener( 'click', function() {
-		return domFenetrePdf( pdfCoutsMensuel( document.getElementById('table-recapitulatif') ), 'Récapitulatif des coûts' );
+	btnImpCoutsMensuel.disabled = true;
+	btnImpCoutsMensuel.addEventListener( 'click', function() {
+		return domFenetrePdf( pdfCoutsMensuel( tableResult, 'Récapitulatif des coûts ' + libMoisRef().toLowerCase() ), 'Récapitulatif des coûts' );
 	});
 
 

@@ -17,12 +17,15 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
+include '../../php/ident.inc.php';
+
+include '../../php/soap/configSoap.inc.php';
+
 require_once '../../php/config.inc.php'; // Database setting constants [DB_HOST, DB_NAME, DB_USERNAME, DB_PASSWORD]
 require_once '../Rest.inc.php';
-	
+
 class API extends REST {
 
-//	public $data = "";
 	private $db = NULL;
 	
 	public function __construct(){
@@ -65,16 +68,19 @@ class API extends REST {
 		if($this->get_request_method() != "POST"){
 			$this->response('',406);
 		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+		
 		$param = json_decode(file_get_contents("php://input"),true);
 
 		$query = "REPLACE INTO t_ca_mensuel_cam"
 			. " ( mois_cam, num_parc_cam, montant_cam, nb_jour_cam, km_cam, date_import_cam, user_import_cam )"
 			. " VALUES ( ?, ?, ?, ?, ?, NOW(), ? )";
-				
-					
-		$user = isset( $_SESSION['ident'] ) ? $_SESSION['ident'] : '???';
 
-		try {
+			try {
 		  $stmt = $this->db->prepare($query);
 		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'], $param['montant'] * 100, 0, 0, $user ) );
 
@@ -96,6 +102,11 @@ class API extends REST {
 	}
 }
 
-// Initiiate Library
-$api = new API;
-$api->processApi();
+//$rep = identSoap( $login );
+//if( $rep["success"] ){
+	// Initiate Library
+	$api = new API;
+	$api->processApi();
+//} else {
+//	echo json_encode($rep);
+//}

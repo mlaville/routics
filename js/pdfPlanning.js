@@ -83,9 +83,10 @@ function pdfPlanning( uneTable, tabAt ) {
 			doc.setFontType("bold");
 			doc.setFontSize(10);
 			doc.setFillColor(127,127,255);
-			doc.rect(marge, h - delta, lgCol1, 6, 'FD'); // filled square with red borders
-//			doc.rect(marge, h - delta, lgCol1, 6); 
-			doc.text(marge+1, h, unEltTr.firstElementChild.textContent);
+			doc.rect(marge, h - delta, lgCol1, 6, 'FD');
+//			doc.rect(marge, h - delta, lgCol1, 6);
+			
+			doc.text(marge+1, h, unEltTr.firstElementChild.firstChild.textContent + ' ' + unEltTr.firstElementChild.lastChild.textContent ); // mois année
 			
 			gauche = marge + lgCol1;
 			
@@ -111,7 +112,7 @@ function pdfPlanning( uneTable, tabAt ) {
 					doc.setFontSize(10);
 				}
 			
-				doc.text(gauche + .5 , h, cell.firstElementChild.textContent);
+				doc.text(gauche + .5 , h, cell.lastElementChild.textContent); // Jour du mois
 				gauche += largCell;
 			}
 			doc.setDrawColor(200,0,0);

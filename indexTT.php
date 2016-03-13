@@ -37,7 +37,8 @@ $user = isset($_SESSION['firstname'], $_SESSION['lastname']) ? $_SESSION['firstn
 $param = json_decode( file_get_contents( './custom/param.json') );
 
 $demo = isset($param->demo) ? $param->demo : false;
-$ajaxDrivers = $demo ? './response/getDrivers.json' : './php/getDrivers.php';
+//$ajaxDrivers = $demo ? './response/getDrivers.json' : './php/getDrivers.php';
+$ajaxDrivers = './response/getDrivers.json';
 
 $dataUrlImg = $param->dataUrlImg;
 
@@ -54,6 +55,7 @@ $dataUrlImg = $param->dataUrlImg;
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
 
+	<link rel="stylesheet" type="text/css" href="http://lib.polinux.fr/js/month-picker/monthPicker.css" />	
 	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
 	<link rel="stylesheet" type="text/css" href="./css/table-typeAT.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/ajaxLoader.css" />
@@ -153,21 +155,29 @@ $dataUrlImg = $param->dataUrlImg;
 	</tfoot>
     <tbody></tbody>
 </table>
-<table id="table-hrNuit" style="display:none">
-	<thead>
-		<tr>
-            <th>
-				<button class="imprimer"></button>
-			</th>
-			<th>Jan</th><th>Fév</th><th>Mars</th><th>Avr</th><th>Mai</th><th>Juin</th><th>Juil</th><th>Août</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Déc</th>
-            <th>Total</th>
-		</tr>
-	</thead>
-	<tfoot>
-	</tfoot>
-    <tbody></tbody>
-</table>
-	<script type="text/javascript" src="http://lib.polinux.net/js/js-util.js"></script>
+<section id="section-hrNuit" style="display:none">
+	<form name="form-hrNuit">
+		<label>mois</label>
+		<input type="text" name="moisRef" >
+		<button class="btn btn-primary" name="calculResult" type="submit">Calculer</button>
+		<div id="ajax-loader"></div>
+		<button class="imprimer" id="btnImpHrNuit"></button>
+	</form>
+	<table id="table-hrNuit">
+	  <caption>Heures de nuit</caption>
+		<thead>
+			<tr>
+				<th>Jan</th><th>Fév</th><th>Mars</th><th>Avr</th><th>Mai</th><th>Juin</th><th>Juil</th><th>Août</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Déc</th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tfoot>
+		</tfoot>
+		<tbody></tbody>
+	</table>
+</section>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>
+	<script type="text/javascript" src="http://lib.polinux.fr/js/month-picker/monthPicker.js"></script>
 	<script type="text/javascript" src="./js/panel.js"></script>
 	<script type="text/javascript" src="./js/crudAT.js"></script>
 	<script type="text/javascript" src="./js/tt.js"></script>
