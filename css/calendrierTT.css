@@ -199,10 +199,28 @@ td ul, td li {
 	padding:0;
 	list-style-type:none;
 }
-th:first-child{
+
+th:first-child {
 	border-width:0px 0px 1px 0px;
-    font-size: 14px;
-}}
+	color: #fff;
+	text-align: center;
+	padding-top: 8px;
+}
+th:first-child .month {
+	background-color: #428bca;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	text-align: center;
+	font-size: 1.6em;
+	margin-bottom: 0px;
+	font-weight: normal;
+}
+th:first-child .year {
+	background-color: #428bca;
+	text-align: center;
+	font-size: 1.2em;
+}
+
 th:last-child{
 	border-width:0px 0px 1px 1px;
 }
@@ -249,4 +267,11 @@ td.rouge {
 	font-weight: bold;
 	padding-left: 6px;
 	padding-right: 6px;
+}
+#section-hrNuit {
+	display: none;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 100%;
 }

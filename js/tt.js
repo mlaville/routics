@@ -18,7 +18,8 @@
  * @date revision   15/12/2015  Affichage des heures de nuit
  * @date revision   18/12/2015  Correction heure nuit -> jour
  * @date revision   02/01/2016  Reecriture estFerie
- * @date revision   05/03/2016  Libellé du jour dansles entêtes de colonne
+ * @date revision   05/03/2016  Libellé du jour dans les entêtes de colonne du planning
+ * @date revision   20/03/2016  planning des heures de nuit
  *
  * Affichage du planning client
  * 
@@ -28,6 +29,7 @@
  * - crudArretTravail.php
  * - crudDriver.php
  * -./php/joursVacancesMois.php
+ * -./services/stat/
  *
  * A Faire
  * - gerer le rechargement quand il y a un erreur de timeout au chargement des temps de travail
@@ -36,7 +38,8 @@
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
  */
- 
+
+'use strict';
 var	modeleTT = null;
 
 var	tabJourOuvres = [],
@@ -53,11 +56,13 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 		strMonth = [ dateRef.getFullYear(), monthRef + 1 ].join( '-' ),
 		libMois = Date.monthNames()[monthRef],
 		libJours = Date.dayNames(),
-		th1, th;
+		th1, th,
+		divLib, divJour,
+		nbJourOuvre;
 	
 	tabJourOuvres = [];
 	
-	tr.innerHTML ='<th>' + libMois + '<br />' + dateRef.getFullYear() + '</th>'
+	tr.innerHTML ='<th><div class="month">' + libMois + '</div><div class="year">' + dateRef.getFullYear() + '</div></th>'
 		+ '<th>cumul<br>Tachy</th><th>Maxi</th><th>Reste</th><th>cumul<br>OdB</th><th>Réserve</th>';
 	tr.parentNode.parentNode.setAttribute( 'data-mois', strMonth );
 	th1 = tr.getElementsByTagName('th')[1]; // 2ème élèment, pour les insertBefore
@@ -108,13 +113,6 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 		th.appendChild( document.createElement('small') ).textContent = item + " jours";
 	});
 	
-/*	
-	th = th.nextSibling;
-	th.appendChild( document.createElement('small') ).textContent = nbJourOuvre + " jours";
-	
-	th = th.nextSibling;
-	th.appendChild( document.createElement('small') ).textContent = nbJourRestant + " jours";
-	*/
 	return tabJourOuvres;
 }
 
@@ -197,7 +195,7 @@ var defautTTJour = 10;
 
 function gereDepassement( tr ) {
 	var ds = tr.dataset,
-		depassement = ( parseInt(ds.cumul_tt_mois) + defautTTJour * 3600 * ( nbJourRestant - parseInt(ds.cumul_at) ) ) - parseInt(ds.quota_secondes);
+		depassement = ( parseInt(ds.cumul_tt_mois) + defautTTJour * 3600 * ( nbJourRestant - parseInt(ds.cumul_at) ) ) - parseInt(ds.quota_secondes),
 		nodesDay = tr.querySelectorAll('td.day'),
 		nbJour = nodesDay.length,
 		tdAlert = nodesDay.item( nbJour - 1 ),
@@ -226,7 +224,7 @@ function gereDepassement( tr ) {
 	}
 
 	for( i = 0 ; i < nbJour ; i++ ) {
-		nodesDay.item( i ).classList.remove( "rouge" );
+		nodesDay.item( i ).classList.remove( 'rouge' );
 	}
 
 	if( depassement > 0 ) {
@@ -549,7 +547,8 @@ function placeActivite( tabActi, trConduct ) {
 		cumul_actiMois = 0,
 		span_cumul = tdCumul.appendChild( document.createElement('span') ),
 		ulCumul = tdCumul.appendChild( document.createElement('ul') ),
-		dtJour = new Date();
+		dtJour = new Date(),
+		acti;
 	
 	for (acti in tabActi) {
 		var tj = acti.split('-'),
@@ -697,6 +696,123 @@ function cancel(e) {
   return false;
 }
 
+function affichePlagesNuit(eltTable, unForm) {
+	var // eltTable = document.getElementById('table-hrNuit'),
+		sectionHrNuits = eltTable.parentElement,
+		listTr = eltTable.querySelectorAll('tbody tr'),
+		listCellsHead = eltTable.querySelectorAll('thead tr th'),
+		nbConduct = listTr.length,
+		traiteLigneConduct = function( eltTr, data, arrIdMois ){
+			var listCell = eltTr.querySelectorAll('td'),
+				idConduct = listCell[0].dataset.idtransics,
+				dataConduct = data[idConduct],
+				nbJours,
+				dummy, totalHr,
+				totalJour;
+				
+			if(dataConduct != undefined) {
+				totalHr = 0;
+
+				arrIdMois.forEach(function(item, ind){
+					dummy = dataConduct[ item ],
+					nbJours = (dummy != undefined) ? +dummy.nbJours : 0;
+				
+					listCell[ind + 1].textContent = nbJours > 0 ? nbJours : '';
+					totalHr += nbJours;
+					
+					return;
+				});
+				listCell[13].textContent = totalHr;
+			}
+		},
+		afficheVue = function(data, tabAnMois) {
+			var arrHeader = function(dateRef){
+					var arr = [],
+						indMois, moisCourant;
+						
+					for(indMois = 0 ; indMois < 12 ; indMois++ ) {
+						moisCourant = dateRef.getMonth() + 1;
+						arr.push( [ dateRef.getFullYear(), ('0' + moisCourant).slice(-2) ].join('-') ) ;
+						listCellsHead[ indMois + 1 ].textContent = [ ('0' + moisCourant).slice(-2), dateRef.getFullYear() ].join('-');
+						dateRef.setMonth(moisCourant);
+					}
+					
+					return arr;
+				},
+				arr = arrHeader( new Date(tabAnMois[1], tabAnMois[0] - 1, 1) ),
+				i;
+				
+			modeleTT.forEach( function(item){
+				item.hrNuit =  data[item.PersonTransicsID];
+			});
+
+			document.getElementById('pdfHrsNuits').data = pdfJoursPenibilite( modeleTT, arrHeader( new Date(tabAnMois[1], tabAnMois[0] - 1, 1) ) );
+			
+			for( i = 0 ; i < nbConduct ; i++ ) {
+				traiteLigneConduct( listTr[i], data, arr );
+			}
+			
+		},
+		chargeModele = function() {
+			var uri = './services/stat/heuresNuit',
+				xhrHrNuit = new XMLHttpRequest(),
+				splitMois = unForm.moisRef.value.toIntArray(),
+				strMois = splitMois[1] + ('0' + splitMois[0]).slice(-2);
+				
+			xhrHrNuit.open('GET', uri + '?mois=' + strMois, true);
+			xhrHrNuit.onreadystatechange = function () {
+			  var DONE = 4, // readyState 4 means the request is done.
+				  OK = 200, // status 200 is a successful return.
+				  responseObject = null;
+			  switch( xhrHrNuit.readyState ) {
+				case 1 :
+//						loaderStyle.backgroundColor = 'red';
+					break;
+				case 2 :
+//						loaderStyle.backgroundColor = '#FFA500';
+					break;
+				case 3 :
+//						loaderStyle.backgroundColor = '#00A5ff';
+					break;
+				case DONE :
+//						loaderStyle.backgroundColor = 'blue';
+//						loaderStyle.display = 'none';
+					if(xhrHrNuit.status === OK) {
+						try {
+							responseObject = JSON.parse(xhrHrNuit.responseText);
+							
+						} catch (e) {
+						  alert("Parsing error:", e); 
+						}
+						afficheVue(responseObject, splitMois);
+					} else {
+					  alert('Error: ' + xhrHrNuit.status); // An error occurred during the request.
+					};
+					document.getElementById('ajax-loader').style.display = 'none';
+					break;
+					
+				default: ;
+			  }
+			};	
+			
+			document.getElementById('ajax-loader').style.display = 'block';
+			
+			return xhrHrNuit.send();
+		}
+
+	winManager.domFenetre( 'Récapitulatif des Heures de Nuit', sectionHrNuits, null, { x:136, y:120, width:624, height: 460 }, true );
+	
+	sectionHrNuits.style.display = 'block';
+	sectionHrNuits.parentNode.style.overflow = 'scroll';
+	
+	unForm.addEventListener( 'submit', function(e) {
+		e.preventDefault();
+		
+		return chargeModele();
+	});
+	
+	return;
+}
 /*
  * Demarrage de l'application
  */
@@ -724,59 +840,14 @@ window.addEventListener('load', function() {
 		
 		return;
 	});
-	document.getElementById('btnHrNuit').addEventListener( 'click', function() {
-		var eltTable = document.getElementById('table-hrNuit'),
-			sectionHrNuits = eltTable.parentElement,
-			listTr = eltTable.querySelectorAll('tbody tr'),
-			nbConduct = listTr.length,
-			traiteLigneConduct = function( eltTr, data ){
-				var listCell = eltTr.querySelectorAll('td'),
-					idConduct = listCell[0].dataset.idtransics,
-					dataConduct = data[idConduct],
-					cell,
-					dummy, j, totalHr,
-					totalJour;
-					
-				if(dataConduct != undefined) {
-					totalHr = 0;
-					
-					for( j = 1 ; j < 13 ; j++ ) {
-						cell = listCell[j];
-						dummy = dataConduct[('0' + j).slice(-2)];
-						
-						if(dummy != undefined) {
-//							cell.textContent = dummy.Duree;
-//							totalHr += +dummy.DureeSec;
-							cell.textContent = dummy.nbJours;
-							totalHr += +dummy.nbJours;
-						}
-					}
-					listCell[13].textContent = totalHr;
-				}
-			};
-		
-		$.get("./php/getHeuresNuit.php", function(data){
-			var i;
-			
-			for( i = 0 ; i < nbConduct ; i++ ) {
-				traiteLigneConduct( listTr[i], data );
-			}
-		})
-		
-		winManager.domFenetre( 'Récapitulatif des Heures de Nuit', sectionHrNuits, null, { x:136, y:120, width:624, height: 460 }, true );
-		
-		sectionHrNuits.style.display = 'block';
-		sectionHrNuits.parentNode.style.overflow = 'scroll';
-		
-		return;
+	
+	document.getElementById('btnHrNuit').addEventListener('click', function() {
+		return affichePlagesNuit(document.getElementById('table-hrNuit'), document.forms['form-hrNuit']); 
 	});
+	
 	monthPickerFactory.createMonthPicker( document.forms['form-hrNuit'].moisRef );
 //	documentforms['form-hrNuit'].moisRef.value = [ ( '0' + ( dateRef.getMonth() + 1 ) ).slice(-2), dateRef.getFullYear() ].join('/');
 
-	document.getElementById('btnImpHrNuit').addEventListener( 'click', function() {
-		alert('imprimer');
-		return;
-	});
 
 	/*
 	 * Affichage du pdf planning

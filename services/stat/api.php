@@ -4,14 +4,14 @@
  * 
  * @auteur     marc laville
  * @Copyleft 2016
- * @date       22/02/2016
+ * @date       15/03/2016
  * @version    0.1
  * @revision   $0$
  *
- * @date revision   15/03/2016  Controle l'identification Soap
+ * @date revision   15/03/2016  
  *
- * REST api de gestion du parc
- * - CRUD CA mensuel
+ * REST api de stat conduite
+ * - remontée des heures de nuit ( pénibilité )
  *
  *
  * Licensed under the GPL license:
@@ -61,37 +61,51 @@ class API extends REST {
 		if( (int)method_exists($this, $func) > 0 )
 			$this->$func();
 		else
-			$this->response('',404); // If the method not exist with in this class "Page not found".
+			$this->response('', 404); // If the method not exist with in this class "Page not found".
 	}
 				
-	private function updateCA(){
-		if($this->get_request_method() != "POST"){
+	private function heuresNuit(){
+		if($this->get_request_method() != "GET"){
 			$this->response('',406);
 		}
-		if(!isset( $_SESSION['ident'] )){
-			$this->response('',401);
-		} else {
-			$user = $_SESSION['ident'];
-		}
+
+		$moisDeb = $_GET['mois'];
+		$timezone = new DateTimeZone('Europe/Paris'); 
+		$dateRef = DateTime::createFromFormat('Ymd', '201501' . '01', $timezone);
+		$dateRef->add(new DateInterval('P1Y'));
+		$moisFin = $dateRef->format('Ym');
 		
-		$param = json_decode(file_get_contents("php://input"),true);
+		$query = "SELECT"
+			. " DriverTransicsId, DATE_FORMAT(BeginDate, '%m') AS Mois, DATE_FORMAT(BeginDate, '%Y-%m') AS AnMois,"
+			. " COUNT(DISTINCT date(EndDate)) AS nbJours,"
+			. " SUM( TIME_TO_SEC(TIMEDIFF(LEAST( EndDate, DATE(EndDate) + INTERVAL 5 HOUR ), BeginDate)) ) AS DureeSec,"
+			. " SEC_TO_TIME( SUM( TIME_TO_SEC(TIMEDIFF(LEAST( EndDate, DATE(EndDate) + INTERVAL 5 HOUR ), BeginDate)) ) ) AS Duree"
+			. " FROM t_km_parcourt"
+			. " WHERE TIME(BeginDate) < '04:00:00' AND BeginDate < EndDate"
+			. " AND DATE_FORMAT(BeginDate, '%Y%m') BETWEEN ? AND ?"
+			. " GROUP BY DriverTransicsId, DATE_FORMAT(BeginDate, '%Y-%m')"
+			. " ORDER BY DriverTransicsId, DATE_FORMAT(BeginDate, '%Y-%m')";
 
-		$query = "REPLACE INTO t_ca_mensuel_cam"
-			. " ( mois_cam, num_parc_cam, montant_cam, nb_jour_cam, km_cam, date_import_cam, user_import_cam )"
-			. " VALUES ( ?, ?, ?, ?, ?, NOW(), ? )";
-
-			try {
+		try {
 		  $stmt = $this->db->prepare($query);
-		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'], $param['montant'] * 100, 0, 0, $user ) );
+		  $response["success"] = $stmt->execute( array( $moisDeb, $moisFin ) );
 
-		  if( $response["result"] ){
-			$response["status"] = "success";
-			$response["message"] = "Données Modifiées";
-			$response["montant"] = $param['montant'];
-		 } else {
-			$response["status"] = "warning";
-			$response["message"] = "No data found.";
-		 }
+		  if( $response["success"] ) {
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			$response = array();
+
+			foreach ($result as $hrMois) {
+				$clef = $hrMois['DriverTransicsId'];
+				
+				if( !isset($response[$clef]) ) {
+					$response[$clef] = array();
+				}
+				
+				$response[$clef][$hrMois['AnMois']] = array( "nbJours"=>$hrMois['nbJours'], "DureeSec"=>$hrMois['DureeSec'], "Duree"=>$hrMois['Duree'] );
+			}
+
+		  }
 
 		 } catch(PDOException $e) {
 			$response["status"] = "error";
