@@ -64,6 +64,29 @@ class API extends REST {
 			$this->response('',404); // If the method not exist with in this class "Page not found".
 	}
 				
+	private function getIdModif( $unNumParc, $moisModif ){
+		$query = "SELECT * FROM t_modif_couts_mdf WHERE mdf_numParc = ? AND mdf_mois = ?";
+		
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'] ) );
+
+		  if( $response["result"] ){
+			$response["status"] = "success";
+			$response["message"] = "Données Modifiées";
+			$response["montant"] = $param['montant'];
+		 } else {
+			$response["status"] = "warning";
+			$response["message"] = "No data found.";
+		 }
+
+		} catch(PDOException $e) {
+			$response["status"] = "error";
+			$response["message"] = 'Select Failed: ' . $e->getMessage();
+			$response["result"] = null;
+		}
+	}
+	
 	private function updateCA(){
 		if($this->get_request_method() != "POST"){
 			$this->response('',406);
@@ -80,7 +103,7 @@ class API extends REST {
 			. " ( mois_cam, num_parc_cam, montant_cam, nb_jour_cam, km_cam, date_import_cam, user_import_cam )"
 			. " VALUES ( ?, ?, ?, ?, ?, NOW(), ? )";
 
-			try {
+		try {
 		  $stmt = $this->db->prepare($query);
 		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'], $param['montant'] * 100, 0, 0, $user ) );
 
@@ -93,7 +116,7 @@ class API extends REST {
 			$response["message"] = "No data found.";
 		 }
 
-		 } catch(PDOException $e) {
+		} catch(PDOException $e) {
 			$response["status"] = "error";
 			$response["message"] = 'Select Failed: ' . $e->getMessage();
 			$response["result"] = null;

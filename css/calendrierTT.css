@@ -5,11 +5,12 @@
  * @Copyleft 2014-2016
  * @date       01-07-2014
  * @version    0.2
- * @revision   $0$
+ * @revision   $4$
  *
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
  * @date revision   15/12/2015  tableau des heures de nuit
  * @date revision   05/03/2016  Libellé des jours sur le calendrier
+ * @date revision   25/03/2016  Affichage du moisde l'année dans l'entête du planning
  *
  * Affichage du planning 
  * 
@@ -201,25 +202,23 @@ td ul, td li {
 }
 
 th:first-child {
-	border-width:0px 0px 1px 0px;
 	color: #fff;
 	text-align: center;
-	padding-top: 8px;
-}
-th:first-child .month {
-	background-color: #428bca;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
-	text-align: center;
+	border-top: 1px dashed rgba(0,0,0,0.30);
+	box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.4);
+	background: rgb(79,133,187);
+	background: linear-gradient(to bottom, #4f85bb 0%, #245a8c 100%);
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.40);
 	font-size: 1.6em;
-	margin-bottom: 0px;
+}
+th:first-child .month {
 	font-weight: normal;
+  text-transform: capitalize;
 }
 th:first-child .year {
-	background-color: #428bca;
-	text-align: center;
-	font-size: 1.2em;
-}
+	font-size: .7em;}
 
 th:last-child{
 	border-width:0px 0px 1px 1px;
@@ -255,9 +254,6 @@ td.rouge {
     background-color: green;
 }
 
-#table-hrNuit .contenuFenetre {
-	overflow: scroll;
-}
 #table-hrNuit td:first-child {
 	text-transform: capitalize;
 	font-weight: bold;

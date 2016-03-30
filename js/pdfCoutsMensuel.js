@@ -39,14 +39,10 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 		lgCol = 18,
 		lgCol1 = 28,
 		gauche = marge + lgCol1,
-		largJour = 6,
 		dateEdition = new Date,
 		strMois = 'Edité le ' 
-			+ Date.dayNames()[dateEdition.getDay()] + ' '
-			+ dateEdition.getDate() + ' '
-			+ Date.monthNames()[ dateEdition.getMonth() ] + ' '
-			+ dateEdition.getFullYear() + ' à '
-			+ dateEdition.getHours() + 'h' + dateEdition.getMinutes(),
+			+ dateEdition.toLocaleString( 'fr', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'} )
+			+ ' à ' + dateEdition.getHours() + 'h' + dateEdition.getMinutes(),
 		
 		docHeader = function(  ) {
 			doc.setFont("helvetica");
@@ -80,21 +76,20 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			doc.setFillColor(150,150,255);
 			doc.rect(marge, h - delta, lgCol1, 12, 'FD');
 			doc.text(marge + 1, h, "Parc");
-			
 			gauche = marge + lgCol1;
+			
 			doc.setFontType("normal");
-
 			doc.setFillColor(150,150,255);
-			doc.rect( gauche, h - delta, 2 * lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, 1.8 * lgCol, 12, 'FD' ); 
 //			doc.rect(gauche, h - delta, 2 * lgCol, 12); 
 			doc.text(gauche + 1, h, "Type");
+			gauche += 1.8 * lgCol;
 			
-			gauche += 2 * lgCol;
 			doc.setFillColor(150,150,255);
 			doc.rect(gauche, h - delta, 2.2 * lgCol, 12, 'FD');
 			doc.text(gauche + 1, h, "Chauffeur");
-			
 			gauche += 2.2 * lgCol;
+			
 			doc.setFillColor(150,150,255);
 			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
 			doc.text(gauche + 1, h, "CA");
@@ -150,6 +145,7 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			
 			return;
 		},
+		
 		ligneTracteur = function( unEltTr, bgColor, h ) {
 			
 			var listCell = unEltTr.querySelectorAll('td'),
@@ -178,36 +174,29 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( marge, h - delta, lgCol1, 12, 'FD' ); 
 			doc.text( marge+1, h, listCell[0].firstElementChild.textContent ); // parc
-			doc.text( marge+1 + 8, h + 4, listCell[1].firstElementChild.textContent ); // immat
+			doc.text( marge+1 + 6, h + 4, listCell[1].firstElementChild.textContent ); // immat
 			
 			gauche = marge + lgCol1;
 			
-			if(impair) {
-				doc.setFillColor(255,255,255);
-			} else {
-				doc.setFillColor(230,230,230);
-			}
-			doc.rect( gauche, h - delta, 2 * lgCol, 12, 'FD' ); 
+			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
+			doc.rect( gauche, h - delta, 1.8 * lgCol, 12, 'FD' ); 
 			doc.setFontSize(7);
 			doc.text( gauche+1, h, (listCell[2].textContent.split('-'))[0] ); // type
 			doc.text( gauche+1, h+4, (listCell[2].textContent.split('-'))[1] );
-			gauche += 2 * lgCol;
+			gauche += 1.8 * lgCol;
 			
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, 2.2 * lgCol, hauteur, 'FD' ); 
 			doc.setFontSize(10);
 			displayConducteur( );
-			
-//			doc.text( gauche+1, h, (listCell[3].querySelectorAll('div'))[0].textContent );
-//			doc.text( gauche+1, h+4, (listCell[2].textContent.split('-'))[1] );
-
 
 			gauche += 2.2 * lgCol;
 			doc.setFont("courier");
+			doc.setFontSize(9);
 			doc.setDrawColor(0,0,0);
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
-			doc.text( gauche, h, ( '        ' + listCell[4].querySelector('input').value ).slice(-8) + ' €' ); // CA
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
+			doc.text( gauche, h, ( Number( listCell[4].querySelector('input').value ) ).toLocaleString('fr').lpad(' ', 9) ); // CA
 			
 			gauche += lgCol;
 			doc.setFontSize(9);
@@ -249,13 +238,14 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
 			doc.setFontSize(8);
-			doc.text( gauche + 1, h, listCell[13].textContent.lpad(' ', 8) + ' €' ); // Entretien
+			doc.text( gauche + 1, h, Number(listCell[13].textContent).toLocaleString('fr').lpad(' ', 8)); // Entretien
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
 			doc.setFontSize(9);
-			doc.text( gauche + 1, h, listCell[14].textContent.lpad(' ', 8) + ' €' ); // Total
+//			doc.text( gauche + 1, h, listCell[14].textContent.lpad(' ', 8) + ' €' ); // Total
+			doc.text( gauche + 1, h, Number(listCell[14].textContent).toLocaleString('fr') ); // Total
 
 			return hauteur;
 		},

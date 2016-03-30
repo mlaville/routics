@@ -20,6 +20,7 @@
  * @date revision   02/01/2016  Reecriture estFerie
  * @date revision   05/03/2016  Libellé du jour dans les entêtes de colonne du planning
  * @date revision   20/03/2016  planning des heures de nuit
+ * @date revision   29/03/2016  debug sec2time (quand la valeur passée en argument est 0)
  *
  * Affichage du planning client
  * 
@@ -117,18 +118,13 @@ function fillRowTHeader( dateCal, tr, dataVacances ) {
 }
 
 // Formate une durée en seconde vers heure + minute
-function sec2time( val ) {
-	var ret = "";
+function sec2time( valSecond ) {
+	var val = Number.isNaN( valSecond ) ? 0 : Number(valSecond),
+		s = val % 60,
+		m = (( val - s ) / 60) % 60,
+		h = ( val - ( 60 * m ) - s ) / 3600;
 	
-	if(val > 0){
-		var s = val % 60,
-			m = (( val - s ) / 60) % 60,
-			h = ( val - ( 60 * m ) - s ) / 3600;
-//		ret = "" + h + "h" + ("0" + m).slice(-2) + "'" + ("0" + s).slice(-2);
-		ret = "" + h + "h" + ("0" + m).slice(-2);
-	}
-	
-	return ret;
+	return '' + h + 'h' + ('0' + m).slice(-2);
 }
 
 function handleDragOver(e) {

@@ -275,9 +275,6 @@ div.remorque:empty {
   padding-left: 2px;
 }
 
-.orMt:after {
-  content: '€';
-}
 .coutKm:after {
   content: '€/km';
 }

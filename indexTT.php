@@ -57,6 +57,7 @@ $dataUrlImg = $param->dataUrlImg;
 
 	<link rel="stylesheet" type="text/css" href="http://lib.polinux.fr/js/month-picker/monthPicker.css" />	
 	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
+    <link rel="stylesheet" href="./css/bouton.css">
 	<link rel="stylesheet" type="text/css" href="./css/table-typeAT.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/ajaxLoader.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="./css/calendrierTT.css" />

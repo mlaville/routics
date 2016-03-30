@@ -2,7 +2,7 @@
  * formOr.js
  * 
  * @auteur     marc laville
- * @Copyleft 2015
+ * @Copyleft 2015 - 2016
  * @date       18/03/2015
  * @version    0.7
  * @revision   $0$
@@ -14,6 +14,7 @@
  * @date revision   14/09/2015 Remplace les liens de la table des OR par des boutons
  * @date revision   21/10/2015 passage de la table des OR en paramêtre
  * @date revision   04/11/2015 Rapport consommation du jour
+ * @date revision   25/03/2016 Utilisation de Intl.NumberFormat pour l'affichage des nombres
  *
  * Appel  ajax:
  * - ../php/crudOR.php
@@ -119,6 +120,8 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 				/**
 				  * Ajout d'une ligne au tableau des ORs
 				  */
+				nbFormat = new Intl.NumberFormat('fr'),
+				euroFormat = new Intl.NumberFormat('fr', {style: 'currency', currency: 'EUR'}),
 				addOr = function( unOr ) {
 					var trOr = tbody.appendChild( document.createElement('tr') ),
 						tdAction = document.createElement('td'),
@@ -147,13 +150,20 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 							} );
 						},
 						addTd = function( lib ) {
-							 return trOr.appendChild( document.createElement('td') ).textContent = lib;
+							 return trOr.insertCell().textContent = lib;
 						};
 					
 					btEdit.addEventListener('click', editOr);
 					btSup.addEventListener( 'click', deleteOr );
 				
-					[unOr.IdOR, unOr.or_date, unOr.or_prestataire, unOr.or_numFacture, unOr.or_km, unOr.or_description, unOr.or_montant].forEach(addTd)
+					[ unOr.IdOR, 
+					  unOr.or_date, 
+					  unOr.or_prestataire, 
+					  unOr.or_numFacture, 
+					  nbFormat.format(unOr.or_km), 
+					  unOr.or_description, 
+					  euroFormat.format(unOr.or_montant)
+					].forEach(addTd)
 
 					trOr.appendChild( tdAction );
 					
@@ -168,11 +178,11 @@ var ctrlFormVehicule = (function (formVehicule, tableOR) {
 			unTab.forEach(addOr);
 
 			trfoot = tfoot.getElementsByTagName('tr')[0];
-			trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? tot / 100 : '';
+			trfoot.getElementsByTagName('td')[1].textContent = ( tot > 0 ) ? euroFormat.format(tot / 100) : '';
 			
 			formVehicule.orNb.textContent = unTab.length;
 			if( tot > 0 ){
-				formVehicule.orMt.textContent = (tot / 100).toFixed(2);
+				formVehicule.orMt.textContent = euroFormat.format(tot / 100);
 				formVehicule.coutKm.textContent = ( tot / formVehicule['km-vehicule'].value / 100 ).toFixed(7);
 			} else {
 				formVehicule.orMt.textContent = '';
