@@ -7,7 +7,7 @@
  * @version    0.1
  * @revision   $0$
  *
- * @date revision   xx/xx/xx  
+ * @date revision   05/04/2016 Correction des hauteurs de ligne lorsque +sieurs conducteurs  
  *
  * Génère le pdf des recapitulatifs de couts mensuels
  * 
@@ -155,11 +155,15 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 					
 					doc.setDrawColor(200, 200, 200);
 					while( i < iterConduct.length ) {
-						doc.text( gauche + 1, h + 6 * i, iterConduct[i].firstChild.textContent );
+						doc.setFontSize(10);
+						doc.setFont("helvetica");
+						doc.text( gauche + 1, h + 6 * i, iterConduct[i].firstChild.textContent ); // nom du conducteur
 						doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 						doc.rect( gauche + 2 * lgCol - 3, h + 6 * i - 3, 5, 6, 'F' ); 
 						doc.setFontSize(11);
-						doc.text( gauche + 2 * lgCol - 2, h + 6 * i, iterConduct[i].lastChild.textContent );
+						doc.rect( gauche + 2 * lgCol + 2, h + 6 * i - 3, 2, 6, 'FD' ); 
+						doc.setFont("courier");
+						doc.text( gauche + 2 * lgCol - 2, h + 6 * i, iterConduct[i].lastChild.textContent.lpad(' ', 2) ); // jours travaillés
 						i++;
 					}
 					
@@ -172,14 +176,14 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			doc.setFont("helvetica");
 			doc.setFontSize(10);
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( marge, h - delta, lgCol1, 12, 'FD' ); 
+			doc.rect( marge, h - delta, lgCol1, hauteur, 'FD' ); 
 			doc.text( marge+1, h, listCell[0].firstElementChild.textContent ); // parc
 			doc.text( marge+1 + 6, h + 4, listCell[1].firstElementChild.textContent ); // immat
 			
 			gauche = marge + lgCol1;
 			
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, 1.8 * lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, 1.8 * lgCol, hauteur, 'FD' ); 
 			doc.setFontSize(7);
 			doc.text( gauche+1, h, (listCell[2].textContent.split('-'))[0] ); // type
 			doc.text( gauche+1, h+4, (listCell[2].textContent.split('-'))[1] );
@@ -201,51 +205,51 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			gauche += lgCol;
 			doc.setFontSize(9);
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
-			doc.text( gauche, h, ( '      ' + listCell[5].textContent ).slice(-6) + ' km' ); // km
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
+			doc.text( gauche, h, ( Number( listCell[5].querySelector('input').value ) ).toLocaleString('fr').lpad(' ', 7) ); // km
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche + 1, h, ( '      ' + listCell[6].textContent ).slice(-7) ); // Terme km
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche + 1, h, ( '      ' + listCell[8].textContent ).slice(-8) + ' €' ); // CA jour
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche, h, ( '      ' + listCell[9].textContent ).slice(-6) + ' €' ); // Autoroute
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche, h, ( '        ' + listCell[10].querySelector('input').value ).slice(-8) + ' L' ); // Gasoil
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche, h, ( '      ' + listCell[11].textContent ).slice(-6) ); // Conso
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.text( gauche, h, ( '      ' + listCell[12].textContent ).slice(-6) + ' €' ); // Pneumatique
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.setFontSize(8);
 			doc.text( gauche + 1, h, Number(listCell[13].textContent).toLocaleString('fr').lpad(' ', 8)); // Entretien
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, 12, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
 			doc.setFontSize(9);
 //			doc.text( gauche + 1, h, listCell[14].textContent.lpad(' ', 8) + ' €' ); // Total
-			doc.text( gauche + 1, h, Number(listCell[14].textContent).toLocaleString('fr') ); // Total
+			doc.text( gauche + 1, h, Number(listCell[14].textContent).toLocaleString('fr').lpad(' ', 8) ); // Total
 
 			return hauteur;
 		},

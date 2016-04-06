@@ -10,7 +10,8 @@
  * @date revision   01/07/2014  Affichage des Vacances et des jous fériés  ascenssion, pentecôte
  * @date revision   15/12/2015  tableau des heures de nuit
  * @date revision   05/03/2016  Libellé des jours sur le calendrier
- * @date revision   25/03/2016  Affichage du moisde l'année dans l'entête du planning
+ * @date revision   25/03/2016  Affichage du mois de l'année dans l'entête du planning
+ * @date revision   06/04/2016  Coloration des jours de vacances
  *
  * Affichage du planning 
  * 
@@ -67,7 +68,6 @@ th.day div:last-child {
 	height: 24px;
 	border-button-right-radius: 6px;
 	border-button-left-radius: 6px;
-	background: white;
 	box-shadow: 0px 1px 0px 0px #fff, 0px 2px 0px 0px #ccc,0px 3px 0px 0px #fff, 0px 4px 0px 0px #ccc;
 	font-size: 16px;
 	font-weight: bold;
@@ -96,7 +96,7 @@ th small {
 	font-weight: normal;
 }
 
-th.day.vacances div:first-child {
+th.vacances div {
 	background-color:#C5D900;
 }
 
@@ -158,9 +158,8 @@ td.dimanche {
 td.arret-travail {
 	text-align: center;
 	font-size: 1.1em;
-	text-shadow: 0 1px 0 #FFFFFF;
+	text-shadow: 0 1px 0 #fff;
 }
-
 
 td.cumul-odb button{
 	background: #ffffff url('../img/icone-erreur.gif') no-repeat center center;
@@ -211,11 +210,11 @@ th:first-child {
 	background: rgb(79,133,187);
 	background: linear-gradient(to bottom, #4f85bb 0%, #245a8c 100%);
 	text-shadow: 1px 1px 0px rgba(0,0,0,0.40);
-	font-size: 1.6em;
+	font-size: 1.4em;
 }
 th:first-child .month {
 	font-weight: normal;
-  text-transform: capitalize;
+	text-transform: capitalize;
 }
 th:first-child .year {
 	font-size: .7em;}
@@ -237,7 +236,7 @@ input:checked+table td:hover ul {
 	display: block;
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8);
     border-radius: 5px 5px 5px 5px;
-    color: #FFFFFF;
+    color: #fff;
     padding: 5px 15px;
     z-index: 98;
 }

@@ -155,32 +155,21 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					</legend>
 					<div>
 						<div>
-							
-							<label for="dateOR">Date
-							<span class="small">de l'OR</span>
-							</label>
+							<label for="dateOR">Date<small>de l'OR</small></label>
 							<input type="text" name="dateOR" id="dateOR" />
 
-							<label for="kmOR">Km
-							<span class="small">.</span>
-							</label>
+							<label for="kmOR">Km<small>.</small></label>
 							<input type="text" name="kmOR" id="kmOR" />
 							<div class="ajax-loader"></div>
 							<br style="clear:both"/>
 
-							<label for="lieuOR">Lieu
-							<span class="small">des Réparations</span>
-							</label>
+							<label for="lieuOR">Lieu<small>des Réparations</small></label>
 							<input type="text" name="lieuOR" id="lieuOR" />
 
-							<label for="numFactOR">N° Facture
-							<span class="small"></span>
-							</label>
+							<label for="numFactOR">N° Facture<small></small></label>
 							<input type="text" name="numFactOR" id="numFactOR" />
 							
-							<label for="montantOR">Montant
-							<span class="small">€ HT</span>
-							</label>
+							<label for="montantOR">Montant<small>€ HT</small></label>
 							<input type="text" name="montantOR" id="montantOR" />
 							
 							<br style="clear:both" />
@@ -193,21 +182,15 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 						<figure id="vehicule-stat">
 						  <div>
 							<div>nombre d'interventions</div>
-							<div>
-							  <output name="orNb"></output>
-							</div>
+							<div><output name="orNb"></output></div>
 						  </div>
 						  <div>
-							<div>Montant total</div>
-							<div>
-							  <output class="orMt" name="orMt"></output>
-							</div>
+							<div>Montant<br />total</div>
+							<div><output class="orMt" name="orMt"></output></div>
 						  </div>
 						  <div>
 							<div>Coût Kilométrique</div>
-							<div>
-							  <output class="coutKm" name="coutKm"></output>
-							</div>
+							<div><output class="coutKm" name="coutKm"></output></div>
 						  </div>
 						</figure>
 					</div>
@@ -395,7 +378,7 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<th>Terme Km</th>
 					<th>Jours<br/>Travaillés</th>
 					<th>CA Jour</th>
-					<th>Autoroute<button id="chargeAutoroute" class="btn btn-primary">charge</button></th>
+					<th>Autoroute<button id="chargeAutoroute" class="btn btn-primary" style="display: none">charge</button></th>
 					<th>gasoil</th>
 					<th>conso./100km</th>
 					<th>Coûts<br/>Pneumatique<input type="text" value="0.01355" id="coefPneumatique" /></th>
@@ -404,14 +387,43 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 				</tr>
 			</thead>
 			<tfoot>
-				<tr>
-					<td class="rounded-foot-left" colspan="4"><em></em></td>
+				<tr style="display: none">
+					<td class="rounded-foot-left" colspan="4">
+						<button class="btn btn-primary" id="btn-nelleLigne" >Ajouter un Tracteur</button>
+					</td>
 					<td></td>
 					<td class="rounded-foot-right">&nbsp;</td>
 				</tr>
+		<form name="modifRecap">
+				<tr style="display: none">
+					<td>
+						<label for="numParc">Num Parc</label>
+						<input type="text" value="" name="numParc" />
+					</td>
+					<td>Immat.<input type="text" value="" name="immat" /></td>
+					<td></td>
+					<td>Chauffeur(s)<input type="text" value="" name="conduct" /></td>
+					<td>CA</td>
+					<td>Km</td>
+					<td></td>
+					<td>Jours<br/>Travaillés<input type="text" value="" name="jourTravail" /></td>
+					<td></td>
+					<td>Autoroute</td>
+					<td>gasoil</td>
+					<td></td>
+					<td></td>
+					<td>Coûts Entretien</td>
+					<td>
+						<button class="btn btn-primary" id="btn-validLigne" >Enregistrer</button>
+					</td>
+				</tr>
+		</form>
 			</tfoot>
 			<tbody></tbody>
 		</table>
+		</div>
+		<div>
+			
 		</div>
 	</section>
 
@@ -429,7 +441,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHCJvUwGSsJk4PuEoaUB6EYJ2ahIeqzn4&callback=initMap">
     </script>
 
-	<!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> -->
+	<!--		<script type="text/javascript" src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script> 
+	<script type="text/javascript" src="./js/jspdf.debug.js"></script> -->
 	<script type="text/javascript" src="http://lib.polinux.fr/js/jspdf.debug.js"></script>
 	
 	<script type="text/javascript" src="http://lib.polinux.fr/js/js-util.js"></script>

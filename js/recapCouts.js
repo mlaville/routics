@@ -15,12 +15,18 @@
  * @date revision 22/02/2016 Gere le bouton d'edition (btnImpCoutsMensuel)
  * @date revision 24/02/2016 Gere les mises à jour des CA
  * @date revision 01/03/2016 use strict
+ * @date revision 05/04/2016 Ajout manuel de tracteurs
  *
  * Appel  ajax:
  * - ./php/getStatVehicles.php
  * - ./services/parc/updateCA
+ * - ./services/parc/updateKM
+ * - ./services/parc/updateATR
+ * - ./services/parc/updateOil
  *
  * A Faire
+ * - presentation de la saisie de nouvelle ligne
+ * - rassembler les update dans une seule procedure
  * - Ligne des totaux
  *
  * Licensed under the GPL license:
@@ -31,6 +37,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	'use strict';
 	
 	var btCalcul = formRecap.calculResult,
+		btnAjoutLigne = document.getElementById('btnAjoutLigne'),
 		btnImpCoutsMensuel = document.getElementById('btnImpCoutsMensuel'),
 		moisRef = function() {
 			var arrMois = formRecap.moisRef.value.split('/');
@@ -47,7 +54,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 		xhrRecapCout = new XMLHttpRequest(),
 		recalcLigne = function( trTract, coef ) {
 			var listTd = trTract.getElementsByTagName('td'),
-				kmParcourt = Number(listTd[5].textContent),
+				kmParcourt = Number(listTd[5].firstChild.value),
 				coutPneu = (coef > 0) ? coef * kmParcourt : 0,
 				tot = coutPneu + Number(listTd[13].textContent);
 			
@@ -69,6 +76,178 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			}
 			
 			return;
+		},
+		chargeModif = function( ) {
+			var collecTr = tableResult.querySelectorAll('tbody tr'),
+				lenTr = collecTr.length,
+				procReponse = function( reponse ) {
+					reponse.result.forEach( function(item){
+						var numParc = item.mdf_numParc,
+							done = false,
+							i, listTd, champInput,
+							strCell, trAdd, listInput;
+						
+						for( i = 0 ; i < lenTr && !done; i++ ) {
+							if(collecTr[i].querySelector('td .numParc').textContent == numParc) {
+								listTd = collecTr[i].querySelectorAll('td'),
+								listInput = collecTr[i].querySelectorAll('td input');
+								
+								if(item.mdf_ca != null) {
+									champInput = listInput[0]
+									
+									champInput.value = item.mdf_ca;
+									champInput.style.color = 'blue';
+								}
+								if(item.mdf_km != null) {
+									champInput = listInput[1]
+									
+									champInput.value = item.mdf_km;
+									champInput.style.color = 'blue';
+								}
+								if(item.mdf_cout_autoroute != null) {
+									champInput = listInput[2]
+									
+									champInput.value = item.mdf_cout_autoroute;
+									champInput.style.color = 'blue';
+								}
+								if(item.mdf_gasoil != null) {
+									champInput = listInput[3]
+									
+									champInput.value = item.mdf_gasoil;
+									champInput.style.color = 'blue';
+								}
+
+								done = true;
+							}
+						}
+						
+						if(!done) {
+							strCell = '<td><span class="numParc">' + item.mdf_numParc + '</span></td>'
+								+ '<td><span>' + item.mdf_immat + '</span><span class="idTransics"></span></td>'
+								+ '<td> </td>'
+								+ '<td class="conducteur"><span class="idTransics"></span>' // IdTransics
+								+ '<div>' + item.mdf_libConducteur + '<span>' + item.mdf_nbJours + '</span></div>'
+								+ '</td>'
+								+ '<td><input type="text" value="' + item.mdf_ca + '"></td>'
+								+ '<td><input type="text" value="' + item.mdf_km + '"></td>'
+								+ '<td></td>'
+								+ '<td class="nombre"></td>'
+								+ '<td class="nombre td-euro"></td>'
+								+ '<td><input type="text" value="' + item.mdf_cout_autoroute + '"></td>'
+								+ '<td><input type="text" value="' + item.mdf_gasoil + '"></td>'
+								+ '<td class="nombre"></td>'
+								+ '<td class="nombre"></td>'
+								+ '<td class="nombre td-euro"></td>'
+								+ '<td class="nombre td-euro"></td>'; // total
+								
+							trAdd = tableResult.querySelector('tbody').insertRow();
+							trAdd.innerHTML = strCell;
+							
+							listInput = trAdd.querySelectorAll('input');
+							listInput[0].addEventListener('change', function( e ) {
+								var txtInput = listInput[0],
+									changeCA = {
+										numParc : trAdd.querySelector('td .numParc').textContent,
+										valeur : txtInput.value,
+										mois : moisRef()
+									},
+									procReponse = function( reponse ) {
+										 txtInput.value = reponse.valeur;
+										 return txtInput.style.borderColor = 'green'
+									},
+									uri = './services/parc/updateCA',
+									xhrCA = new XMLHttpRequest();
+		
+								xhrCA.open("POST", uri, true);
+								xhrCA.onreadystatechange = function() {
+									if (xhrCA.readyState == 4 && xhrCA.status == 200) {
+										// Handle response.
+										procReponse(JSON.parse(xhrCA.responseText));
+									}
+								};
+								
+								txtInput.style.borderColor = 'red';
+								
+								return xhrCA.send(JSON.stringify(changeCA));						
+							});
+							listInput[1].addEventListener('change', function( e ) {
+								var txtInput = listInput[1],
+									changeKM = {
+										numParc : trAdd.querySelector('td .numParc').textContent,
+										valeur : txtInput.value,
+										mois : moisRef()
+									},
+									procReponse = function( reponse ) {
+										 txtInput.value = reponse.valeur;
+										 return txtInput.style.borderColor = 'green'
+									},
+									uri = './services/parc/updateKM',
+									xhrKM = new XMLHttpRequest();
+		
+								xhrKM.open('POST', uri, true);
+								xhrKM.onreadystatechange = function() {
+									if (xhrKM.readyState == 4 && xhrKM.status == 200) {
+										// Handle response.
+										procReponse(JSON.parse(xhrKM.responseText));
+									}
+								};
+								
+								txtInput.style.borderColor = 'red';
+								
+								return xhrKM.send(JSON.stringify(changeKM));						
+							});
+							
+							[
+							 { champ: listInput[2], uri: './services/parc/updateATR'},
+							 { champ: listInput[3], uri: './services/parc/updateOil'}
+							].forEach( function(item) {
+								var txtInput = item.champ;
+								
+									txtInput.addEventListener('change', function( e ) {
+										var changeValeur = {
+											numParc : trAdd.querySelector('td .numParc').textContent,
+											valeur : txtInput.value,
+											mois : moisRef()
+										},
+										procReponse = function( reponse ) {
+											 txtInput.value = reponse.valeur;
+											 return txtInput.style.borderColor = 'green'
+										},
+									//	uri = './services/parc/updateATR',
+										uri = item.uri,
+										xhrUpdate = new XMLHttpRequest();
+			
+									xhrUpdate.open('POST', uri, true);
+									xhrUpdate.onreadystatechange = function() {
+										if (xhrUpdate.readyState == 4 && xhrUpdate.status == 200) {
+											// Handle response.
+											procReponse(JSON.parse(xhrUpdate.responseText));
+										}
+									};
+									
+									txtInput.style.borderColor = 'red';
+									
+									return xhrUpdate.send(JSON.stringify(changeValeur));						
+								});
+							});
+						}
+						
+					});
+
+					return;
+				},
+				uri = './services/parc/listModif?mois=' + moisRef(),
+				xhrChg = new XMLHttpRequest();
+
+			xhrChg.open('GET', uri, true);
+			xhrChg.onreadystatechange = function() {
+				if (xhrChg.readyState == 4 && xhrChg.status == 200) {
+					// Handle response.
+					procReponse(JSON.parse(xhrChg.responseText));
+				}
+			};
+			
+			return xhrChg.send();
 		},
 		listResult = function( objParc ) {
 			var tbody = tableResult.getElementsByTagName('tbody')[0],
@@ -95,11 +274,11 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 						caChange = function( txtInput, ligne ) {
 							var changeCA = {
 									numParc : ligne.querySelector('td .numParc').textContent,
-									montant : txtInput.value,
+									valeur : txtInput.value,
 									mois : moisRef()
 								},
 								procReponse = function( reponse ) {
-									 txtInput.value = reponse.montant;
+									 txtInput.value = reponse.valeur;
 									 return txtInput.style.borderColor = 'green'
 								},
 								uri = './services/parc/updateCA',
@@ -116,6 +295,84 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 							txtInput.style.borderColor = 'red';
 							
 							return xhrCA.send(JSON.stringify(changeCA));						
+						},
+						/**
+						 * Gere les mise à jour saisies dans la colonne KM
+						 */
+						kmChange = function( txtInput, ligne ) {
+							var changeKM = {
+									numParc : ligne.querySelector('td .numParc').textContent,
+									valeur : txtInput.value,
+									mois : moisRef()
+								},
+								procReponse = function( reponse ) {
+									 txtInput.value = reponse.valeur;
+									 return txtInput.style.borderColor = 'green'
+								},
+								uri = './services/parc/updateKM',
+								xhrKM = new XMLHttpRequest();
+	
+							xhrKM.open('POST', uri, true);
+							xhrKM.onreadystatechange = function() {
+								if (xhrKM.readyState == 4 && xhrKM.status == 200) {
+									// Handle response.
+									procReponse(JSON.parse(xhrKM.responseText));
+								}
+							};
+							
+							txtInput.style.borderColor = 'red';
+							
+							return xhrKM.send(JSON.stringify(changeKM));						
+						},
+						ATRChange = function( txtInput, ligne ) {
+							var changeVal = {
+									numParc : ligne.querySelector('td .numParc').textContent,
+									valeur : txtInput.value,
+									mois : moisRef()
+								},
+								procReponse = function( reponse ) {
+									 txtInput.value = reponse.valeur;
+									 return txtInput.style.borderColor = 'green'
+								},
+								uri = './services/parc/updateATR',
+								xhrChg = new XMLHttpRequest();
+	
+							xhrChg.open('POST', uri, true);
+							xhrChg.onreadystatechange = function() {
+								if (xhrChg.readyState == 4 && xhrChg.status == 200) {
+									// Handle response.
+									procReponse(JSON.parse(xhrChg.responseText));
+								}
+							};
+							
+							txtInput.style.borderColor = 'red';
+							
+							return xhrChg.send(JSON.stringify(changeVal));						
+						},
+						oilChange = function( txtInput, ligne ) {
+							var changeVal = {
+									numParc : ligne.querySelector('td .numParc').textContent,
+									valeur : txtInput.value,
+									mois : moisRef()
+								},
+								procReponse = function( reponse ) {
+									 txtInput.value = reponse.valeur;
+									 return txtInput.style.borderColor = 'green'
+								},
+								uri = './services/parc/updateOil',
+								xhrChg = new XMLHttpRequest();
+	
+							xhrChg.open('POST', uri, true);
+							xhrChg.onreadystatechange = function() {
+								if (xhrChg.readyState == 4 && xhrChg.status == 200) {
+									// Handle response.
+									procReponse(JSON.parse(xhrChg.responseText));
+								}
+							};
+							
+							txtInput.style.borderColor = 'red';
+							
+							return xhrChg.send(JSON.stringify(changeVal));						
 						},
 						ajoutCellInput = function( lib, evtChange ) {
 							var cellule = ligne.insertCell(-1),
@@ -139,7 +396,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 						spanTransics = cellImmat.appendChild( document.createElement('span') ),
 						conso = lg.conso,
 						viewConco = function( detailConso ) {
-							return `<span class="idTransics">` + detailConso.DriverTransicsId + '</span><div>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
+							return '<span class="idTransics">' + detailConso.DriverTransicsId + '</span><div>' + detailConso.driverName + '<span>' + detailConso.NbJours + '</span></div>';
 						},
 						totConso = conso.reduce(function(valeurPrecedente, valeurCourante){
 							valeurPrecedente.listConduct += viewConco(valeurCourante);
@@ -158,13 +415,17 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 					ajoutCell( lg.Category ); // Type
 					(ajoutCell( '', [ 'conducteur' ] )).innerHTML = totConso.listConduct; // Chauffeur
 					ajoutCellInput( (lg.montant_cam / 100).toFixed(2), caChange ); // CA
+					
+					ajoutCellInput( lg.KmFin - lg.KmDebut, kmChange ); // km
 
-					ajoutCell( lg.KmFin - lg.KmDebut, [ 'td-km', 'nombre' ] );
 					ajoutCell( ( lg.montant_cam / 100 / (lg.KmFin - lg.KmDebut) ).toFixed(5) ); // Terme Km
 					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaillés
 					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // CA Jour
-					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
-					ajoutCellInput( totConso.gasoil.toFixed(1) ); // Gasoil
+					
+					ajoutCellInput( (+lg.MontantAutoroute).toFixed(2), ATRChange ); // Autoroute
+//					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
+					
+					ajoutCellInput( (totConso.gasoil || 0).toFixed(1), oilChange ); // Gasoil
 					ajoutCell( '', [ 'nombre' ] ); // Conso 100km
 					ajoutCell( '', [ 'nombre' ] ); // Pneumatiques
 					ajoutCell( (lg.CoutOR / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // Cout Entretien
@@ -179,13 +440,17 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			  tbody.removeChild(tbody.firstChild);
 			};
 			
-			(Object.keys(objParc)).forEach( function(item) { return ajoutLigne( objParc[item] ) });
+			objParc.sort( ( a, b ) => { return +a.Vehicle - +b.Vehicle; } );
+//			objParc.sort( ( a, b ) => +a.Vehicle - +b.Vehicle; );
+			objParc.forEach(ajoutLigne);
 			
+			chargeModif();
 			recalcTbody();
 			
 			btCalcul.disabled = false;
 			btnImpCoutsMensuel.disabled = false;
 			document.getElementById('ajax-loader').style.display = 'none';
+			tableResult.querySelector('tfoot').firstElementChild.style.display = '';	
 			
 			return;
 		},
@@ -240,9 +505,6 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			
 			return calcRecap();
 		},
-		calculLigne = function (event){
-			
-		},
 		dateRef = new Date(),
 		traiteReponse = function(data) {
 			var jsonData = JSON.parse(data);
@@ -276,6 +538,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 		return fileElement.click();
 	}, false);
 
+	// recalcul la page lorsque l'on modifie le coeficient
 	inputCoef.addEventListener('change', recalcTbody );
 	
 	/*
@@ -285,7 +548,39 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	btnImpCoutsMensuel.addEventListener( 'click', function() {
 		return domFenetrePdf( pdfCoutsMensuel( tableResult, 'Récapitulatif des coûts ' + libMoisRef().toLowerCase() ), 'Récapitulatif des coûts' );
 	});
+	
+	document.getElementById('btn-nelleLigne').addEventListener( 'click', function() {
+		return tableResult.querySelector('tfoot').lastElementChild.style.display = '';	
+	});
 
+	document.getElementById('btn-validLigne').addEventListener( 'click', function(e) {
+		var dummy = e.preventDefault(),
+			d2 = e.stopPropagation(),
+			formInsert = document.forms['modifRecap'],
+			paramInsert = {
+				numParc : formInsert.numParc.value,
+				immat : formInsert.immat.value,
+				conduct : formInsert.conduct.value,
+				jourTravail : formInsert.jourTravail.value,
+				mois : moisRef()
+			},
+			procReponse = function( reponse ) {
+				 return btCalcul.click();
+			},
+			uri = './services/parc/ajoutLigne',
+			xhrInsert = new XMLHttpRequest();
+
+		
+		xhrInsert.open('POST', uri, true);
+		xhrInsert.onreadystatechange = function() {
+			if (xhrInsert.readyState == 4 && xhrInsert.status == 200) {
+				// Handle response.
+				procReponse(JSON.parse(xhrInsert.responseText));
+			}
+		};
+
+		return xhrInsert.send(JSON.stringify(paramInsert));						
+	});
 
 	return this;
 }

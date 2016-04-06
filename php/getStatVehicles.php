@@ -25,6 +25,7 @@ include 'connect.inc.php';
 include './database/funcStatVehicles.php';
 include './soap/funcVehicles.php';
 
+
 function calculStat( $mois, $dbFlotte, $listDrivers, $getVehicles ) {
 	$tabVehicule = array();		
 	$coutKmMensuel = loadCoutKmMensuel($dbFlotte, $mois);
@@ -77,7 +78,7 @@ function calculStat( $mois, $dbFlotte, $listDrivers, $getVehicles ) {
 		echo json_encode($coutKmMensuel['error']);
 	}
 	
-	return $tabVehicule;
+	return array_values($tabVehicule);
 }
 
 $response = identSoap( $login );

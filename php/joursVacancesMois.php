@@ -21,8 +21,8 @@
   
   try {
 //	$rep = $client->getDatesVacances( isset($_POST["mois"]) ? $_POST["mois"] : "201407" );
-	$rep = $client->getDatesVacancesBasic(
-		isset($_POST["mois"]) ? $_POST["mois"] : "201512",
+	$response = $client->getDatesVacancesBasic(
+		isset($_POST["mois"]) ? $_POST["mois"] : "201614",
 		isset($_POST["zone"]) ? $_POST["zone"] : "A",
 		'test@bouquerodpierre.fr'
 	);
@@ -31,8 +31,8 @@
   catch (SoapFault $exception) {
     echo $exception;
   }
-
-// return response to client
+  
+/* Prints out the response object */
 header("Content-Type: application/json");
-echo json_encode( $rep );
+echo htmlspecialchars_decode( json_encode( $response ), ENT_QUOTES );
 ?>

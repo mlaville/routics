@@ -4,8 +4,8 @@
  * @auteur     marc laville
  * @Copyleft 2015
  * @date       12/09/2015
- * @version    0.5.5
- * @revision   $4$
+ * @version    0.5.6
+ * @revision   $5$
  *
  * Formulaire véhicule
  *
@@ -13,6 +13,7 @@
  * @date revision   25/08/2015 Gestion de la sélection dans la liste de véhicule par des input radio
  * @date revision   04/11/2015 Rapport consommation du jour
  * @date revision   23/01/2016 Modif sur l'affichage des numeros de parc
+ * @date revision   06/04/2016 Utilisation de la balise small en lieu et place de la class small
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -287,14 +288,12 @@ main section form label,
 	width:96px;
 	float:left;
 }
-#content .small{
-	color:#666666;
-	display:block;
-	font-size:11px;
-	font-weight:normal;
-	text-align:right;
-/*	float:right;
-	width:100%;*/
+#content small {
+	color: #666666;
+	display: block;
+	font-size: 11px;
+	font-weight: normal;
+	text-align: right;
 }
 
 figcaption {

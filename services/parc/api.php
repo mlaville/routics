@@ -9,10 +9,13 @@
  * @revision   $0$
  *
  * @date revision   15/03/2016  Controle l'identification Soap
+ * @date revision   05/04/2016  Gere les modifications par la table "t_modif_couts_mdf"
  *
  * REST api de gestion du parc
  * - CRUD CA mensuel
  *
+ * A Faire
+ * - Rassembler les update dans 1 seule fonction 
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -63,18 +66,108 @@ class API extends REST {
 		else
 			$this->response('',404); // If the method not exist with in this class "Page not found".
 	}
-				
+	/**
+	 * Recherche la clef primaire pour un codeParc et un mois passés en parametre
+	 * Si l'ID n'existe pas, un enregistrement est créé
+	 */
 	private function getIdModif( $unNumParc, $moisModif ){
-		$query = "SELECT * FROM t_modif_couts_mdf WHERE mdf_numParc = ? AND mdf_mois = ?";
+		$query = "SELECT IdMdf FROM t_modif_couts_mdf WHERE mdf_numParc = ? AND mdf_mois = ?";
 		
 		try {
 		  $stmt = $this->db->prepare($query);
-		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'] ) );
+		  $exec= $stmt->execute( array( $unNumParc, $moisModif ) );
+
+		  if( $exec ){
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		 } else {
+			$result = null;
+		 }
+
+		} catch(PDOException $e) {
+			$result = null;
+		}
+		
+		if( is_null($result) ) {
+			
+		} else {
+			if( !count($result) ) {
+				$query = "INSERT INTO t_modif_couts_mdf( mdf_numParc, mdf_mois, mdf_datecrea ) VALUES ( ?, ?, NOW())";
+				$stmt = $this->db->prepare($query);
+				$exec= $stmt->execute( array( $unNumParc, $moisModif ) );
+				
+				$lastInsertId = $this->db->lastInsertId();
+				$result = $lastInsertId[0];
+		
+			} else {
+				$result = $result[0];
+			}
+		}
+		
+		return $result;
+	}
+	
+	private function ajoutLigne(){
+		if($this->get_request_method() != "POST"){
+			$this->response('',406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+		
+		$param = json_decode(file_get_contents("php://input"),true);
+
+//		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
+		$query = "INSERT INTO t_modif_couts_mdf ( mdf_numParc, mdf_mois, mdf_immat, mdf_libConducteur, mdf_nbJours, mdf_user, mdf_datecrea)"
+			. " VALUES ( ?, ?, ?, ?, ?, ?, NOW() )";
+			
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array( $param['numParc'], $param['mois'], $param['immat'], $param['conduct'], $param['jourTravail'], $user ) );
 
 		  if( $response["result"] ){
 			$response["status"] = "success";
 			$response["message"] = "Données Modifiées";
-			$response["montant"] = $param['montant'];
+//			$response["valeur"] = $param['valeur'];
+		 } else {
+			$response["status"] = "warning";
+			$response["message"] = "No data found.";
+		 }
+
+		} catch(PDOException $e) {
+			$response["status"] = "error";
+			$response["message"] = 'Insert Failed: ' . $e->getMessage();
+			$response["result"] = null;
+		}
+
+		$response["post"] = $param;
+		
+		$this->response( json_encode($response), 200 );
+	}
+	
+	private function updateKM(){
+		if($this->get_request_method() != "POST"){
+			$this->response('',406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+		
+		$param = json_decode(file_get_contents("php://input"),true);
+		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
+		$query = "UPDATE t_modif_couts_mdf SET mdf_km = ?, mdf_user = ?, mdf_dateupdate = NOW() WHERE IdMdf = ?";
+
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array( $param['valeur'], $user, $idModif ) );
+
+		  if( $response["result"] ){
+			$response["status"] = "success";
+			$response["message"] = "Données Modifiées";
+			$response["valeur"] = $param['valeur'];
 		 } else {
 			$response["status"] = "warning";
 			$response["message"] = "No data found.";
@@ -85,6 +178,86 @@ class API extends REST {
 			$response["message"] = 'Select Failed: ' . $e->getMessage();
 			$response["result"] = null;
 		}
+
+		$response["getIdModif"] = $idModif;
+		
+		$this->response( json_encode($response), 200 );
+	}
+	
+	private function updateATR(){
+		if($this->get_request_method() != "POST"){
+			$this->response('',406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+		
+		$param = json_decode(file_get_contents("php://input"),true);
+		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
+		$query = "UPDATE t_modif_couts_mdf SET mdf_cout_autoroute = ?, mdf_user = ?, mdf_dateupdate = NOW() WHERE IdMdf = ?";
+
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array( $param['valeur'], $user, $idModif ) );
+
+		  if( $response["result"] ){
+			$response["status"] = "success";
+			$response["message"] = "Données Modifiées";
+			$response["valeur"] = $param['valeur'];
+		 } else {
+			$response["status"] = "warning";
+			$response["message"] = "No data found.";
+		 }
+
+		} catch(PDOException $e) {
+			$response["status"] = "error";
+			$response["message"] = 'Select Failed: ' . $e->getMessage();
+			$response["result"] = null;
+		}
+
+		$response["getIdModif"] = $idModif;
+		
+		$this->response( json_encode($response), 200 );
+	}
+	
+	private function updateOil(){
+		if($this->get_request_method() != "POST"){
+			$this->response('',406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+		
+		$param = json_decode(file_get_contents("php://input"),true);
+		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
+		$query = "UPDATE t_modif_couts_mdf SET mdf_gasoil = ?, mdf_user = ?, mdf_dateupdate = NOW() WHERE IdMdf = ?";
+
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array( $param['valeur'], $user, $idModif ) );
+
+		  if( $response["result"] ){
+			$response["status"] = "success";
+			$response["message"] = "Données Modifiées";
+			$response["valeur"] = $param['valeur'];
+		 } else {
+			$response["status"] = "warning";
+			$response["message"] = "No data found.";
+		 }
+
+		} catch(PDOException $e) {
+			$response["status"] = "error";
+			$response["message"] = 'Select Failed: ' . $e->getMessage();
+			$response["result"] = null;
+		}
+
+		$response["getIdModif"] = $idModif;
+		
+		$this->response( json_encode($response), 200 );
 	}
 	
 	private function updateCA(){
@@ -99,18 +272,17 @@ class API extends REST {
 		
 		$param = json_decode(file_get_contents("php://input"),true);
 
-		$query = "REPLACE INTO t_ca_mensuel_cam"
-			. " ( mois_cam, num_parc_cam, montant_cam, nb_jour_cam, km_cam, date_import_cam, user_import_cam )"
-			. " VALUES ( ?, ?, ?, ?, ?, NOW(), ? )";
+		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
+		$query = "UPDATE t_modif_couts_mdf SET mdf_ca = ?, mdf_user = ?, mdf_dateupdate = NOW() WHERE IdMdf = ?";
 
 		try {
 		  $stmt = $this->db->prepare($query);
-		  $response["result"] = $stmt->execute( array( $param['mois'], $param['numParc'], $param['montant'] * 100, 0, 0, $user ) );
+		  $response["result"] = $stmt->execute( array( $param['valeur'] * 100, $user, $idModif ) );
 
 		  if( $response["result"] ){
 			$response["status"] = "success";
 			$response["message"] = "Données Modifiées";
-			$response["montant"] = $param['montant'];
+			$response["valeur"] = $param['valeur'];
 		 } else {
 			$response["status"] = "warning";
 			$response["message"] = "No data found.";
@@ -121,8 +293,47 @@ class API extends REST {
 			$response["message"] = 'Select Failed: ' . $e->getMessage();
 			$response["result"] = null;
 		}
+
+		$response["getIdModif"] = $idModif;
+		
+//		$response["getIdModif"] = $this->getIdModif( $param['numParc'], $param['mois'] );
+		
 		$this->response( json_encode($response), 200 );
 	}
+
+	private function listModif(){
+		if($this->get_request_method() != 'GET'){
+			$this->response('',406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('',401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+
+		$query = "SELECT mdf_numParc, mdf_immat, mdf_libConducteur, ROUND(mdf_ca / 100, 2) AS mdf_ca, mdf_nbJours, mdf_km, mdf_cout_autoroute, mdf_gasoil"
+			. " FROM t_modif_couts_mdf"
+			. " WHERE mdf_mois = ?";
+			
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $exec= $stmt->execute( array( $_GET['mois'] ) );
+
+		  if( $exec ){
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		 } else {
+			$result = null;
+		 }
+
+		} catch(PDOException $e) {
+			$result = null;
+		}
+
+		$response["result"] = $result;
+		
+		$this->response( json_encode($response), 200 );
+	}
+	
 }
 
 $rep = identSoap( $login );
