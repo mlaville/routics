@@ -14,6 +14,7 @@
  * @date revision   04/11/2015 Rapport consommation du jour
  * @date revision   23/01/2016 Modif sur l'affichage des numeros de parc
  * @date revision   06/04/2016 Utilisation de la balise small en lieu et place de la class small
+ * @date revision   11/04/2016 Saisie des ajout de tracteur dans le recapitulatif mensuel
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -39,6 +40,10 @@ figure {
 
 input[type='file'] {
   display: none;
+}
+
+form br {
+	clear: both;
 }
 
 fieldset>div {
@@ -280,7 +285,9 @@ div.remorque:empty {
   content: '€/km';
 }
 
+
 main section form label,
+#modifRecap  label,
 #content form label{
 	display:block;
 	font-weight:bold;
@@ -288,6 +295,11 @@ main section form label,
 	width:96px;
 	float:left;
 }
+
+#modifRecap  label{
+	width:120px;
+}
+
 #content small {
 	color: #666666;
 	display: block;
@@ -447,6 +459,7 @@ legend {
  /*******/
  
 main section input[type=text],
+#modifRecap input[type=text],
 #content input[type=text]{
 	width:96px;
 	text-align:center;

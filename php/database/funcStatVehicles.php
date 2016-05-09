@@ -13,6 +13,7 @@
  * @date revision   07/02/2016 marc laville : Recupere le nb de jour travaillés par mois (loadConsoMensuel)
  * @date revision   07/03/2016 marc laville : Recupere les codes conducteur à partir de la table t_km_parcourt 
 								lorsqu'il ne sont pas présent dans la table t_report_consom_csm
+ * @date revision   07/03/2016 marc laville : debug loadCoutKmMensuel (erreur dans le nb de km)
  *
  * Tables
  * - t_vehicle
@@ -162,7 +163,8 @@ function loadCoutKmMensuel($dbConn, $mois) {
  		. " FROM (SELECT"
 		. " Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, NbJours, CoutOR, NbOR, BeginDate, idTransicsDrivers"
 		. " FROM ("
-		. " SELECT Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, sum(NbJours) AS NbJours, BeginDate,"
+//		. " SELECT Vehicle, VehicleTransicsId, KmDebut, KmFin, Distance, sum(NbJours) AS NbJours, BeginDate,"
+		. " SELECT Vehicle, VehicleTransicsId, MIN(KmDebut) AS KmDebut, MAX(KmFin) AS KmFin, SUM(Distance) AS Distance, SUM(NbJours) AS NbJours, BeginDate,"
 		. " GROUP_CONCAT( CONCAT(DriverTransicsId, '-', NbJours) ) AS idTransicsDrivers"
 		. " FROM (SELECT Vehicle, VehicleTransicsId, MIN( KmBegin ) AS KmDebut, MAX( KmEnd ) AS KmFin, MAX( KmEnd ) - MIN( KmBegin ) AS Distance,"
 		. " COUNT( DISTINCT DATE(BeginDate) ) AS NbJours, BeginDate, DriverTransicsId"

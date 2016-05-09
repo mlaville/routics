@@ -81,6 +81,10 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 		<source src="http://s1download-universal-soundbank.com/mp3/sounds/2040.mp3"></source>
 		Audio not supported.
 	</audio>
+	<audio id="clickSound2">
+		<source src="http://freesound.org/data/previews/66/66717_931655-lq.mp3"></source>
+		Audio not supported.
+	</audio>
 	<div id="leftcolumn">
 <!-- 			<a id="a_vehicule" href="#">Actualiser</a><br> -->
 
@@ -394,36 +398,28 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 					<td></td>
 					<td class="rounded-foot-right">&nbsp;</td>
 				</tr>
-		<form name="modifRecap">
-				<tr style="display: none">
-					<td>
-						<label for="numParc">Num Parc</label>
-						<input type="text" value="" name="numParc" />
-					</td>
-					<td>Immat.<input type="text" value="" name="immat" /></td>
-					<td></td>
-					<td>Chauffeur(s)<input type="text" value="" name="conduct" /></td>
-					<td>CA</td>
-					<td>Km</td>
-					<td></td>
-					<td>Jours<br/>Travaillés<input type="text" value="" name="jourTravail" /></td>
-					<td></td>
-					<td>Autoroute</td>
-					<td>gasoil</td>
-					<td></td>
-					<td></td>
-					<td>Coûts Entretien</td>
-					<td>
-						<button class="btn btn-primary" id="btn-validLigne" >Enregistrer</button>
-					</td>
-				</tr>
-		</form>
 			</tfoot>
 			<tbody></tbody>
 		</table>
 		</div>
-		<div>
-			
+		<div style="display: none">
+			<form name="modifRecap" id="modifRecap">
+			  <label>Numéro de Parc</label><input type="text" value="" name="numParc" /><br />
+			  <label>Immatriculation</label><input type="text" value="" name="immat" /><br />
+			  <fieldset><legend>Chauffeur 1</legend>
+				  <label>Nom</label><input type="text" value="" name="conduct1" /><br />
+				  <label>Jours Travaillés</label><input type="text" value="" name="jourTravail1" /><br />
+			  </fieldset>
+			  <fieldset><legend>Chauffeur 2</legend>
+				  <label>Nom</label><input type="text" value="" name="conduct2" /><br />
+				  <label>Jours Travaillés</label><input type="text" value="" name="jourTravail2" /><br />
+			  </fieldset>
+			  <fieldset><legend>Chauffeur 3</legend>
+				  <label>Nom</label><input type="text" value="" name="conduct3" /><br />
+				  <label>Jours Travaillés</label><input type="text" value="" name="jourTravail3" /><br />
+			  </fieldset>
+			  <button class="btn btn-primary" id="btn-validLigne">Enregistrer</button>
+			</form>
 		</div>
 	</section>
 

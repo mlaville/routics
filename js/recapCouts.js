@@ -5,7 +5,7 @@
  * @Copyleft 2015
  * @date       20/10/2015
  * @version    0.5
- * @revision   $0$
+ * @revision   $8$
  *
  * Affichage du récapitulatif des couts de la flotte
  *
@@ -16,6 +16,10 @@
  * @date revision 24/02/2016 Gere les mises à jour des CA
  * @date revision 01/03/2016 use strict
  * @date revision 05/04/2016 Ajout manuel de tracteurs
+ * @date revision 26/04/2016 Intercepte par preventDefault le click sur le bouton "imprimer"  
+ * @date revision 02/05/2016 Gestion du chargement des modifs manuelles : recalcul de la ligne modifiée (recalcLigne)
+ * @date revision 04/05/2016 Gere +sieurs conducteurs sur chaque ligne ajoutées manuellement
+ * @date revision 04/05/2016 Gere la supression des lignes ajoutées manuellement
  *
  * Appel  ajax:
  * - ./php/getStatVehicles.php
@@ -23,9 +27,10 @@
  * - ./services/parc/updateKM
  * - ./services/parc/updateATR
  * - ./services/parc/updateOil
+ * - ./services/parc/delLigne
  *
  * A Faire
- * - presentation de la saisie de nouvelle ligne
+ * - saisie de plusieurs conducteurs dans les modifs manuelles
  * - rassembler les update dans une seule procedure
  * - Ligne des totaux
  *
@@ -52,152 +57,129 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 		},
 		fileElement = formCA.fileElement,
 		xhrRecapCout = new XMLHttpRequest(),
+		localNb = new Intl.NumberFormat('fr'),
+		localCur = new Intl.NumberFormat('fr', {style: 'currency', currency: 'EUR'}),
 		recalcLigne = function( trTract, coef ) {
 			var listTd = trTract.getElementsByTagName('td'),
 				kmParcourt = Number(listTd[5].firstChild.value),
 				coutPneu = (coef > 0) ? coef * kmParcourt : 0,
 				tot = coutPneu + Number(listTd[13].textContent);
 			
-			listTd[8].textContent = ( listTd[4].firstChild.value / listTd[7].textContent).toFixed(2);
-			listTd[11].textContent = ( 100 * listTd[10].firstChild.value / kmParcourt ).toFixed(2);
+			listTd[8].textContent = localCur.format( listTd[4].firstChild.value / listTd[7].textContent ); // CA jour
+			listTd[11].textContent = ( 100 * listTd[10].firstChild.value / kmParcourt ).toFixed(2); // Terme km
 			listTd[12].textContent = (coutPneu > 0) ? coutPneu.toFixed(2) : ''; // cout pneumatique
-			listTd[14].textContent = tot.toFixed(2);
+			listTd[14].textContent = localCur.format(tot); // total
 
 			return;
 		},
 		recalcTbody = function( ) {
-			var coef = 1 * inputCoef.value,
+			var coef = 1 * inputCoef.value /*,
 				collecTr = tableResult.querySelectorAll('tbody tr'),
-				idTr = collecTr.length;
+				idTr = collecTr.length*/;
 				
-			while(idTr > 0){
+			Array.from( tableResult.querySelectorAll('tbody tr') ).forEach( function (itemTr){ return recalcLigne( itemTr, coef ); } );
+				
+/* 			while(idTr > 0){
 				idTr--;
 				recalcLigne( collecTr[idTr], coef );
-			}
+			}*/
 			
 			return;
 		},
+		/**
+		 * Affiche les modifications manuelles dans la table tableResult
+		 */
 		chargeModif = function( ) {
 			var collecTr = tableResult.querySelectorAll('tbody tr'),
 				lenTr = collecTr.length,
+				delModif = function(idModif) {
+					var	xhrDelete = new XMLHttpRequest(),
+						uri = './services/parc/delLigne?id=' + idModif;
+		
+						xhrDelete.open('DELETE', uri, true);
+						xhrDelete.onreadystatechange = function() {
+							if (xhrDelete.readyState == 4 && xhrDelete.status == 200) {
+								// Handle response.
+								return btCalcul.click();
+							}
+						};
+
+//					alert(idModif);
+					xhrDelete.send();
+				},
 				procReponse = function( reponse ) {
+					/**
+					 * Pour chaque modif, on parcourt la table pour selectionner la ligne affectée par la modif
+					 * item :
+					 *	{
+					 *	  "mdf_numParc": "80",
+					 *	  "mdf_immat": "",
+					 *	  "mdf_libConducteur": "",
+					 *	  "mdf_ca": null,
+					 *	  "mdf_nbJours": "0",
+					 *	  "mdf_km": "9735",
+					 *	  "mdf_cout_autoroute": null,
+					 *	  "mdf_gasoil": null
+					 *	}
+					 */
 					reponse.result.forEach( function(item){
 						var numParc = item.mdf_numParc,
 							done = false,
-							i, listTd, champInput,
+							i,
 							strCell, trAdd, listInput;
 						
 						for( i = 0 ; i < lenTr && !done; i++ ) {
 							if(collecTr[i].querySelector('td .numParc').textContent == numParc) {
-								listTd = collecTr[i].querySelectorAll('td'),
+								
 								listInput = collecTr[i].querySelectorAll('td input');
 								
-								if(item.mdf_ca != null) {
-									champInput = listInput[0]
-									
-									champInput.value = item.mdf_ca;
-									champInput.style.color = 'blue';
-								}
-								if(item.mdf_km != null) {
-									champInput = listInput[1]
-									
-									champInput.value = item.mdf_km;
-									champInput.style.color = 'blue';
-								}
-								if(item.mdf_cout_autoroute != null) {
-									champInput = listInput[2]
-									
-									champInput.value = item.mdf_cout_autoroute;
-									champInput.style.color = 'blue';
-								}
-								if(item.mdf_gasoil != null) {
-									champInput = listInput[3]
-									
-									champInput.value = item.mdf_gasoil;
-									champInput.style.color = 'blue';
-								}
+								[{ val: item.mdf_ca, champ: listInput[0]},
+								 { val: item.mdf_km, champ: listInput[1]},
+								 { val: item.mdf_cout_autoroute, champ: listInput[2]},
+								 { val: item.mdf_gasoil, champ: listInput[3]}
+								].forEach(function( obj ) {
+									if(obj.val != null) {
+										obj.champ.value = obj.val;
+										obj.champ.style.color = 'blue';
+									}
+								});
 
 								done = true;
 							}
 						}
 						
 						if(!done) {
-							strCell = '<td><span class="numParc">' + item.mdf_numParc + '</span></td>'
+							strCell = '<td><button></button><span class="numParc">' + item.mdf_numParc + '</span></td>'
 								+ '<td><span>' + item.mdf_immat + '</span><span class="idTransics"></span></td>'
 								+ '<td> </td>'
-								+ '<td class="conducteur"><span class="idTransics"></span>' // IdTransics
-								+ '<div>' + item.mdf_libConducteur + '<span>' + item.mdf_nbJours + '</span></div>'
+								+ '<td class="conducteur">'
+								+ item.mdf_libConducteur.map( function(elmt){
+								  return ( +elmt.nbJours > 0 ) ? '<div>' + elmt.nom + '<span>' + elmt.nbJours + '</span></div>' : '';
+								}).join('\n')
 								+ '</td>'
-								+ '<td><input type="text" value="' + item.mdf_ca + '"></td>'
-								+ '<td><input type="text" value="' + item.mdf_km + '"></td>'
+								+ '<td><input type="text" value="' + (item.mdf_ca || '') + '"></td>'
+								+ '<td><input type="text" value="' + (item.mdf_km || '') + '"></td>'
 								+ '<td></td>'
+								+ '<td class="nombre">'
+								+ item.mdf_libConducteur.reduce( function(valPrec, valCour){ return valPrec + +valCour.nbJours }, 0 )
+								+ '</td>'
+//								+ '<td class="nombre">' + (item.mdf_nbJours || 0) + '</td>'
+								+ '<td class="nombre"></td>'
+								+ '<td><input type="text" value="' + (item.mdf_cout_autoroute || '') + '"></td>'
+								+ '<td><input type="text" value="' + (item.mdf_gasoil || '') + '"></td>'
+								+ '<td class="nombre"></td>'
 								+ '<td class="nombre"></td>'
 								+ '<td class="nombre td-euro"></td>'
-								+ '<td><input type="text" value="' + item.mdf_cout_autoroute + '"></td>'
-								+ '<td><input type="text" value="' + item.mdf_gasoil + '"></td>'
-								+ '<td class="nombre"></td>'
-								+ '<td class="nombre"></td>'
-								+ '<td class="nombre td-euro"></td>'
-								+ '<td class="nombre td-euro"></td>'; // total
+								+ '<td class="nombre"></td>'; // total
 								
 							trAdd = tableResult.querySelector('tbody').insertRow();
 							trAdd.innerHTML = strCell;
 							
 							listInput = trAdd.querySelectorAll('input');
-							listInput[0].addEventListener('change', function( e ) {
-								var txtInput = listInput[0],
-									changeCA = {
-										numParc : trAdd.querySelector('td .numParc').textContent,
-										valeur : txtInput.value,
-										mois : moisRef()
-									},
-									procReponse = function( reponse ) {
-										 txtInput.value = reponse.valeur;
-										 return txtInput.style.borderColor = 'green'
-									},
-									uri = './services/parc/updateCA',
-									xhrCA = new XMLHttpRequest();
-		
-								xhrCA.open("POST", uri, true);
-								xhrCA.onreadystatechange = function() {
-									if (xhrCA.readyState == 4 && xhrCA.status == 200) {
-										// Handle response.
-										procReponse(JSON.parse(xhrCA.responseText));
-									}
-								};
-								
-								txtInput.style.borderColor = 'red';
-								
-								return xhrCA.send(JSON.stringify(changeCA));						
-							});
-							listInput[1].addEventListener('change', function( e ) {
-								var txtInput = listInput[1],
-									changeKM = {
-										numParc : trAdd.querySelector('td .numParc').textContent,
-										valeur : txtInput.value,
-										mois : moisRef()
-									},
-									procReponse = function( reponse ) {
-										 txtInput.value = reponse.valeur;
-										 return txtInput.style.borderColor = 'green'
-									},
-									uri = './services/parc/updateKM',
-									xhrKM = new XMLHttpRequest();
-		
-								xhrKM.open('POST', uri, true);
-								xhrKM.onreadystatechange = function() {
-									if (xhrKM.readyState == 4 && xhrKM.status == 200) {
-										// Handle response.
-										procReponse(JSON.parse(xhrKM.responseText));
-									}
-								};
-								
-								txtInput.style.borderColor = 'red';
-								
-								return xhrKM.send(JSON.stringify(changeKM));						
-							});
 							
 							[
+							 { champ: listInput[0], uri: './services/parc/updateCA'},
+							 { champ: listInput[1], uri: './services/parc/updateKM'},
 							 { champ: listInput[2], uri: './services/parc/updateATR'},
 							 { champ: listInput[3], uri: './services/parc/updateOil'}
 							].forEach( function(item) {
@@ -209,27 +191,36 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 											valeur : txtInput.value,
 											mois : moisRef()
 										},
-										procReponse = function( reponse ) {
+										retourUpdate = function( reponse ) {
 											 txtInput.value = reponse.valeur;
 											 return txtInput.style.borderColor = 'green'
 										},
-									//	uri = './services/parc/updateATR',
-										uri = item.uri,
 										xhrUpdate = new XMLHttpRequest();
 			
-									xhrUpdate.open('POST', uri, true);
+									xhrUpdate.open('POST', item.uri, true);
 									xhrUpdate.onreadystatechange = function() {
 										if (xhrUpdate.readyState == 4 && xhrUpdate.status == 200) {
 											// Handle response.
-											procReponse(JSON.parse(xhrUpdate.responseText));
+											retourUpdate(JSON.parse(xhrUpdate.responseText));
 										}
 									};
 									
 									txtInput.style.borderColor = 'red';
 									
+									recalcLigne(trAdd, 1 * inputCoef.value );
+									
 									return xhrUpdate.send(JSON.stringify(changeValeur));						
 								});
 							});
+							
+							recalcLigne(trAdd, 1 * inputCoef.value );
+							
+							trAdd.querySelector('button').addEventListener('click', function(e) {
+								if( confirm('supprimer la ligne du véhicule ' + item.mdf_numParc) ) {
+									delModif(item.IdMdf);
+								}
+							});
+
 						}
 						
 					});
@@ -263,7 +254,6 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 							var cellule = ligne.insertCell(-1);
 							
 							cellule.textContent = lib || '';
-//							( classArray || [] ).forEach( function( item ) { return cellule.classList.add(item); } );
 							( classArray || [] ).forEach( (item) => { return cellule.classList.add(item); } );
 								
 							return cellule;
@@ -349,7 +339,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 							
 							return xhrChg.send(JSON.stringify(changeVal));						
 						},
-						oilChange = function( txtInput, ligne ) {
+/*						oilChange = function( txtInput, ligne ) {
 							var changeVal = {
 									numParc : ligne.querySelector('td .numParc').textContent,
 									valeur : txtInput.value,
@@ -373,6 +363,33 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 							txtInput.style.borderColor = 'red';
 							
 							return xhrChg.send(JSON.stringify(changeVal));						
+						},*/
+						dataChange = function( uri ) {
+							return function( txtInput, ligne ) {
+								var changeVal = {
+										numParc : ligne.querySelector('td .numParc').textContent,
+										valeur : txtInput.value,
+										mois : moisRef()
+									},
+									procReponse = function( reponse ) {
+										 txtInput.value = reponse.valeur;
+										 return txtInput.style.borderColor = 'green'
+									},
+//									uri = './services/parc/updateOil',
+									xhrChg = new XMLHttpRequest();
+		
+								xhrChg.open('POST', uri, true);
+								xhrChg.onreadystatechange = function() {
+									if (xhrChg.readyState == 4 && xhrChg.status == 200) {
+										// Handle response.
+										procReponse(JSON.parse(xhrChg.responseText));
+									}
+								};
+								
+								txtInput.style.borderColor = 'red';
+								
+								return xhrChg.send(JSON.stringify(changeVal));						
+							}
 						},
 						ajoutCellInput = function( lib, evtChange ) {
 							var cellule = ligne.insertCell(-1),
@@ -420,16 +437,16 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 
 					ajoutCell( ( lg.montant_cam / 100 / (lg.KmFin - lg.KmDebut) ).toFixed(5) ); // Terme Km
 					ajoutCell( lg.NbJours, [ 'nombre' ] ); // Jours Travaillés
-					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // CA Jour
+					ajoutCell( '', [ 'nombre' ] ); // CA Jour
 					
 					ajoutCellInput( (+lg.MontantAutoroute).toFixed(2), ATRChange ); // Autoroute
-//					ajoutCell( (+lg.MontantAutoroute).toFixed(2), [ 'nombre', 'td-euro' ] ); // Autoroute
 					
-					ajoutCellInput( (totConso.gasoil || 0).toFixed(1), oilChange ); // Gasoil
+//					ajoutCellInput( (totConso.gasoil || 0).toFixed(1), oilChange ); // Gasoil
+					ajoutCellInput( (totConso.gasoil || 0).toFixed(1), dataChange('./services/parc/updateOil') ); // Gasoil
 					ajoutCell( '', [ 'nombre' ] ); // Conso 100km
 					ajoutCell( '', [ 'nombre' ] ); // Pneumatiques
 					ajoutCell( (lg.CoutOR / 100).toFixed(2), [ 'nombre', 'td-euro' ] ); // Cout Entretien
-					ajoutCell( '', [ 'nombre', 'td-euro' ] ); // Total Cout
+					ajoutCell( '', [ 'nombre' ] ); // Total Cout
 					
 					return ligne;
 				};
@@ -468,6 +485,7 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 				alert('Request failed', error);  
 			});
 */
+			tableResult.getElementsByTagName('tbody')[0].innerHTML = '';
 			document.getElementById('ajax-loader').style.display = 'inline-block';
 			btCalcul.disabled = true;
 
@@ -505,20 +523,24 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			
 			return calcRecap();
 		},
-		dateRef = new Date(),
 		traiteReponse = function(data) {
-			var jsonData = JSON.parse(data);
+			var jsonData = JSON.parse(data),
+				s = document.getElementById('clickSound2');
+			
+			s.volume = 0.2;
+			s.play();
 			
 			return listResult( jsonData.vehicules );
-		};
+		},
+		dateRef = new Date();
 	
 	xhrRecapCout.onreadystatechange = function (aEvt) {
 	  if (xhrRecapCout.readyState == XMLHttpRequest.DONE) {
-		 if(xhrRecapCout.status == 200) {
-		  traiteReponse(xhrRecapCout.responseText);
-		 } else {
+		if(xhrRecapCout.status == 200) {
+		  traiteReponse( xhrRecapCout.responseText );
+		} else {
 		  alert("Erreur pendant le chargement de la page.\n");
-	     }
+	    }
 	  }
 	};
 	
@@ -530,14 +552,8 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	btCalcul.disabled = false;
 	
 	// Gere le formulaire CA
-	fileElement.addEventListener("change", handleFileCa, false);
-	formCA.fileSelect.addEventListener("click", function(e) {
-		
-		e.preventDefault(); // prevent navigation to "#"
-		
-		return fileElement.click();
-	}, false);
-
+	fileElement.addEventListener('change', handleFileCa, false);
+	formCA.fileSelect.addEventListener( 'click', (e) => { e.preventDefault(); return fileElement.click(); }, false );
 	// recalcul la page lorsque l'on modifie le coeficient
 	inputCoef.addEventListener('change', recalcTbody );
 	
@@ -545,12 +561,28 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 	 * Affichage du pdf Récapitulatif des coûts
 	 */
 	btnImpCoutsMensuel.disabled = true;
-	btnImpCoutsMensuel.addEventListener( 'click', function() {
+	btnImpCoutsMensuel.addEventListener( 'click', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		
 		return domFenetrePdf( pdfCoutsMensuel( tableResult, 'Récapitulatif des coûts ' + libMoisRef().toLowerCase() ), 'Récapitulatif des coûts' );
 	});
 	
+	/*
+	 * Gere l'ajout d'une nouvelle ligne
+	 */
 	document.getElementById('btn-nelleLigne').addEventListener( 'click', function() {
-		return tableResult.querySelector('tfoot').lastElementChild.style.display = '';	
+
+		winManager.domFenetre(
+			'Ajouter un Tracteur',
+			document.forms.modifRecap,
+			null,
+			{ x: 236, y: 120, width: 260, height: 560 },
+			true
+		);
+		document.forms.modifRecap.style.display = '';
+		
+		return;
 	});
 
 	document.getElementById('btn-validLigne').addEventListener( 'click', function(e) {
@@ -560,12 +592,19 @@ ctrlRecapCouts = function( formRecap, formCA, inputCoef, tableResult ) {
 			paramInsert = {
 				numParc : formInsert.numParc.value,
 				immat : formInsert.immat.value,
-				conduct : formInsert.conduct.value,
-				jourTravail : formInsert.jourTravail.value,
+				conduct : [{ nom: formInsert.conduct1.value, nbJours: +formInsert.jourTravail1.value},
+							{ nom: formInsert.conduct2.value, nbJours: +formInsert.jourTravail2.value},
+							{ nom: formInsert.conduct3.value, nbJours: +formInsert.jourTravail3.value}],
 				mois : moisRef()
 			},
 			procReponse = function( reponse ) {
-				 return btCalcul.click();
+				[ formInsert.numParc, formInsert.immat, 
+				  formInsert.conduct1, formInsert.jourTravail1,
+				  formInsert.conduct2, formInsert.jourTravail2,
+				  formInsert.conduct3, formInsert.jourTravail3,
+				].forEach( elmt => { elmt.value = ''; } )
+				 
+				return btCalcul.click();
 			},
 			uri = './services/parc/ajoutLigne',
 			xhrInsert = new XMLHttpRequest();

@@ -8,6 +8,7 @@
  * @revision   $0$
  *
  * @date revision   05/04/2016 Correction des hauteurs de ligne lorsque +sieurs conducteurs  
+ * @date revision   26/04/2016 Correction plantage quand la colonne descriptif est vide  
  *
  * Génère le pdf des recapitulatifs de couts mensuels
  * 
@@ -17,6 +18,7 @@
  * A Faire
  * - Extraire les données personnalisées
  * - Numérotation des pages
+ * - Procedure de dessindes cellules
  *
  * Licensed under the GPL license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -138,7 +140,7 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			
 			gauche += lgCol;
 			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
+			doc.rect(gauche, h - delta, lgCol + 1, 12, 'FD');
 			doc.text(gauche + 2, h, "Total");
 			
 			h += 6;
@@ -169,7 +171,8 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 					
 					return i;
 				},
-				hauteur = 6 * Math.max( 2, iterConduct.length );
+				hauteur = 6 * Math.max( 2, iterConduct.length ),
+				descript = listCell[2].textContent.split('-');
 			
 			// Cellule Parc
 			doc.setDrawColor(0,0,0);
@@ -185,8 +188,8 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, 1.8 * lgCol, hauteur, 'FD' ); 
 			doc.setFontSize(7);
-			doc.text( gauche+1, h, (listCell[2].textContent.split('-'))[0] ); // type
-			doc.text( gauche+1, h+4, (listCell[2].textContent.split('-'))[1] );
+			doc.text( gauche+1, h, descript[0] ); // type
+			doc.text( gauche+1, h+4, (descript.length > 1) ? descript[1] : '' );
 			gauche += 1.8 * lgCol;
 			
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
@@ -221,7 +224,7 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
-			doc.text( gauche, h, ( '      ' + listCell[9].textContent ).slice(-6) + ' €' ); // Autoroute
+			doc.text( gauche, h, ( Number( listCell[9].querySelector('input').value ) ).toLocaleString('fr').lpad(' ', 7) ); // Autoroute
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
@@ -246,10 +249,9 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
-			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
+			doc.rect( gauche, h - delta, lgCol + 1, hauteur, 'FD' ); 
 			doc.setFontSize(9);
-//			doc.text( gauche + 1, h, listCell[14].textContent.lpad(' ', 8) + ' €' ); // Total
-			doc.text( gauche + 1, h, Number(listCell[14].textContent).toLocaleString('fr').lpad(' ', 8) ); // Total
+			doc.text( gauche + 0.5, h, listCell[14].textContent.lpad(' ', 9) ); // Total
 
 			return hauteur;
 		},

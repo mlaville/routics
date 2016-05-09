@@ -10,6 +10,8 @@
  *
  * @date revision   15/03/2016  Controle l'identification Soap
  * @date revision   05/04/2016  Gere les modifications par la table "t_modif_couts_mdf"
+ * @date revision 04/05/2016 Gere +sieurs conducteurs sur chaque ligne ajoutées manuellement
+ * @date revision 04/05/2016 Gere la supression des lignes ajoutées manuellement
  *
  * REST api de gestion du parc
  * - CRUD CA mensuel
@@ -117,19 +119,19 @@ class API extends REST {
 		}
 		
 		$param = json_decode(file_get_contents("php://input"),true);
+		$conduct = json_encode($param['conduct']);
 
-//		$idModif = $this->getIdModif( $param['numParc'], $param['mois'] );
 		$query = "INSERT INTO t_modif_couts_mdf ( mdf_numParc, mdf_mois, mdf_immat, mdf_libConducteur, mdf_nbJours, mdf_user, mdf_datecrea)"
 			. " VALUES ( ?, ?, ?, ?, ?, ?, NOW() )";
 			
 		try {
 		  $stmt = $this->db->prepare($query);
-		  $response["result"] = $stmt->execute( array( $param['numParc'], $param['mois'], $param['immat'], $param['conduct'], $param['jourTravail'], $user ) );
+//		  $response["result"] = $stmt->execute( array( $param['numParc'], $param['mois'], $param['immat'], $conduct, $param['jourTravail'], $user ) );
+		  $response["result"] = $stmt->execute( array( $param['numParc'], $param['mois'], $param['immat'], $conduct, NULL, $user ) );
 
 		  if( $response["result"] ){
 			$response["status"] = "success";
 			$response["message"] = "Données Modifiées";
-//			$response["valeur"] = $param['valeur'];
 		 } else {
 			$response["status"] = "warning";
 			$response["message"] = "No data found.";
@@ -140,9 +142,7 @@ class API extends REST {
 			$response["message"] = 'Insert Failed: ' . $e->getMessage();
 			$response["result"] = null;
 		}
-
-		$response["post"] = $param;
-		
+	
 		$this->response( json_encode($response), 200 );
 	}
 	
@@ -301,8 +301,8 @@ class API extends REST {
 		$this->response( json_encode($response), 200 );
 	}
 
-	private function listModif(){
-		if($this->get_request_method() != 'GET'){
+	private function delLigne(){
+		if($this->get_request_method() != "DELETE"){
 			$this->response('',406);
 		}
 		if(!isset( $_SESSION['ident'] )){
@@ -310,25 +310,62 @@ class API extends REST {
 		} else {
 			$user = $_SESSION['ident'];
 		}
+		
+		$query = "DELETE FROM t_modif_couts_mdf WHERE IdMdf = ?";
+			
+		try {
+		  $stmt = $this->db->prepare($query);
+		  $response["result"] = $stmt->execute( array($_GET['id']) );
 
-		$query = "SELECT mdf_numParc, mdf_immat, mdf_libConducteur, ROUND(mdf_ca / 100, 2) AS mdf_ca, mdf_nbJours, mdf_km, mdf_cout_autoroute, mdf_gasoil"
+		  if( $response["result"] ){
+			$response["status"] = "success";
+			$response["message"] = "Données Supprimées";
+		 } else {
+			$response["status"] = "warning";
+			$response["message"] = "No data found.";
+		 }
+
+		} catch(PDOException $e) {
+			$response["status"] = "error";
+			$response["message"] = 'Insert Failed: ' . $e->getMessage();
+			$response["result"] = null;
+		}
+	
+		$this->response( json_encode($response), 200 );
+	}
+	
+	private function listModif(){
+		if($this->get_request_method() != 'GET'){
+			$this->response('', 406);
+		}
+		if(!isset( $_SESSION['ident'] )){
+			$this->response('', 401);
+		} else {
+			$user = $_SESSION['ident'];
+		}
+
+		$query = "SELECT IdMdf, mdf_numParc, mdf_immat, mdf_libConducteur, ROUND(mdf_ca / 100, 2) AS mdf_ca, mdf_nbJours, mdf_km, mdf_cout_autoroute, mdf_gasoil"
 			. " FROM t_modif_couts_mdf"
 			. " WHERE mdf_mois = ?";
 			
 		try {
 		  $stmt = $this->db->prepare($query);
 		  $exec= $stmt->execute( array( $_GET['mois'] ) );
-
 		  if( $exec ){
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		 } else {
 			$result = null;
 		 }
-
 		} catch(PDOException $e) {
 			$result = null;
 		}
-
+		if(!is_null($result)) {
+			foreach ($result as &$modif){
+				//commandes
+				$modif['mdf_libConducteur'] = json_decode($modif['mdf_libConducteur']);
+			}			
+		}
+		
 		$response["result"] = $result;
 		
 		$this->response( json_encode($response), 200 );

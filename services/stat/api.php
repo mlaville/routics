@@ -8,7 +8,7 @@
  * @version    0.1
  * @revision   $0$
  *
- * @date revision   15/03/2016  
+ * @date revision   15/03/2016  Correction du calcul de l'intervalles de date
  *
  * REST api de stat conduite
  * - remontée des heures de nuit ( pénibilité )
@@ -71,7 +71,7 @@ class API extends REST {
 
 		$moisDeb = $_GET['mois'];
 		$timezone = new DateTimeZone('Europe/Paris'); 
-		$dateRef = DateTime::createFromFormat('Ymd', '201501' . '01', $timezone);
+		$dateRef = DateTime::createFromFormat('Ymd', $moisDeb . '01', $timezone);
 		$dateRef->add(new DateInterval('P1Y'));
 		$moisFin = $dateRef->format('Ym');
 		
@@ -112,6 +112,8 @@ class API extends REST {
 			$response["message"] = 'Select Failed: ' . $e->getMessage();
 			$response["result"] = null;
 		}
+		$response["moisDeb"] = $moisDeb;
+		$response["moisFin"] = $moisFin;
 		$this->response( json_encode($response), 200 );
 	}
 }
