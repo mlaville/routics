@@ -21,6 +21,7 @@
  * @date revision   05/03/2016  Libellé du jour dans les entêtes de colonne du planning
  * @date revision   20/03/2016  planning des heures de nuit
  * @date revision   29/03/2016  debug sec2time (quand la valeur passée en argument est 0)
+ * @date revision   11/05/2016  debug la gestion du drag and drop 
  *
  * Affichage du planning client
  * 
@@ -127,13 +128,6 @@ function sec2time( valSecond ) {
 	return '' + h + 'h' + ('0' + m).slice(-2);
 }
 
-function handleDragOver(e) {
-  // this / e.target is the current hover target.
-  this.classList.add('over-drop');
-}
-function handleDragLeave(e) {
-  this.classList.remove('over-drop');  // this / e.target is previous target element.
-}
 
 /* Réponse à un click sur cellule arret de travail */
 function afficheAT( event ) {
@@ -427,7 +421,6 @@ function ligneTT( dataConduct, tabOuvres ) {
 	});
 	
 	// Affichage du reste
-//	td = trConducteur.appendChild( document.createElement('td') );
 	td = trConducteur.insertCell();
 	/* Affichage du cumul Activité */
 	td = trConducteur.appendChild( document.createElement('td') );
@@ -460,6 +453,24 @@ function ligneTT( dataConduct, tabOuvres ) {
 
 // Gere le drop d'un Arret de Travail sur une case du calendrier
 function cibleDrop( item ) {
+	var handleDragOver = function(e) {
+		  // this / e.target is the current hover target.
+		  this.classList.add('over-drop');
+/*		  
+		  if( this.hasChildNodes() ) {
+			  this.style.backgroundColor = 'red';
+			  e.dataTransfer.dropEffect = 'none';
+		  } else {
+			  this.style.backgroundColor = 'blue';
+		  }*/
+			  e.dataTransfer.dropEffect = item.hasChildNodes() ? 'none' : 'move';
+			  
+		  
+		},
+		handleDragLeave = function(e) {
+			  e.dataTransfer.dropEffect = 'move';
+		  this.classList.remove('over-drop');  // this / e.target is previous target element.
+		};
 
 	item.addEventListener('dragover', handleDragOver, false);
 	item.addEventListener('dragleave', handleDragLeave, false);
@@ -521,7 +532,7 @@ function fillBody( tabTT, tabOuvrees ) {
 	}
 	
 	// Gere le drop d'un Arret de Travail sur une case du calendrier
-	drops = tbody.querySelectorAll('td.day:empty');
+	drops = tbody.querySelectorAll('td.day');
 	for( var i = 0, taille = drops.length ; i < taille ; ++i ) {
 		cibleDrop( drops[i] );
 	}
@@ -796,7 +807,7 @@ function affichePlagesNuit(eltTable, unForm) {
 			return xhrHrNuit.send();
 		}
 
-	winManager.domFenetre( 'Récapitulatif des Heures de Nuit', sectionHrNuits, null, { x:136, y:120, width:624, height: 460 }, true );
+	winManager.domFenetre( 'Récapitulatif des Heures de Nuit', sectionHrNuits, null, { x:136, y:120, width:820, height: 460 }, true );
 	
 	sectionHrNuits.style.display = 'block';
 	sectionHrNuits.parentNode.style.overflow = 'scroll';
@@ -831,7 +842,7 @@ window.addEventListener('load', function() {
 	document.getElementById('btnEditTypeAT').addEventListener( 'click', function() {
 		var eltTable = document.getElementById("table-typeAT");
 		
-		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:136, y:120, width:424, height: 560 }, true );
+		winManager.domFenetre( 'Types Arrêt de Travail', eltTable, null, { x:136, y:120, width:424, height: 620 }, true );
 		eltTable.style.display = 'block';
 		
 		return;
