@@ -43,7 +43,8 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
     <meta charset="UTF-8">
 	<title>Routics - Véhicules</title>
 	<link rel="stylesheet" type="text/css" href="./css/panel.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" />
+<!--	<link rel="stylesheet" type="text/css" media="screen" href="http://lib.polinux.net/js/JQuery/ui/flick/jquery-ui-1.10.2.custom.css" /> -->
+	<link rel="stylesheet" type="text/css" media="screen" href="http://localhost/jquery-ui-1.11.4.custom/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="http://lib.polinux.fr/js/month-picker/monthPicker.css" />	
     <link rel='stylesheet' href='css/px-layout.css'>
     <link rel="stylesheet" href="./css/bouton.css">
@@ -391,6 +392,23 @@ $ajaxKmCompteur = $demo ? './response/getKmCompteur.json' : './php/getKmCompteur
 				</tr>
 			</thead>
 			<tfoot>
+				<tr>
+					<th>Num Parc</th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>CA</th>
+					<th>Km</th>
+					<th>Terme Km</th>
+					<th></th>
+					<th>CA Jour</th>
+					<th>Autoroute</th>
+					<th>gasoil</th>
+					<th>conso./100km</th>
+					<th>Pneumatique</th>
+					<th>Coûts Entretien</th>
+					<th></th>
+				</tr>
 				<tr style="display: none">
 					<td class="rounded-foot-left" colspan="4">
 						<button class="btn btn-primary" id="btn-nelleLigne" >Ajouter un Tracteur</button>

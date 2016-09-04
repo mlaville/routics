@@ -79,6 +79,7 @@ fieldset>div {
 	font-family: "Arial Black",Arial;
 	font-weight: bolder;
 	width: 36px;
+	min-height: 16px;
 	padding: 2px 4px;
 }
 

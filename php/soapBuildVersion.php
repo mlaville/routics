@@ -15,7 +15,8 @@
  */
 
  /* Settings */
-$wsdl = "http://transics.tx-connect.com/IWSLead/Service.asmx?WSDL";
+// $wsdl = "https://transics.tx-connect.com/IWSLead/Service.asmx?WSDL";
+$wsdl = "../wsdl/transics-2.wsdl";
 
 /* Create Soap client */
 $context = stream_context_create( array(

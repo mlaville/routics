@@ -23,12 +23,17 @@
 	border-collapse: collapse;
 }
 
-th:first-child {
+thead tr:first-child th:first-child{
     border-radius: 8px 0 0 0;
 }
 
-th:last-child {
-    border-radius: 0 8px 0 0;
+tfoot tr:last-child th:first-child {
+    border-radius: 0 0 0 8px;
+}
+
+thead tr:last-child th:last-child,
+tfoot tr:last-child th:last-child {
+    border-radius: 0 0 8px 0;
 }
 
 #rounded-corner th {

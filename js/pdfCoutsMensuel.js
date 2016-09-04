@@ -9,6 +9,7 @@
  *
  * @date revision   05/04/2016 Correction des hauteurs de ligne lorsque +sieurs conducteurs  
  * @date revision   26/04/2016 Correction plantage quand la colonne descriptif est vide  
+ * @date revision   01/07/2016 Edition des totaux
  *
  * Génère le pdf des recapitulatifs de couts mensuels
  * 
@@ -32,7 +33,7 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 		
 		doc = new jsPDF('l'),
 		eltTr = uneTable.querySelector('thead tr'),
-		listTr = uneTable.querySelectorAll('tbody tr'),
+		listTr = Array.from( uneTable.querySelectorAll('tbody tr') ),
 		nbLg = listTr.length,
 		impair = true,
 		h = 26,
@@ -71,8 +72,14 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			
 			return;
 		},
+		impCell = function( libelle, largeur ) {
+			doc.setFillColor(150,150,255);
+			doc.rect(gauche, h - delta, largeur, 12, 'FD');
+			doc.text(gauche + 1, h, libelle);
+			gauche += largeur;
+		},
 		tableHeader = function( unEltTr ) {
-		
+
 			doc.setFontType("bold");
 			doc.setFontSize(9);
 			doc.setFillColor(150,150,255);
@@ -81,82 +88,90 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			gauche = marge + lgCol1;
 			
 			doc.setFontType("normal");
-			doc.setFillColor(150,150,255);
-			doc.rect( gauche, h - delta, 1.8 * lgCol, 12, 'FD' ); 
-//			doc.rect(gauche, h - delta, 2 * lgCol, 12); 
-			doc.text(gauche + 1, h, "Type");
-			gauche += 1.8 * lgCol;
 			
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, 2.2 * lgCol, 12, 'FD');
-			doc.text(gauche + 1, h, "Chauffeur");
-			gauche += 2.2 * lgCol;
 			
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 1, h, "CA");
+			impCell( 'Type', 1.8 * lgCol );
+			impCell( 'Chauffeur', 2.2 * lgCol );
 			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 1, h, "km");
+			['CA', 'km'].forEach( str => impCell(str, lgCol ) );
 			
-			gauche += lgCol;
 			doc.setFillColor(150,150,255);
 			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
 			doc.text(gauche + 2, h, "Terme");
 			doc.text(gauche + 2, 5 + h, "km");
-			
 			gauche += lgCol;
+			
 			doc.setFillColor(150,150,255);
 			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
 			doc.text(gauche + 2, h, "CA");
 			doc.text(gauche + 2, 5 + h, "jour");
-			
 			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 2, h, "Autoroute");
 			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 2, h, "Gasoil");
+			['Autoroute', 'Gasoil', 'L/100km', 'Pneumatique', 'Entretien'].forEach( str => impCell(str, lgCol ) );
 			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 2, h, "L/100km");
-			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 2, h, "Pneumatique");
-			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol, 12, 'FD');
-			doc.text(gauche + 2, h, "Entretien");
-			
-			gauche += lgCol;
-			doc.setFillColor(150,150,255);
-			doc.rect(gauche, h - delta, lgCol + 1, 12, 'FD');
-			doc.text(gauche + 2, h, "Total");
+			impCell( 'Total', lgCol + 1 )
+//			doc.setFillColor(150,150,255);
+//			doc.rect(gauche, h - delta, lgCol + 1, 12, 'FD');
+//			doc.text(gauche + 2, h, "Total");
 			
 			h += 6;
 			
 			return;
 		},
 		
-		ligneTracteur = function( unEltTr, bgColor, h ) {
+		tableFooter = function( unEltTr ) {
+			var listCell = Array.from( unEltTr.querySelectorAll('th') );
 			
-			var listCell = unEltTr.querySelectorAll('td'),
-				iterConduct = listCell[3].querySelectorAll('div'),
+			doc.setFontType("bold");
+			doc.setFontSize(14);
+			doc.setFillColor(150,150,255);
+			
+			doc.rect(marge, h - delta, lgCol1, 12, 'FD');
+			doc.text( marge + 1, h, listCell[0].textContent );
+			gauche = marge + lgCol1;
+			
+			gauche += 4 * lgCol;
+			doc.setFontSize(12);
+			doc.setFontType("normal");
+			
+			impCell( listCell[4].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[5].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[6].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[7].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[9].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[10].textContent.split(',').shift().lpad (' ', 8), lgCol );
+			impCell( listCell[11].textContent.lpad (' ', 8), lgCol );
+			impCell( listCell[12].textContent.split(',').shift().lpad (' ', 8), lgCol );
+			impCell( listCell[13].textContent.split(',').shift().lpad (' ', 8), lgCol );
+			
+			return;
+			
+		},
+		ligneTracteur = function( listCell, bgColor, h ) {
+			
+			var // listCell = unEltTr.querySelectorAll('td'),
+				iterConduct = Array.from( listCell[3].querySelectorAll('div') ), // Cellule Conducteur
+				hauteur = 6 * Math.max( 2, iterConduct.length ),
 				displayConducteur = function( ) {
 					var i = 0;
 					
 					doc.setDrawColor(200, 200, 200);
-					while( i < iterConduct.length ) {
+					iterConduct.forEach( function(eltDiv, index) {
+						
+						doc.setFontSize(10);
+						doc.setFont("helvetica");
+						doc.text( gauche + 1, h + 6 * index, eltDiv.firstChild.textContent ); // nom du conducteur
+						doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
+						doc.rect( gauche + 2 * lgCol - 3, h + 6 * index - 3, 5, 6, 'F' ); 
+						doc.setFontSize(11);
+						doc.rect( gauche + 2 * lgCol + 2, h + 6 * index - 3, 2, 6, 'FD' ); 
+						doc.setFont("courier");
+						doc.text( gauche + 2 * lgCol - 2, h + 6 * index, iterConduct[i].lastChild.textContent.lpad(' ', 2) ); // jours travaillés
+						
+						return;
+					});
+					
+/*					while( i < iterConduct.length ) {
 						doc.setFontSize(10);
 						doc.setFont("helvetica");
 						doc.text( gauche + 1, h + 6 * i, iterConduct[i].firstChild.textContent ); // nom du conducteur
@@ -168,10 +183,9 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 						doc.text( gauche + 2 * lgCol - 2, h + 6 * i, iterConduct[i].lastChild.textContent.lpad(' ', 2) ); // jours travaillés
 						i++;
 					}
-					
-					return i;
+					*/
+					return iterConduct.length;
 				},
-				hauteur = 6 * Math.max( 2, iterConduct.length ),
 				descript = listCell[2].textContent.split('-');
 			
 			// Cellule Parc
@@ -234,12 +248,12 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
-			doc.text( gauche, h, ( '      ' + listCell[11].textContent ).slice(-6) ); // Conso
+			doc.text( gauche, h, ( '       ' + listCell[11].textContent ).slice(-7) ); // Conso
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
 			doc.rect( gauche, h - delta, lgCol, hauteur, 'FD' ); 
-			doc.text( gauche, h, ( '      ' + listCell[12].textContent ).slice(-6) + ' €' ); // Pneumatique
+			doc.text( gauche, h, ( '        ' + listCell[12].textContent ).slice(-8) ); // Pneumatique
 			
 			gauche += lgCol;
 			doc.setFillColor( bgColor[0], bgColor[1], bgColor[2] );
@@ -261,6 +275,8 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 	tableHeader( uneTable.querySelector('thead tr') );
 	h += 6;
 	
+//	listTr.push(uneTable.querySelector('tfoot tr'));
+
 	for( ligne = 0 ; ligne < nbLg ; ligne++ ) {
 
 //		h += 12;
@@ -274,10 +290,12 @@ function pdfCoutsMensuel( uneTable, unTitre ) {
 			h += 6;
 		}
 			
-		h += ligneTracteur( listTr[ligne], impair ? [ 255, 255, 255 ] : [ 230, 230, 230 ], h );
+		h += ligneTracteur( listTr[ligne].querySelectorAll('td'), impair ? [ 255, 255, 255 ] : [ 230, 230, 230 ], h );
 		
 		impair = !impair;
 	}
+//	h += ligneTracteur( uneTable.querySelectorAll('tfoot tr:first-child th'), [ 230, 230, 230 ], h );
+	tableFooter( uneTable.querySelector('tfoot tr') );
 
 	return doc.output('datauristring');
 }

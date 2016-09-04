@@ -15,9 +15,9 @@
 .CSSTableGenerator {
 	margin:0 12px;
 	padding:0;
-	box-shadow: 10px 10px 5px #888;
-/*	border:1px solid #000000; */
-	width:800px;
+/*	box-shadow: 10px 10px 5px #888;
+	border:1px solid #000000;
+	width:800px; */
 }
 .CSSTableGenerator table{
 	width:100%;
@@ -48,7 +48,7 @@ border-collapse: collapse;}
 .CSSTableGenerator tr:last-child td:last-child{
 	border-width:0px 0px 0px 0px;
 }
-.CSSTableGenerator th{
+.CSSTableGenerator tr:last-child th{
 	background: linear-gradient( center top, #005fbf 5%, #003f7f 100% );
 	padding:4px 8px;
 	background-color:#005fbf;

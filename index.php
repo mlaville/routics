@@ -46,7 +46,8 @@ $param = json_decode( file_get_contents( './custom/param.json') );
         <div class="inputs">
             <input name="login" type="text" placeholder="Login" autofocus required />
             <input name="pwd" type="password" placeholder="Mot de Passe" />
-            <div class="checkboxy">
+			<div id="error_login" class="alert"></div>
+			<div class="checkboxy">
                 <input name="checky" id="checky" type="checkbox" value="1" />
 				<label for="checky" class="terms">Mémoriser le Mot de Passe</label>
             </div>

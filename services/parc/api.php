@@ -347,7 +347,12 @@ class API extends REST {
 		$query = "SELECT IdMdf, mdf_numParc, mdf_immat, mdf_libConducteur, ROUND(mdf_ca / 100, 2) AS mdf_ca, mdf_nbJours, mdf_km, mdf_cout_autoroute, mdf_gasoil"
 			. " FROM t_modif_couts_mdf"
 			. " WHERE mdf_mois = ?";
-			
+/*			
+		$query .= "UNION"
+			. " SELECT DISTINCT NULL AS IdMdf, mdf_numParc, mdf_immat, mdf_libConducteur,"
+			. " 0 AS mdf_ca, 0 AS mdf_nbJours, 0 AS mdf_km, 0 AS mdf_cout_autoroute, 0 AS mdf_gasoil"
+			. " FROM t_modif_couts_mdf WHERE mdf_immat IS NOT NULL AND mdf_numParc NOT IN (SELECT mdf_numParc FROM t_modif_couts_mdf WHERE mdf_mois = ?)";
+	*/		
 		try {
 		  $stmt = $this->db->prepare($query);
 		  $exec= $stmt->execute( array( $_GET['mois'] ) );

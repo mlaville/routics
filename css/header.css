@@ -23,11 +23,6 @@ header {
 	padding: 0 12px;
 	color:#000;
     background: none repeat scroll 0 0 #20AAE5;
-	background: -moz-linear-gradient(top, #fefefe 28%, #c1dcf3 66%, #1e5799 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(28%,#fefefe), color-stop(66%,#c1dcf3), color-stop(100%,#1e5799)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* IE10+ */
 	background: linear-gradient(to bottom, #fefefe 28%,#c1dcf3 66%,#1e5799 100%); /* W3C */   
 	border-bottom: 0.25em solid #1894CA;
     box-shadow: 0 -1px rgba(255, 255, 255, 0.05) inset, 0 1px rgba(0, 0, 0, 0.05);
@@ -67,10 +62,6 @@ header nav div{
 	float:right;
 }
 header div a{
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
     background: linear-gradient(to bottom, #4CB1FE, #229AFC 40%, #138DF6) repeat scroll 0 0 #1993FB;
     border-color: #1486F9 #0F7DE9 #0D6ACF;
     border-image: none;
@@ -187,7 +178,7 @@ button.imprimer {
 	background-image: url(../img/PDF.png);
 }
 #btnHrNuit {
-	background-image: url(../img/night.png);
+	background-image: url(../img/night.jpg);
 }
 button.editer {
 	background-image: url(../img/b_edit.png);
